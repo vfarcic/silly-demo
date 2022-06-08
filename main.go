@@ -2,34 +2,36 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	http.HandleFunc("/", handler)
+	r := gin.Default()
+	r.GET("/", rootHandler)
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8080"
 	}
-	log.Println("Starting the server on " + port + "...")
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	r.Run(fmt.Sprintf(":%s", port))
 }
 
-func handler(w http.ResponseWriter, req *http.Request) {
+func rootHandler(c *gin.Context) {
+	code := http.StatusOK
 	output := "This is a silly demo"
-	if len(req.URL.Query()["fail"]) > 0 {
-		w.WriteHeader(http.StatusInternalServerError)
+	if len(c.Query("fail")) > 0 {
+		code = http.StatusInternalServerError
 		output = "Something terrible happened"
 	}
 	version := os.Getenv("VERSION")
 	if len(version) > 0 {
 		output = fmt.Sprintf("%s version %s", output, version)
 	}
-	if len(req.URL.Query()["html"]) > 0 {
+	if len(c.Query("html")) > 0 {
 		output = fmt.Sprintf("<h1>%s</h1>", output)
 	}
 	output = fmt.Sprintf("%s\n", output)
-	fmt.Fprintf(w, output)
+	c.String(code, output)
 }

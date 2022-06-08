@@ -1,0 +1,40 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: silly-demo
+  labels:
+    app: silly-demo
+    component: web
+spec:
+  selector:
+    matchLabels:
+      app: silly-demo
+      component: web
+  template:
+    metadata:
+      labels:
+        app: silly-demo
+        component: web
+    spec:
+      containers:
+        - ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          name: silly-demo
+          image: vfarcic/silly-demo:1.0.4
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
