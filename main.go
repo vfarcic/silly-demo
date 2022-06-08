@@ -35,3 +35,6 @@ func rootHandler(c *gin.Context) {
 	output = fmt.Sprintf("%s\n", output)
 	c.String(code, output)
 }
+
+
+
