@@ -5,7 +5,7 @@ kind: Ingress
 metadata:
   name: silly-demo
   labels:
-    app: silly-demo
+    app.kubernetes.io/name: silly-demo
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
@@ -16,7 +16,7 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-           name: silly-demo
-           port:
-             number: 8080
+            name: silly-demo
+            port:
+              number: 8080
     host: devopstoolkitseries.com

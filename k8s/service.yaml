@@ -5,7 +5,7 @@ kind: Service
 metadata:
   name: silly-demo
   labels:
-    app: silly-demo
+    app.kubernetes.io/name: silly-demo
 spec:
   type: ClusterIP
   ports:

@@ -5,18 +5,15 @@ kind: Deployment
 metadata:
   name: silly-demo
   labels:
-    app: silly-demo
-    component: web
+    app.kubernetes.io/name: silly-demo
 spec:
   selector:
     matchLabels:
       app: silly-demo
-      component: web
   template:
     metadata:
       labels:
         app: silly-demo
-        component: web
     spec:
       containers:
         - ports:
