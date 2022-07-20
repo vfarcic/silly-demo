@@ -9,11 +9,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: silly-demo
+      app.kubernetes.io/name: silly-demo
   template:
     metadata:
       labels:
-        app: silly-demo
+        app.kubernetes.io/name: silly-demo
     spec:
       containers:
         - ports:
