@@ -46,19 +46,11 @@ Operation: %s`,
 		request.Parent.Kind,
 		managedField.Operation)
 	println(message)
-	// Throw error if message is empty
-	if message == "" {
-		println("Query parameter `message` is empty")
-		c.String(http.StatusBadRequest, "Query parameter `message` is empty")
-		return
-	}
 	// Get channel parameter from query
 	channel := c.Query("channel")
 	// Throw error if channel is empty
 	if channel == "" {
-		println("Query parameter `channel` is empty")
-		c.String(http.StatusBadRequest, "Query parameter `channel` is empty")
-		return
+		channel = "#general"
 	}
 	// Get token from environment variable
 	token := os.Getenv("SLACK_TOKEN")
