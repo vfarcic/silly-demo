@@ -10,7 +10,7 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/fibonacci", fibonacciHandler)
-	r.GET("/slack", slackHandler)
+	r.POST("/slack", slackHandler)
 	r.GET("/", rootHandler)
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
