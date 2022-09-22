@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/slack-go/slack v0.11.3
-	k8s.io/apimachinery v0.25.1
+	k8s.io/apimachinery v0.25.2
 )
 
 require (
