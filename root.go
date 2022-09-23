@@ -14,7 +14,10 @@ func rootHandler(c *gin.Context) {
 		return
 	}
 	version := os.Getenv("VERSION")
-	output := "This is a silly demo"
+	output := os.Getenv("MESSAGE")
+	if len(output) == 0 {
+		output = "This is a silly demo"
+	}
 	if len(version) > 0 {
 		output = fmt.Sprintf("%s version %s", output, version)
 	}
