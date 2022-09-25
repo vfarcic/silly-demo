@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: cosign
+spec:
+  validationFailureAction: enforce
+  background: false
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+    - name: check-image
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            - Deployment
+      verifyImages:
+      - imageReferences:
+        - "docker.io/vfarcic/silly-demo:*"
+        attestors:
+        - count: 1
+          entries:
+          - keys:
+              publicKeys: |-
+                -----BEGIN PUBLIC KEY-----
+                MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEJUDnUq1zczH77549GQ5F8nhrA10h
+                FjYQvScNBEbIdD3ys1YVyFI6nSb0dXU/+jBfUpeCTYFqW81gInY3bnzULA==
+                -----END PUBLIC KEY-----

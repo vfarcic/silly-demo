@@ -1,5 +1,4 @@
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,8 +15,10 @@ spec:
         app.kubernetes.io/name: silly-demo
     spec:
       containers:
-        - ports:
-          - containerPort: 8080
+        - name: silly-demo
+          image: docker.io/vfarcic/silly-demo:1.0.10
+          ports:
+            - containerPort: 8080
           resources:
             limits:
               cpu: 500m
@@ -25,8 +26,6 @@ spec:
             requests:
               cpu: 250m
               memory: 256Mi
-          name: silly-demo
-          image: vfarcic/silly-demo:1.0.10
           livenessProbe:
             httpGet:
               path: /
