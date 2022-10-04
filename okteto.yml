@@ -1,0 +1,18 @@
+name: silly-demo
+build:
+  silly-demo:
+    context: .
+    dockerfile: Dockerfile
+deploy:
+- kubectl apply -f k8s
+dev:
+  silly-demo:
+    image: docker.io/vfarcic/silly-demo
+    workdir: /src
+    sync:
+    - .:/src
+    environment:
+    - name=$USER
+    forward:
+    - 8080:8080
+
