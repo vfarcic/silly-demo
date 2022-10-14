@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/lib/pq v1.10.7
 	github.com/slack-go/slack v0.11.3
-	k8s.io/apimachinery v0.25.2
+	k8s.io/apimachinery v0.25.3
 )
 
 require (
