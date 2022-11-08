@@ -90,15 +90,21 @@ func getDB(c *gin.Context) *sql.DB {
 	}
 	user := os.Getenv("DB_USER")
 	if len(user) == 0 {
-		fmt.Println("Environment variable `DB_USER` is empty")
-		c.String(http.StatusBadRequest, "Environment variable `DB_USER` is empty")
-		return nil
+		user = os.Getenv("DB_USERNAME")
+		if len(user) == 0 {
+			fmt.Println("Environment variables `DB_USER` and `DB_USERNAME` are empty")
+			c.String(http.StatusBadRequest, "Environment variables `DB_USER` and `DB_USERNAME` are empty")
+			return nil
+		}
 	}
 	pass := os.Getenv("DB_PASS")
 	if len(pass) == 0 {
-		fmt.Println("Environment variable `DB_PASS` is empty")
-		c.String(http.StatusBadRequest, "Environment variable `DB_PASS` is empty")
-		return nil
+		pass = os.Getenv("DB_PASSWORD")
+		if len(pass) == 0 {
+			fmt.Println("Environment variables `DB_PASS` and `DB_PASSWORD are empty")
+			c.String(http.StatusBadRequest, "Environment variables `DB_PASS` and `DB_PASSWORD are empty")
+			return nil
+		}
 	}
 	name := os.Getenv("DB_NAME")
 	if len(name) == 0 {
