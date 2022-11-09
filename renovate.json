@@ -3,6 +3,10 @@
     "config:base"
   ],
   "kubernetes": {
-    "fileMatch": ["k8s/.+\\.yaml$"]
+    "fileMatch": [
+      "k8s/.+\\.yaml$",
+      "kustomize/overlays/stateful/deployment.yaml",
+      "kustomize/overlays/stateless/deployment.yaml"
+    ]
   }
 }
