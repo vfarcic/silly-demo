@@ -1,0 +1,5 @@
+image:
+  repository: docker.io/vfarcic/silly-demo
+  tag: latest
+ingress:
+  host: devopstoolkitseries.com
