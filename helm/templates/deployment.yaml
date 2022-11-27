@@ -35,3 +35,19 @@ spec:
           httpGet:
             path: /
             port: 8080
+        {{- if .Values.db.enabled }}
+        env: 
+        - name: DB_ENDPOINT
+          value: {{ template "name" . }}-postgresql
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: postgres
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "name" . }}-postgresql
+              key: postgres-password
+        - name: DB_NAME
+          value: {{ template "name" . }}
+        {{- end }}
