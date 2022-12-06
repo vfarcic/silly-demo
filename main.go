@@ -12,19 +12,13 @@ import (
 )
 
 const name = "silly-demo"
-const version = "v0.0.1"
 
 func main() {
 	// OpenTelemetry
-	l := log.New(os.Stdout, "", 0)
-	f, err := os.Create("traces.txt")
+	var err error
+	tp, err = initTrace()
 	if err != nil {
-		l.Fatal(err)
-	}
-	defer f.Close()
-	tp, err := initTrace(f)
-	if err != nil {
-		l.Fatal(err)
+		log.Fatal(err)
 	}
 	defer func() {
 		if err := tp.Shutdown(context.Background()); err != nil {

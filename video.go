@@ -1,17 +1,25 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"net/http"
 	"os"
 
-	_ "github.com/lib/pq"
+	"github.com/go-pg/pg/extra/pgotel/v10"
+	"github.com/go-pg/pg/v10"
 
 	"github.com/gin-gonic/gin"
 )
 
-var dbSession *sql.DB = nil
+// Test:
+// $ docker container run --name my-db -e POSTGRES_PASSWORD=postgres -d --publish 5432:5432 postgres
+// $ DB_ENDPOINT=127.0.0.1 DB_PORT=5432 DB_USER=postgres DB_PASS=postgres DB_NAME=postgres go run .
+// $ curl -X POST "http://localhost:8080/video?id=wNBG1-PSYmE&title=Kubernetes%20Policies%20And%20Governance%20-%20Ask%20Me%20Anything%20With%20Jim%20Bugwadia"
+// $ curl -X POST "http://localhost:8080/video?id=VlBiLFaSi7Y&title=Scaleway%20-%20Everything%20We%20Expect%20From%20A%20Cloud%20Computing%20Service%3F"
+// $ curl "http://localhost:8080/videos" | jq .
+
+var dbSession *pg.DB = nil
 
 type Video struct {
 	ID    string `json:"id"`
@@ -19,52 +27,46 @@ type Video struct {
 }
 
 func videosGetHandler(c *gin.Context) {
+	traceContext, _ := tp.Tracer(name).Start(context.TODO(), name)
+
 	db := getDB(c)
 	if db == nil {
 		return
 	}
-	rows, err := db.Query("SELECT id, title FROM videos")
+	var videos []Video
+	err := db.ModelContext(traceContext, &videos).Select()
 	if err != nil {
 		fmt.Println(err)
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-	defer rows.Close()
-	var videos []Video
-	for rows.Next() {
-		var video Video
-		err := rows.Scan(&video.ID, &video.Title)
-		if err != nil {
-			fmt.Println(err)
-			c.String(http.StatusInternalServerError, err.Error())
-			return
-		}
-		videos = append(videos, video)
-	}
 	c.JSON(http.StatusOK, videos)
 }
 
 func videoPostHandler(c *gin.Context) {
+	traceContext, _ := tp.Tracer(name).Start(context.TODO(), "silly-demo4")
+
 	db := getDB(c)
 	if db == nil {
 		return
 	}
-	// Get id from request
 	id := c.Query("id")
 	if len(id) == 0 {
 		fmt.Println("id is empty")
 		c.String(http.StatusBadRequest, "id is empty")
 		return
 	}
-	// Get title from request
 	title := c.Query("title")
 	if len(title) == 0 {
 		fmt.Println("title is empty")
 		c.String(http.StatusBadRequest, "title is empty")
 		return
 	}
-	// Insert data into the table videos
-	_, err := db.Exec("INSERT INTO videos (id, title) VALUES ($1, $2)", id, title)
+	video := &Video{
+		ID:    id,
+		Title: title,
+	}
+	_, err := db.ModelContext(traceContext, video).Insert()
 	if err != nil {
 		fmt.Println(err)
 		c.String(http.StatusInternalServerError, err.Error())
@@ -72,7 +74,7 @@ func videoPostHandler(c *gin.Context) {
 	}
 }
 
-func getDB(c *gin.Context) *sql.DB {
+func getDB(c *gin.Context) *pg.DB {
 	if dbSession != nil {
 		return dbSession
 	}
@@ -112,19 +114,12 @@ func getDB(c *gin.Context) *sql.DB {
 		c.String(http.StatusBadRequest, "Environment variable `DB_NAME` is empty")
 		return nil
 	}
-	psqlconn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		endpoint,
-		port,
-		user,
-		pass,
-		name,
-	)
-	dbSession, err := sql.Open("postgres", psqlconn)
-	if err != nil {
-		fmt.Println(err)
-		c.String(http.StatusInternalServerError, err.Error())
-		return nil
-	}
+	dbSession := pg.Connect(&pg.Options{
+		Addr:     endpoint + ":" + port,
+		User:     user,
+		Password: pass,
+		Database: name,
+	})
+	dbSession.AddQueryHook(pgotel.NewTracingHook())
 	return dbSession
 }
