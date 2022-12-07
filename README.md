@@ -1,5 +1,5 @@
 ```bash
-export VERSION=1.0.13
+export VERSION=1.1.0
 
 cat Dockerfile \
     | sed -e "s@ENV VERSION .*@ENV VERSION $VERSION@g" \
