@@ -1,13 +1,15 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"errors"
+	"log"
 	"net/http"
 	"os"
 
 	"github.com/go-pg/pg/extra/pgotel/v10"
 	"github.com/go-pg/pg/v10"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,50 +28,52 @@ type Video struct {
 	Title string `json:"title"`
 }
 
-func videosGetHandler(c *gin.Context) {
-	traceContext, _ := tp.Tracer(name).Start(context.TODO(), name)
+func videosGetHandler(ctx *gin.Context) {
+	traceContext, span := tp.Tracer(name).Start(ctx, "video-get")
+	defer func() { span.End() }()
 
-	db := getDB(c)
+	span.AddEvent("Establishing connection to the database")
+	db := getDB(ctx)
 	if db == nil {
 		return
 	}
 	var videos []Video
 	err := db.ModelContext(traceContext, &videos).Select()
 	if err != nil {
-		fmt.Println(err)
-		c.String(http.StatusInternalServerError, err.Error())
+		httpErrorInternalServerError(err, span, ctx)
 		return
 	}
-	c.JSON(http.StatusOK, videos)
+	ctx.JSON(http.StatusOK, videos)
 }
 
-func videoPostHandler(c *gin.Context) {
-	traceContext, _ := tp.Tracer(name).Start(context.TODO(), "silly-demo4")
+func videoPostHandler(ctx *gin.Context) {
+	traceContext, span := tp.Tracer(name).Start(ctx, "video-post")
+	defer func() { span.End() }()
 
-	db := getDB(c)
+	span.AddEvent("Establishing connection to the database...")
+	db := getDB(ctx)
 	if db == nil {
 		return
 	}
-	id := c.Query("id")
+	span.AddEvent("Retrieving values...")
+	id := ctx.Query("id")
 	if len(id) == 0 {
-		fmt.Println("id is empty")
-		c.String(http.StatusBadRequest, "id is empty")
+		httpErrorBadRequest(errors.New("id is empty"), span, ctx)
 		return
 	}
-	title := c.Query("title")
+	title := ctx.Query("title")
 	if len(title) == 0 {
-		fmt.Println("title is empty")
-		c.String(http.StatusBadRequest, "title is empty")
+		httpErrorBadRequest(errors.New("title is empty"), span, ctx)
 		return
 	}
+	span.AddEvent("Retrieving data from the database...")
 	video := &Video{
 		ID:    id,
 		Title: title,
 	}
 	_, err := db.ModelContext(traceContext, video).Insert()
 	if err != nil {
-		fmt.Println(err)
-		c.String(http.StatusInternalServerError, err.Error())
+		httpErrorInternalServerError(err, span, ctx)
 		return
 	}
 }
@@ -80,13 +84,13 @@ func getDB(c *gin.Context) *pg.DB {
 	}
 	endpoint := os.Getenv("DB_ENDPOINT")
 	if len(endpoint) == 0 {
-		fmt.Println("Environment variable `DB_ENDPOINT` is empty")
+		log.Println("Environment variable `DB_ENDPOINT` is empty")
 		c.String(http.StatusBadRequest, "Environment variable `DB_ENDPOINT` is empty")
 		return nil
 	}
 	port := os.Getenv("DB_PORT")
 	if len(port) == 0 {
-		fmt.Println("Environment variable `DB_PORT` is empty")
+		log.Println("Environment variable `DB_PORT` is empty")
 		c.String(http.StatusBadRequest, "Environment variable `DB_PORT` is empty")
 		return nil
 	}
@@ -94,7 +98,7 @@ func getDB(c *gin.Context) *pg.DB {
 	if len(user) == 0 {
 		user = os.Getenv("DB_USERNAME")
 		if len(user) == 0 {
-			fmt.Println("Environment variables `DB_USER` and `DB_USERNAME` are empty")
+			log.Println("Environment variables `DB_USER` and `DB_USERNAME` are empty")
 			c.String(http.StatusBadRequest, "Environment variables `DB_USER` and `DB_USERNAME` are empty")
 			return nil
 		}
@@ -103,14 +107,14 @@ func getDB(c *gin.Context) *pg.DB {
 	if len(pass) == 0 {
 		pass = os.Getenv("DB_PASSWORD")
 		if len(pass) == 0 {
-			fmt.Println("Environment variables `DB_PASS` and `DB_PASSWORD are empty")
+			log.Println("Environment variables `DB_PASS` and `DB_PASSWORD are empty")
 			c.String(http.StatusBadRequest, "Environment variables `DB_PASS` and `DB_PASSWORD are empty")
 			return nil
 		}
 	}
 	name := os.Getenv("DB_NAME")
 	if len(name) == 0 {
-		fmt.Println("Environment variable `DB_NAME` is empty")
+		log.Println("Environment variable `DB_NAME` is empty")
 		c.String(http.StatusBadRequest, "Environment variable `DB_NAME` is empty")
 		return nil
 	}
@@ -122,4 +126,19 @@ func getDB(c *gin.Context) *pg.DB {
 	})
 	dbSession.AddQueryHook(pgotel.NewTracingHook())
 	return dbSession
+}
+
+func httpErrorBadRequest(err error, span trace.Span, ctx *gin.Context) {
+	httpError(err, span, ctx, http.StatusBadRequest)
+}
+
+func httpErrorInternalServerError(err error, span trace.Span, ctx *gin.Context) {
+	httpError(err, span, ctx, http.StatusInternalServerError)
+}
+
+func httpError(err error, span trace.Span, ctx *gin.Context, status int) {
+	log.Println(err.Error())
+	span.RecordError(err)
+	span.SetStatus(codes.Error, err.Error())
+	ctx.String(status, err.Error())
 }
