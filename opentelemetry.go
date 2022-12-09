@@ -12,16 +12,16 @@ import (
 
 var tp *trace.TracerProvider
 
-func initTrace() (*trace.TracerProvider, error) {
+func initTracer() (*trace.TracerProvider, error) {
 	url := os.Getenv("JAEGER_ENDPOINT")
 	if len(url) > 0 {
-		return initJaegerTrace()
+		return initJaegerTracer()
 	} else {
-		return initFileTrace()
+		return initFileTracer()
 	}
 }
 
-func initFileTrace() (*trace.TracerProvider, error) {
+func initFileTracer() (*trace.TracerProvider, error) {
 	f, err := os.Create("traces.json")
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func initFileTrace() (*trace.TracerProvider, error) {
 	), nil
 }
 
-func initJaegerTrace() (*trace.TracerProvider, error) {
+func initJaegerTracer() (*trace.TracerProvider, error) {
 	url := os.Getenv("JAEGER_ENDPOINT")
 	exporter, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {
@@ -49,7 +49,7 @@ func initJaegerTrace() (*trace.TracerProvider, error) {
 		trace.WithBatcher(exporter),
 		trace.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String(name),
+			semconv.ServiceNameKey.String(serviceName),
 		)),
 	), nil
 }

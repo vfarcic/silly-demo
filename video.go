@@ -8,8 +8,6 @@ import (
 
 	"github.com/go-pg/pg/extra/pgotel/v10"
 	"github.com/go-pg/pg/v10"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +27,7 @@ type Video struct {
 }
 
 func videosGetHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(name).Start(ctx, "video-get")
+	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-get")
 	defer func() { span.End() }()
 
 	span.AddEvent("Establishing connection to the database")
@@ -47,7 +45,7 @@ func videosGetHandler(ctx *gin.Context) {
 }
 
 func videoPostHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(name).Start(ctx, "video-post")
+	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-post")
 	defer func() { span.End() }()
 
 	span.AddEvent("Establishing connection to the database...")
@@ -126,19 +124,4 @@ func getDB(c *gin.Context) *pg.DB {
 	})
 	dbSession.AddQueryHook(pgotel.NewTracingHook())
 	return dbSession
-}
-
-func httpErrorBadRequest(err error, span trace.Span, ctx *gin.Context) {
-	httpError(err, span, ctx, http.StatusBadRequest)
-}
-
-func httpErrorInternalServerError(err error, span trace.Span, ctx *gin.Context) {
-	httpError(err, span, ctx, http.StatusInternalServerError)
-}
-
-func httpError(err error, span trace.Span, ctx *gin.Context, status int) {
-	log.Println(err.Error())
-	span.RecordError(err)
-	span.SetStatus(codes.Error, err.Error())
-	ctx.String(status, err.Error())
 }

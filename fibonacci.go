@@ -11,7 +11,7 @@ import (
 )
 
 func fibonacciHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(name).Start(ctx, "fibonacci")
+	traceContext, span := tp.Tracer(serviceName).Start(ctx, "fibonacci")
 	defer func() { span.End() }()
 	number, err := strconv.Atoi(ctx.Query("number"))
 	if err != nil {
@@ -23,7 +23,7 @@ func fibonacciHandler(ctx *gin.Context) {
 }
 
 func calculateFibonacci(n int, ctx context.Context) int {
-	traceContext, span := tp.Tracer(name).Start(ctx, "fibonacci-"+strconv.Itoa(n))
+	traceContext, span := tp.Tracer(serviceName).Start(ctx, "fibonacci-"+strconv.Itoa(n))
 	span.SetAttributes(attribute.String("number", strconv.Itoa(n)))
 	defer func() { span.End() }()
 	if n <= 1 {
