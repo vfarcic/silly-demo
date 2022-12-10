@@ -23,6 +23,7 @@ func pingHandler(ctx *gin.Context) {
 		httpErrorBadRequest(errors.New("url is empty"), span, ctx)
 		return
 	}
+	log.Printf("Sending a ping to %s", url)
 	resp, _ := req.Get(url)
 	log.Println(resp.String())
 	ctx.String(http.StatusOK, resp.String())

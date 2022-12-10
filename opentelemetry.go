@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"go.opentelemetry.io/otel/exporters/jaeger"
@@ -15,13 +16,14 @@ var tp *trace.TracerProvider
 func initTracer() (*trace.TracerProvider, error) {
 	url := os.Getenv("JAEGER_ENDPOINT")
 	if len(url) > 0 {
-		return initJaegerTracer()
+		return initJaegerTracer(url)
 	} else {
 		return initFileTracer()
 	}
 }
 
 func initFileTracer() (*trace.TracerProvider, error) {
+	log.Println("Initializing tracing to traces.json")
 	f, err := os.Create("traces.json")
 	if err != nil {
 		return nil, err
@@ -39,8 +41,8 @@ func initFileTracer() (*trace.TracerProvider, error) {
 	), nil
 }
 
-func initJaegerTracer() (*trace.TracerProvider, error) {
-	url := os.Getenv("JAEGER_ENDPOINT")
+func initJaegerTracer(url string) (*trace.TracerProvider, error) {
+	log.Printf("Initializing tracing to jaeger at %s\n", url)
 	exporter, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {
 		return nil, err

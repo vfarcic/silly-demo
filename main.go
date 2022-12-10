@@ -18,6 +18,7 @@ import (
 var serviceName string
 
 func main() {
+	log.SetOutput(os.Stderr)
 	serviceName = "silly-demo"
 	if os.Getenv("SERVICE_NAME") != "" {
 		serviceName = os.Getenv("SERVICE_NAME")
@@ -38,6 +39,7 @@ func main() {
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	// Server
+	log.Println("Starting server...")
 	router := gin.New()
 	router.Use(otelgin.Middleware(serviceName))
 	router.GET("/fibonacci", fibonacciHandler)
