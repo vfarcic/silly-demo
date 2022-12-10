@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: postgresql
+    releaseName: postgresql
+    repo: https://charts.bitnami.com/bitnami
+    version: 12.1.2
+    namespace: production
+    valuesFile: postgresql-values.yaml
+patchesStrategicMerge:
+  - deployment-patch.yaml

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: silly-demo
+spec:
+  template:
+    spec:
+      containers:
+        - name: silly-demo
+          env: 
+            - name: DB_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: my-db
+                  key: endpoint
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: my-db
+                  key: port
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: my-db
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: my-db
+                  key: password
+            - name: DB_NAME
+              value: my-db

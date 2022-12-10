@@ -1,0 +1,12 @@
+global:
+  persistence:
+    enabled: false
+auth:
+  postgresPassword: postgres
+primary:
+  initdb:
+    scripts:
+      00_init_script.sh: |
+        export PGPASSWORD=$POSTGRES_PASSWORD
+        psql -U postgres -c 'CREATE DATABASE "silly-demo";'
+        psql -U postgres -d silly-demo -c 'CREATE TABLE videos (id text PRIMARY KEY, title text NOT NULL);'
