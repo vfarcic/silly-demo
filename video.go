@@ -12,68 +12,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Test:
-// $ docker container run --name my-db -e POSTGRES_PASSWORD=postgres -d --publish 5432:5432 postgres
-// $ DB_ENDPOINT=127.0.0.1 DB_PORT=5432 DB_USER=postgres DB_PASS=postgres DB_NAME=postgres go run .
-// $ curl -X POST "http://localhost:8080/video?id=wNBG1-PSYmE&title=Kubernetes%20Policies%20And%20Governance%20-%20Ask%20Me%20Anything%20With%20Jim%20Bugwadia"
-// $ curl -X POST "http://localhost:8080/video?id=VlBiLFaSi7Y&title=Scaleway%20-%20Everything%20We%20Expect%20From%20A%20Cloud%20Computing%20Service%3F"
-// $ curl "http://localhost:8080/videos" | jq .
-
 var dbSession *pg.DB = nil
 
 type Video struct {
 	ID    string `json:"id"`
 	Title string `json:"title"`
-}
-
-func videosGetHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-get")
-	defer func() { span.End() }()
-
-	span.AddEvent("Establishing connection to the database")
-	db := getDB(ctx)
-	if db == nil {
-		return
-	}
-	var videos []Video
-	err := db.ModelContext(traceContext, &videos).Select()
-	if err != nil {
-		httpErrorInternalServerError(err, span, ctx)
-		return
-	}
-	ctx.JSON(http.StatusOK, videos)
-}
-
-func videoPostHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-post")
-	defer func() { span.End() }()
-
-	span.AddEvent("Establishing connection to the database...")
-	db := getDB(ctx)
-	if db == nil {
-		return
-	}
-	span.AddEvent("Retrieving values...")
-	id := ctx.Query("id")
-	if len(id) == 0 {
-		httpErrorBadRequest(errors.New("id is empty"), span, ctx)
-		return
-	}
-	title := ctx.Query("title")
-	if len(title) == 0 {
-		httpErrorBadRequest(errors.New("title is empty"), span, ctx)
-		return
-	}
-	span.AddEvent("Retrieving data from the database...")
-	video := &Video{
-		ID:    id,
-		Title: title,
-	}
-	_, err := db.ModelContext(traceContext, video).Insert()
-	if err != nil {
-		httpErrorInternalServerError(err, span, ctx)
-		return
-	}
 }
 
 func getDB(c *gin.Context) *pg.DB {
@@ -124,4 +67,54 @@ func getDB(c *gin.Context) *pg.DB {
 	})
 	dbSession.AddQueryHook(pgotel.NewTracingHook())
 	return dbSession
+}
+
+func videosGetHandler(ctx *gin.Context) {
+	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-get")
+	defer func() { span.End() }()
+
+	span.AddEvent("Establishing connection to the database")
+	db := getDB(ctx)
+	if db == nil {
+		return
+	}
+	var videos []Video
+	err := db.ModelContext(traceContext, &videos).Select()
+	if err != nil {
+		httpErrorInternalServerError(err, span, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, videos)
+}
+
+func videoPostHandler(ctx *gin.Context) {
+	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-post")
+	defer func() { span.End() }()
+
+	span.AddEvent("Establishing connection to the database...")
+	db := getDB(ctx)
+	if db == nil {
+		return
+	}
+	span.AddEvent("Retrieving values...")
+	id := ctx.Query("id")
+	if len(id) == 0 {
+		httpErrorBadRequest(errors.New("id is empty"), span, ctx)
+		return
+	}
+	title := ctx.Query("title")
+	if len(title) == 0 {
+		httpErrorBadRequest(errors.New("title is empty"), span, ctx)
+		return
+	}
+	span.AddEvent("Retrieving data from the database...")
+	video := &Video{
+		ID:    id,
+		Title: title,
+	}
+	_, err := db.ModelContext(traceContext, video).Insert()
+	if err != nil {
+		httpErrorInternalServerError(err, span, ctx)
+		return
+	}
 }
