@@ -298,6 +298,10 @@ github.com/slack-go/slack v0.11.3 h1:GN7revxEMax4amCc3El9a+9SGnjmBvSUobs0QnO6ZO8
 github.com/slack-go/slack v0.11.3/go.mod h1:hlGi5oXA+Gt+yWTPP0plCdRKmjsDxecdHxYQdlMQKOw=
 github.com/slack-go/slack v0.11.4 h1:ojSa7KlPm3PqY2AomX4VTxEsK5eci5JaxCjlzGV5zoM=
 github.com/slack-go/slack v0.11.4/go.mod h1:hlGi5oXA+Gt+yWTPP0plCdRKmjsDxecdHxYQdlMQKOw=
+github.com/slack-go/slack v0.12.0 h1:k93w2dvYXIUO/ggxpz/3ichCpBuCVXxxEAsRqM87np4=
+github.com/slack-go/slack v0.12.0/go.mod h1:hlGi5oXA+Gt+yWTPP0plCdRKmjsDxecdHxYQdlMQKOw=
+github.com/slack-go/slack v0.12.1 h1:X97b9g2hnITDtNsNe5GkGx6O2/Sz/uC20ejRZN6QxOw=
+github.com/slack-go/slack v0.12.1/go.mod h1:hlGi5oXA+Gt+yWTPP0plCdRKmjsDxecdHxYQdlMQKOw=
 github.com/spf13/afero v1.2.2/go.mod h1:9ZxEEn6pIJ8Rxe320qSDBk6AsU0r9pR7Q4OcevTdifk=
 github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
 github.com/stoewer/go-strcase v1.2.0/go.mod h1:IBiWB2sKIp3wVVQ3Y035++gc+knqhUQag1KpM8ahLw8=
