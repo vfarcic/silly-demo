@@ -1,0 +1,16 @@
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: silly-demo
+  labels:
+    app: silly-demo
+spec:
+  minReplicas: 2
+  maxReplicas: 6
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: silly-demo
+  targetCPUUtilizationPercentage: 80
