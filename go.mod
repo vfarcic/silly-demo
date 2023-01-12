@@ -4,8 +4,8 @@ go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.8.2
-	github.com/go-pg/pg/extra/pgotel/v10 v10.10.7
-	github.com/go-pg/pg/v10 v10.10.7
+	github.com/go-pg/pg/extra/pgotel/v10 v10.11.0
+	github.com/go-pg/pg/v10 v10.11.0
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/lib/pq v1.10.7
 	github.com/slack-go/slack v0.12.1
@@ -65,7 +65,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/klog/v2 v2.80.1 // indirect
 	k8s.io/utils v0.0.0-20221107191617-1a15be271d1d // indirect
-	mellium.im/sasl v0.2.1 // indirect
+	mellium.im/sasl v0.3.1 // indirect
 	sigs.k8s.io/json v0.0.0-20220713155537-f223a00ba0e2 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 )
