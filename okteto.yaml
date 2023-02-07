@@ -4,17 +4,17 @@ build:
     context: .
     image: docker.io/vfarcic/silly-demo
 deploy:
-- kubectl apply --kustomize kustomize/overlays/stateful
+  - kubectl apply --kustomize kustomize/overlays/stateful
 dev:
   silly-demo:
     image: golang
     command: bash
     sync:
-    - .:/src
+      - .:/src
     securityContext:
       capabilities:
         add:
-        - SYS_PTRACE
+          - SYS_PTRACE
     workdir: /src
     forward:
-    - 8080:8080
+      - 8080:8080

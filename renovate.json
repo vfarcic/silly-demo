@@ -5,8 +5,7 @@
   "kubernetes": {
     "fileMatch": [
       "k8s/.+\\.yaml$",
-      "kustomize/overlays/stateful/deployment.yaml",
-      "kustomize/overlays/stateless/deployment.yaml"
+      "kustomize/base"
     ]
   }
 }
