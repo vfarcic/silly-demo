@@ -9,7 +9,7 @@ data:
 apiVersion: devopstoolkitseries.com/v1alpha1
 kind: SQLClaim
 metadata:
-  name: cncf-demo
+  name: silly-demo
 spec:
   id: silly-demo-db
   compositionSelector:
