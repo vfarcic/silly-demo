@@ -16,7 +16,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.14.0
 	go.opentelemetry.io/otel/sdk v1.14.0
 	go.opentelemetry.io/otel/trace v1.14.0
-	k8s.io/apimachinery v0.26.1
+	k8s.io/apimachinery v0.26.2
 )
 
 require (
