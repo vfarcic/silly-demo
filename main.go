@@ -68,4 +68,5 @@ func httpError(err error, span trace.Span, ctx *gin.Context, status int) {
 	span.RecordError(err)
 	span.SetStatus(codes.Error, err.Error())
 	ctx.String(status, err.Error())
+
 }
