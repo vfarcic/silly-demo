@@ -6,7 +6,7 @@ on:
       - main
       - master
 jobs:
-  check-bats-version:
+  build-container-image:
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -22,4 +22,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vfarcic/silly-demo:latest
+          tags: vfarcic/silly-demo:latest,vfarcic/silly-demo:1.2.${{ github.run_number }}
