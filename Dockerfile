@@ -2,7 +2,7 @@ FROM golang:1.20-alpine AS build
 ADD . /src
 WORKDIR /src
 RUN go get -d -v -t
-RUN GOOS=linux GOARCH=amd64 go build -v -o silly-demo 
+RUN GOOS=linux go build -v -o silly-demo 
 
 FROM alpine:3.17.3
 EXPOSE 8080
