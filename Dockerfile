@@ -1,4 +1,5 @@
 FROM golang:1.20-alpine AS build
+RUN mkdir /src
 ADD ./*.go /src
 ADD ./go.mod /src
 ADD ./go.sum /src
