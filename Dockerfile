@@ -1,5 +1,7 @@
 FROM golang:1.20-alpine AS build
-ADD . /src
+ADD ./*.go /src
+ADD ./go.mod /src
+ADD ./go.sum /src
 WORKDIR /src
 RUN go get -d -v -t
 RUN GOOS=linux go build -v -o silly-demo 
