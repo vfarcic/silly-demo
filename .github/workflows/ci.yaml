@@ -24,3 +24,5 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64/v8
           tags: vfarcic/silly-demo:latest,vfarcic/silly-demo:1.2.${{ github.run_number }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
