@@ -5,7 +5,7 @@
 package main
 
 import (
-	templates "timoni.sh/timoni/templates"
+	templates "devopstoolkitseries.com/silly-demo/templates"
 )
 
 values: templates.#Config

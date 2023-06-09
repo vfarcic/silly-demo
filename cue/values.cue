@@ -5,6 +5,6 @@ package main
 
 values: {
 	// image: tag: "1.2.13"
-    // ingress: host: "sillydemo.127.0.0.1.nip.io"
+	// ingress: host: "sillydemo.127.0.0.1.nip.io"
 	// autoscaling: enabled: true
 }
