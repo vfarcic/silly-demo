@@ -17,7 +17,7 @@ import (
 	selectorLabels:  *{"app.kubernetes.io/name": metadata.name} | {[ string]: string}
 	podAnnotations?: {[ string]: string}
 	image: {
-		repository: *"docker.io/vfarcic/silly-demo" | string
+		repository: *"c8n.io/vfarcic/silly-demo" | string
 		tag:        *"latest" | string
 	}
 	_resources: {
