@@ -43,6 +43,8 @@ jobs:
         uses: stefanprodan/timoni/actions/setup@main
       - name: Package with Timoni
         run: |
+          ls -la
+          pwd
           yq --inplace ".values.image.tag = \"1.3.${{ github.run_number }}\"" timoni/values.yaml
           cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"1.3.${{ github.run_number }}\"@g" | tee timoni/values.cue.tmp
           mv timoni/values.cue.tmp timoni/values.cue
