@@ -14,6 +14,7 @@ import (
 	metadata: annotations: {
 		"description": "This is a silly demo",
 		"owner": "Viktor Farcic (viktor@farcic.com)",
+		"team": "dot",
 		"language": "Go",
 	}
 
