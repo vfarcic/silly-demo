@@ -17,8 +17,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: c8n.io
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.C8N_USER }}
+          password: ${{ secrets.C8N_SECRET }}
       - name: Update files
         run: |
           cat Dockerfile | sed -e "s@ENV VERSION .*@ENV VERSION $VERSION@g" | tee Dockerfile.tmp
