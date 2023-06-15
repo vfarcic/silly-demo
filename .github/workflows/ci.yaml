@@ -39,3 +39,9 @@ jobs:
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      - name: Package with Timoni
+        run: |
+          yq --inplace ".values.image.tag = \"1.3.${{ github.run_number }}\"" timoni/values.yaml
+          cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"1.3.${{ github.run_number }}\"@g" | tee timoni/values.cue.tmp
+          mv timoni/values.cue.tmp timoni/values.cue
+          timoni mod push timoni oci://c8n.io/vfarcic/silly-demo-package --version 1.3.${{ github.run_number }}
