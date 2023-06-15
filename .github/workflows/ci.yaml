@@ -39,6 +39,8 @@ jobs:
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      - name: Setup Timoni
+        uses: stefanprodan/timoni/actions/setup@main
       - name: Package with Timoni
         run: |
           yq --inplace ".values.image.tag = \"1.3.${{ github.run_number }}\"" timoni/values.yaml
