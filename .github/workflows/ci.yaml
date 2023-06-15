@@ -9,6 +9,12 @@ jobs:
   build-container-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: xxx1
+        run: |
+          ls -la
+          pwd
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -39,6 +45,10 @@ jobs:
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      - name: xxx2
+        run: |
+          ls -la
+          pwd
       - name: Setup Timoni
         uses: stefanprodan/timoni/actions/setup@main
       - name: Package with Timoni
