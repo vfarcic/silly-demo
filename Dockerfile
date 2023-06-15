@@ -7,7 +7,7 @@ WORKDIR /src
 RUN go get -d -v -t
 RUN GOOS=linux go build -v -o silly-demo 
 
-FROM alpine:3.17.3
+FROM alpine:3.18.2
 EXPOSE 8080
 CMD ["silly-demo"]
 ENV VERSION 1.2.22
