@@ -11,7 +11,11 @@ import (
 	metadata: name:         *"silly-demo" | string & =~"^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" & strings.MaxRunes(63)
 	metadata: namespace:    *"default" | string & strings.MaxRunes(63)
 	metadata: labels:       *selectorLabels | {[ string]: string}
-	metadata: annotations?: {[ string]:            string}
+	metadata: annotations: {
+		"description": "This is a silly demo",
+		"owner": "Viktor Farcic (viktor@farcic.com)",
+		"language": "Go",
+	}
 
 	replicas:        *2 | int & >0
 	selectorLabels:  *{"app.kubernetes.io/name": metadata.name} | {[ string]: string}
