@@ -1,5 +1,5 @@
 image:
-  repository: docker.io/vfarcic/silly-demo
+  repository: c8n.io/vfarcic/silly-demo
   tag: latest
 ingress:
   host: devopstoolkitseries.com
