@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.C8N_SECRET }}
       - name: Update files
         run: |
-          cat Dockerfile | sed -e "s@ENV VERSION .*@ENV VERSION $VERSION@g" | tee Dockerfile.tmp
+          cat Dockerfile | sed -e "s@ENV VERSION .*@ENV VERSION 1.3.${{ github.run_number }}@g" | tee Dockerfile.tmp
           mv Dockerfile.tmp Dockerfile
       - name: Build and push
         uses: docker/build-push-action@v4
