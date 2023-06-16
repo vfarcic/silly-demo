@@ -10,6 +10,6 @@ RUN GOOS=linux go build -v -o silly-demo
 FROM alpine:3.18.2
 EXPOSE 8080
 CMD ["silly-demo"]
-ENV VERSION 1.2.22
+ENV VERSION 
 COPY --from=build /src/silly-demo /usr/local/bin/silly-demo
 RUN chmod +x /usr/local/bin/silly-demo
