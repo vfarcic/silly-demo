@@ -6,9 +6,9 @@ ADD ./go.sum /src
 WORKDIR /src
 RUN go get -d -v -t
 RUN GOOS=linux go build -v -o silly-demo 
+RUN chmod +x silly-demo
 
-FROM alpine:3.18.2
+FROM scratch
+COPY --from=build /src/silly-demo /usr/local/bin/silly-demo
 EXPOSE 8080
 CMD ["silly-demo"]
-COPY --from=build /src/silly-demo /usr/local/bin/silly-demo
-RUN chmod +x /usr/local/bin/silly-demo

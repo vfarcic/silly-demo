@@ -9,6 +9,9 @@ jobs:
   build-container-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Variables
+        run: |
+          echo "VERSION=silly-demo:1.4.${{ github.run_number }}" >> "$GITHUB_ENV"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up QEMU
@@ -26,14 +29,24 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64/v8
-          tags: c8n.io/vfarcic/silly-demo:latest,c8n.io/vfarcic/silly-demo:1.3.${{ github.run_number }}
+          tags: c8n.io/vfarcic/silly-demo:latest,c8n.io/vfarcic/silly-demo:${{ env.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64/v8
+          tags: c8n.io/vfarcic/silly-demo:latest-alpine,c8n.io/vfarcic/silly-demo:${{ env.VERSION }}-alpine
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          file: Dockerfile.alpine
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.0.5
       - name: Sign image with a key
         run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY c8n.io/vfarcic/silly-demo:1.3.${{ github.run_number }}
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY c8n.io/vfarcic/silly-demo:${{ env.VERSION }}
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY c8n.io/vfarcic/silly-demo:${{ env.VERSION }}-alpine
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
@@ -41,22 +54,22 @@ jobs:
         uses: stefanprodan/timoni/actions/setup@main
       - name: Timoni package
         run: |
-          yq --inplace ".values.image.tag = \"1.3.${{ github.run_number }}\"" timoni/values.yaml
-          cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"1.3.${{ github.run_number }}\"@g" | tee timoni/values.cue.tmp
+          yq --inplace ".values.image.tag = \"${{ env.VERSION }}\"" timoni/values.yaml
+          cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"${{ env.VERSION }}\"@g" | tee timoni/values.cue.tmp
           mv timoni/values.cue.tmp timoni/values.cue
-          timoni mod push timoni oci://c8n.io/vfarcic/silly-demo-package --version 1.3.${{ github.run_number }}
+          timoni mod push timoni oci://c8n.io/vfarcic/silly-demo-package --version ${{ env.VERSION }}
       - name: Helm package
         run: |
-          yq --inplace ".version = \"1.3.${{ github.run_number }}\"" helm/Chart.yaml
-          yq --inplace ".image.tag = \"1.3.${{ github.run_number }}\"" helm/values.yaml
+          yq --inplace ".version = \"${{ env.VERSION }}\"" helm/Chart.yaml
+          yq --inplace ".image.tag = \"${{ env.VERSION }}\"" helm/values.yaml
           helm package helm
-          helm push silly-demo-helm-1.3.${{ github.run_number }}.tgz oci://c8n.io/vfarcic
+          helm push silly-demo-helm-${{ env.VERSION }}.tgz oci://c8n.io/vfarcic
       - name: Commit changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          git commit -m "Release 1.3.${{ github.run_number }} [skip ci]"
+          git commit -m "Release ${{ env.VERSION }} [skip ci]"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
