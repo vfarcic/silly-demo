@@ -41,7 +41,7 @@ jobs:
           tags: ${{ env.IMAGE }}:latest-alpine,${{ env.IMAGE }}:${{ env.VERSION }}-alpine
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          file: Dockerfile.alpine
+          file: Dockerfile-alpine
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.0.5
       - name: Sign image with a key
