@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Variables
         run: |
-          echo "VERSION=silly-demo:1.4.${{ github.run_number }}" >> "$GITHUB_ENV"
+          echo "VERSION=1.4.${{ github.run_number }}" >> "$GITHUB_ENV"
+          echo "IMAGE=${{ env.IMAGE }}" >> "$GITHUB_ENV"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up QEMU
@@ -29,15 +30,15 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64/v8
-          tags: c8n.io/vfarcic/silly-demo:latest,c8n.io/vfarcic/silly-demo:${{ env.VERSION }}
+          tags: ${{ env.IMAGE }}:latest,${{ env.IMAGE }}:${{ env.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Build and push
+      - name: Build and push Alpine
         uses: docker/build-push-action@v4
         with:
           push: true
           platforms: linux/amd64,linux/arm64/v8
-          tags: c8n.io/vfarcic/silly-demo:latest-alpine,c8n.io/vfarcic/silly-demo:${{ env.VERSION }}-alpine
+          tags: ${{ env.IMAGE }}:latest-alpine,${{ env.IMAGE }}:${{ env.VERSION }}-alpine
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: Dockerfile.alpine
@@ -45,8 +46,8 @@ jobs:
         uses: sigstore/cosign-installer@v3.0.5
       - name: Sign image with a key
         run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY c8n.io/vfarcic/silly-demo:${{ env.VERSION }}
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY c8n.io/vfarcic/silly-demo:${{ env.VERSION }}-alpine
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.VERSION }}
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.VERSION }}-alpine
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
@@ -57,7 +58,7 @@ jobs:
           yq --inplace ".values.image.tag = \"${{ env.VERSION }}\"" timoni/values.yaml
           cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"${{ env.VERSION }}\"@g" | tee timoni/values.cue.tmp
           mv timoni/values.cue.tmp timoni/values.cue
-          timoni mod push timoni oci://c8n.io/vfarcic/silly-demo-package --version ${{ env.VERSION }}
+          timoni mod push timoni oci://${{ env.IMAGE }}-package --version ${{ env.VERSION }}
       - name: Helm package
         run: |
           yq --inplace ".version = \"${{ env.VERSION }}\"" helm/Chart.yaml
