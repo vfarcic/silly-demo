@@ -18,6 +18,7 @@ spec:
       verifyImages:
       - imageReferences:
         - "docker.io/vfarcic/silly-demo:*"
+        - "c8n.io/vfarcic/silly-demo:*"
         attestors:
         - count: 1
           entries:
