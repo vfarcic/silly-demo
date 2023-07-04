@@ -9,6 +9,7 @@ RUN GOOS=linux go build -v -o silly-demo
 RUN chmod +x silly-demo
 
 FROM alpine:3.18.2
+ENV DB_PORT=5432 DB_USER=postgres DB_NAME=silly-demo
 COPY --from=build /src/silly-demo /usr/local/bin/silly-demo
 EXPOSE 8080
 CMD ["silly-demo"]
