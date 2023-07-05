@@ -15,7 +15,7 @@ jobs:
           echo "IMAGE=c8n.io/vfarcic/silly-demo" >> "$GITHUB_ENV"
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Teller
+      - name: Setup Teller xxxx
         uses: spectralops/setup-teller@v2
       - name: REMOVE
         run: teller env --config .teller/c8n.yaml
