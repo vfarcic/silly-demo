@@ -1,6 +1,6 @@
 values:
   image:
-    tag: "1.4.38"
+    tag: "1.4.39"
   ingress:
     host: sillydemo.127.0.0.1.nip.io
   autoscaling:
