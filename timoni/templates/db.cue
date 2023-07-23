@@ -24,7 +24,7 @@ import (
 	apiVersion: "devopstoolkitseries.com/v1alpha1"
 	kind: 		"SQLClaim"
 	metadata: {
-		name: _config.metadata.name + "-password"
+		name: _config.metadata.name
 		namespace: _config.metadata.namespace
 		labels: _config.metadata.labels
 		metadata: annotations: {
