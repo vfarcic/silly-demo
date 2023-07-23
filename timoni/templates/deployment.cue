@@ -53,7 +53,7 @@ import (
 									name: "DB_ENDPOINT"
 									valueFrom: {
 										secretKeyRef: {
-											name: _config.metadata.name + "-db"
+											name: _config.metadata.name
 											key: "endpoint"
 										}
 									}
@@ -61,7 +61,7 @@ import (
 									name: "DB_PORT"
 									valueFrom: {
 										secretKeyRef: {
-											name: _config.metadata.name + "-db"
+											name: _config.metadata.name
 											key: "port"
 										}
 									}
@@ -69,7 +69,7 @@ import (
 									name: "DB_USER"
 									valueFrom: {
 										secretKeyRef: {
-											name: _config.metadata.name + "-db"
+											name: _config.metadata.name
 											key: "username"
 										}
 									}
@@ -77,13 +77,13 @@ import (
 									name: "DB_PASS"
 									valueFrom: {
 										secretKeyRef: {
-											name: _config.metadata.name + "-db"
+											name: _config.metadata.name
 											key: "password"
 										}
 									}
 								}, {
 									name: "DB_NAME"
-									value: _config.metadata.name + "-db"
+									value: _config.metadata.name
 								},
 							]
 						}

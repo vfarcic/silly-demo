@@ -7,5 +7,5 @@ values:
   # autoscaling:
   #   enabled: true
   #   minReplicas: 3
-  db:
-    enabled: true
+  # db:
+  #   enabled: true
