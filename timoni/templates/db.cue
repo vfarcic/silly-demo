@@ -27,7 +27,7 @@ import (
 		name: _config.metadata.name
 		namespace: _config.metadata.namespace
 		labels: _config.metadata.labels
-		metadata: annotations: {
+		annotations: {
 			"argocd.argoproj.io/hook": "PreSync",
 			"argocd.argoproj.io/sync-wave": "-10"
 		}
