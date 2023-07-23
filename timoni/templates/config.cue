@@ -51,6 +51,9 @@ import (
 		host:    *"sillydemo.com" | string
 		className?: string
 	}
+	db: {
+		enabled: *false | bool
+	}
 }
 
 #Instance: {
@@ -63,5 +66,9 @@ import (
 			"\(config.metadata.name)-hpa": #HorizontalPodAutoscaler & {_config: config}
 		}
 		"\(config.metadata.name)-ingress": #Ingress & {_config: config}
+		if config.db.enabled {
+			"\(config.metadata.name)-db-secret": #DBSecret & {_config: config}
+			"\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
+		}
 	}
 }

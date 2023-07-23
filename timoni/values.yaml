@@ -2,7 +2,10 @@ values:
   image:
     tag: "1.4.39"
   ingress:
+    className: traefik
     host: sillydemo.127.0.0.1.nip.io
-  autoscaling:
+  # autoscaling:
+  #   enabled: true
+  #   minReplicas: 3
+  db:
     enabled: true
-    minReplicas: 3
