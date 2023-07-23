@@ -23,7 +23,15 @@ import (
 	_config:    #Config
 	apiVersion: "devopstoolkitseries.com/v1alpha1"
 	kind: 		"SQLClaim"
-	metadata:   _config.metadata
+	metadata: {
+		name: _config.metadata.name + "-password"
+		namespace: _config.metadata.namespace
+		labels: _config.metadata.labels
+		metadata: annotations: {
+			"argocd.argoproj.io/hook": "PreSync",
+			"argocd.argoproj.io/sync-wave": "-10"
+		}
+	}
 	spec: {
 		id: _config.metadata.name
   		compositionSelector: {
