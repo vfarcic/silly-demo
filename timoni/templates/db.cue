@@ -25,7 +25,7 @@ import (
 	kind: 		"SQLClaim"
 	metadata:   _config.metadata
 	spec: {
-		id: _config.metadata.name + "-db"
+		id: _config.metadata.name
   		compositionSelector: {
 			matchLabels: {
 				provider: "google-official"
