@@ -12,7 +12,9 @@ import (
 		name: _config.metadata.name + "-password"
 		namespace: _config.metadata.namespace
 		labels: _config.metadata.labels
-		annotations: _config.metadata.annotations
+		annotations: {
+			"argocd.argoproj.io/sync-wave": "-10"
+		}
 	}
 	data: {
 		password: 'cG9zdGdyZXM='
