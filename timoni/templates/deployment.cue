@@ -47,6 +47,46 @@ import (
 						if _config.resources != _|_ {
 							resources: _config.resources
 						}
+						if _config.db.enabled == true {
+							env: [
+								{
+									name: "DB_ENDPOINT"
+									valueFrom: {
+										secretKeyRef: {
+											name: _config.metadata.name
+											key: "endpoint"
+										}
+									}
+								}, {
+									name: "DB_PORT"
+									valueFrom: {
+										secretKeyRef: {
+											name: _config.metadata.name
+											key: "port"
+										}
+									}
+								}, {
+									name: "DB_USER"
+									valueFrom: {
+										secretKeyRef: {
+											name: _config.metadata.name
+											key: "username"
+										}
+									}
+								}, {
+									name: "DB_PASS"
+									valueFrom: {
+										secretKeyRef: {
+											name: _config.metadata.name
+											key: "password"
+										}
+									}
+								}, {
+									name: "DB_NAME"
+									value: _config.metadata.name
+								},
+							]
+						}
 					},
 				]
 			}
