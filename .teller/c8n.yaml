@@ -1,8 +1,0 @@
-project: dot
-providers:
-  google_secretmanager:
-    env:
-      C8N_USER:
-        path: projects/vfarcic/secrets/c8n-user/versions/1
-      C8N_SECRET:
-        path: projects/vfarcic/secrets/c8n-secret/versions/1
