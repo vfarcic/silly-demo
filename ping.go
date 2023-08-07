@@ -14,7 +14,7 @@ import (
 )
 
 func pingHandler(ctx *gin.Context) {
-	req := resty.New().R().SetHeader("Content-Type", "application/text")
+	req := resty.New().R().SetHeaderMultiValues(ctx.Request.Header).SetHeader("Content-Type", "application/text")
 	otelCtx := ctx.Request.Context()
 	span := trace.SpanFromContext(otelCtx)
 	defer span.End()
