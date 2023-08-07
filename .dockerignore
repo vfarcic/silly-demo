@@ -1,0 +1,8 @@
+/.*
+/*.md
+/cosign
+/helm
+/k8s
+/kustomize
+/schemahero
+/timoni
