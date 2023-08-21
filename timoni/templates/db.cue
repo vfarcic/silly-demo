@@ -37,8 +37,8 @@ import (
 		id: _config.metadata.name
   		compositionSelector: {
 			matchLabels: {
-				provider: "google-official"
-				db: "postgresql"
+				provider: _config.db.provider
+				db: "postgres"
 			}
 		}
   		parameters: {

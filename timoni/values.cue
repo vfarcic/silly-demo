@@ -10,5 +10,8 @@ values: {
 	// 	host: "sillydemo.127.0.0.1.nip.io"
 	// }
 	// autoscaling: enabled: true
-	// db: enabled: trued
+	// db: {
+	// 	enabled: true
+	// 	provider: "google-official"
+	// }
 }

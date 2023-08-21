@@ -6,6 +6,8 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+dbProvider: "local-k8s" | "aws-official" | "azure-official"
+
 #Config: {
 	metadata: metav1.#ObjectMeta
 	metadata: name:         *"silly-demo" | string & =~"^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" & strings.MaxRunes(63)
@@ -53,6 +55,8 @@ import (
 	}
 	db: {
 		enabled: *false | bool
+		provider: *"google-official" | dbProvider
+		type: *"postgres" | string
 	}
 }
 

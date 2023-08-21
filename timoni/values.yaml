@@ -9,3 +9,4 @@ values:
   #   minReplicas: 3
   # db:
   #   enabled: true
+  #   provider: "google-official"
