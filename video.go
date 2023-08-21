@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/go-pg/pg/extra/pgotel/v10"
 	"github.com/go-pg/pg/v10"
 
 	"github.com/gin-gonic/gin"
@@ -65,56 +64,45 @@ func getDB(c *gin.Context) *pg.DB {
 		Password: pass,
 		Database: name,
 	})
-	dbSession.AddQueryHook(pgotel.NewTracingHook())
 	return dbSession
 }
 
 func videosGetHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-get")
-	defer func() { span.End() }()
-
-	span.AddEvent("Establishing connection to the database")
 	db := getDB(ctx)
 	if db == nil {
 		return
 	}
 	var videos []Video
-	err := db.ModelContext(traceContext, &videos).Select()
+	err := db.ModelContext(ctx, &videos).Select()
 	if err != nil {
-		httpErrorInternalServerError(err, span, ctx)
+		httpErrorInternalServerError(err, ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, videos)
 }
 
 func videoPostHandler(ctx *gin.Context) {
-	traceContext, span := tp.Tracer(serviceName).Start(ctx, "video-post")
-	defer func() { span.End() }()
-
-	span.AddEvent("Establishing connection to the database...")
 	db := getDB(ctx)
 	if db == nil {
 		return
 	}
-	span.AddEvent("Retrieving values...")
 	id := ctx.Query("id")
 	if len(id) == 0 {
-		httpErrorBadRequest(errors.New("id is empty"), span, ctx)
+		httpErrorBadRequest(errors.New("id is empty"), ctx)
 		return
 	}
 	title := ctx.Query("title")
 	if len(title) == 0 {
-		httpErrorBadRequest(errors.New("title is empty"), span, ctx)
+		httpErrorBadRequest(errors.New("title is empty"), ctx)
 		return
 	}
-	span.AddEvent("Retrieving data from the database...")
 	video := &Video{
 		ID:    id,
 		Title: title,
 	}
-	_, err := db.ModelContext(traceContext, video).Insert()
+	_, err := db.ModelContext(ctx, video).Insert()
 	if err != nil {
-		httpErrorInternalServerError(err, span, ctx)
+		httpErrorInternalServerError(err, ctx)
 		return
 	}
 }
