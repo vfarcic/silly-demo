@@ -38,7 +38,7 @@ import (
   		compositionSelector: {
 			matchLabels: {
 				provider: _config.db.provider
-				db: "postgres"
+				db: "postgresql"
 			}
 		}
   		parameters: {
