@@ -1,4 +1,4 @@
-module devopstoolkitseries/silly-app
+module devopstoolkitseries.com/silly-app
 
 go 1.19
 
