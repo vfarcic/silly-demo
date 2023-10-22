@@ -1,4 +1,4 @@
-FROM golang:1.20.5-alpine AS build
+FROM golang:1.20.10-alpine3.17 AS build
 RUN mkdir /src
 ADD ./*.go /src
 ADD ./go.mod /src
