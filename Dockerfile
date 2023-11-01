@@ -3,7 +3,6 @@ RUN mkdir /src
 ADD ./*.go /src
 ADD ./go.mod /src
 ADD ./go.sum /src
-ADD ./vendor /src
 WORKDIR /src
 RUN go mod download
 RUN GOOS=linux GOARCH=amd64 go build -v -o silly-demo 
