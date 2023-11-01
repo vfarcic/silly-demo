@@ -5,7 +5,7 @@ ADD ./go.mod /src
 ADD ./go.sum /src
 ADD ./vendor /src
 WORKDIR /src
-RUN GOOS=linux GOARCH=amd64 go build -v -o silly-demo 
+RUN go build -v -o silly-demo 
 RUN chmod +x silly-demo
 
 FROM scratch
