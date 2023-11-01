@@ -1,9 +1,11 @@
 FROM golang:1.20.10-alpine3.17 AS build
 RUN mkdir /src
+ADD ./*.go /src
+ADD ./go.mod /src
+ADD ./go.sum /src
+ADD ./vendor /src
 WORKDIR /src
-COPY ./ ./
-RUN ls -l
-RUN GOOS=linux GOARCH=amd64 go build -o silly-demo 
+RUN GOOS=linux GOARCH=amd64 go build -v -o silly-demo 
 RUN chmod +x silly-demo
 
 FROM scratch
