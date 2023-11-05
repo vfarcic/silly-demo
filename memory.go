@@ -23,11 +23,13 @@ func memoryLeakHandler(ctx *gin.Context) {
 	if len(ctx.Query("frequency")) > 0 {
 		frequency, _ = strconv.Atoi(ctx.Query("frequency"))
 	}
-	output := memoryLeak(maxMemory, frequency)
-	ctx.String(http.StatusOK, output)
+	go func() {
+		memoryLeak(maxMemory, frequency)
+	}()
+	ctx.String(http.StatusOK, "Memory leak simulation started")
 }
 
-func memoryLeak(maxMemory, frequency int) string {
+func memoryLeak(maxMemory, frequency int) {
 	if maxMemory <= 0 {
 		maxMemory = 1024 * 1 // 1 GB
 		if len(os.Getenv("MEMORY_LEAK_MAX_MEMORY")) > 0 {
@@ -37,27 +39,23 @@ func memoryLeak(maxMemory, frequency int) string {
 	if frequency <= 0 {
 		frequency = 60
 		if len(os.Getenv("MEMORY_LEAK_FREQUENCY")) > 0 {
-			frequency, _ = strconv.Atoi(os.Getenv("MEMORY_LEAK_MAX_MEMORY"))
+			frequency, _ = strconv.Atoi(os.Getenv("MEMORY_LEAK_FREQUENCY"))
 		}
 	}
-	output := fmt.Sprintf(
+	log.Printf(
 		"Memory leak simulation started with max memory set to %d MB and frequency set to %d seconds",
 		maxMemory,
 		frequency,
 	)
-	log.Println(output)
-	go func() {
-		for {
-			memoryLeakSlice = append(memoryLeakSlice, memoryLeakSlice...)
-			memStats := runtime.MemStats{}
-			runtime.ReadMemStats(&memStats)
-			fmt.Printf("Memory usage: %d MB\n", memStats.Alloc/1024/1024)
-			if memStats.Alloc/1024/1024 > uint64(maxMemory) {
-				log.Println("Memory leak simulation ended")
-				break
-			}
-			time.Sleep(time.Second * time.Duration(frequency))
+	for {
+		memoryLeakSlice = append(memoryLeakSlice, memoryLeakSlice...)
+		memStats := runtime.MemStats{}
+		runtime.ReadMemStats(&memStats)
+		fmt.Printf("Memory usage: %d MB\n", memStats.Alloc/1024/1024)
+		if memStats.Alloc/1024/1024 > uint64(maxMemory) {
+			log.Println("Memory leak simulation ended")
+			break
 		}
-	}()
-	return output
+		time.Sleep(time.Second * time.Duration(frequency))
+	}
 }
