@@ -17,6 +17,9 @@ func main() {
 	if os.Getenv("SERVICE_NAME") != "" {
 		serviceName = os.Getenv("SERVICE_NAME")
 	}
+	if os.Getenv("MEMORY_LEAK_MAX_MEMORY") != "" {
+		memoryLeak(0, 0)
+	}
 
 	// Server
 	log.Println("Starting server...")
