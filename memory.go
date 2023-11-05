@@ -13,7 +13,7 @@ import (
 )
 
 func memoryLeakHandler(ctx *gin.Context) {
-	maxMemory := 1024 * 1 // 1 GB
+	maxMemory := 0
 	if len(ctx.Query("max-memory")) > 0 {
 		maxMemory, _ = strconv.Atoi(ctx.Query("max-memory"))
 	}
@@ -29,7 +29,10 @@ func memoryLeakHandler(ctx *gin.Context) {
 
 func memoryLeak(maxMemory, frequency int) {
 	if maxMemory <= 0 {
-		maxMemory, _ = strconv.Atoi(os.Getenv("MEMORY_LEAK_MAX_MEMORY"))
+		maxMemory = 1024 * 1 // 1 GB
+		if len(os.Getenv("MEMORY_LEAK_MAX_MEMORY")) > 0 {
+			maxMemory, _ = strconv.Atoi(os.Getenv("MEMORY_LEAK_MAX_MEMORY"))
+		}
 	}
 	if frequency <= 0 {
 		frequency = 60
