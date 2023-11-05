@@ -12,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var memoryLeakSlice = make([]byte, 1024*1024)
+
 func memoryLeakHandler(ctx *gin.Context) {
 	maxMemory := 0
 	if len(ctx.Query("max-memory")) > 0 {
@@ -21,13 +23,11 @@ func memoryLeakHandler(ctx *gin.Context) {
 	if len(ctx.Query("frequency")) > 0 {
 		frequency, _ = strconv.Atoi(ctx.Query("frequency"))
 	}
-	memoryLeak(maxMemory, frequency)
-	output := "Memory leak simulation started"
-	log.Println(output)
+	output := memoryLeak(maxMemory, frequency)
 	ctx.String(http.StatusOK, output)
 }
 
-func memoryLeak(maxMemory, frequency int) {
+func memoryLeak(maxMemory, frequency int) string {
 	if maxMemory <= 0 {
 		maxMemory = 1024 * 1 // 1 GB
 		if len(os.Getenv("MEMORY_LEAK_MAX_MEMORY")) > 0 {
@@ -40,17 +40,24 @@ func memoryLeak(maxMemory, frequency int) {
 			frequency, _ = strconv.Atoi(os.Getenv("MEMORY_LEAK_MAX_MEMORY"))
 		}
 	}
-	slice := make([]byte, 1024*1024)
+	output := fmt.Sprintf(
+		"Memory leak simulation started with max memory set to %d MB and frequency set to %d seconds",
+		maxMemory,
+		frequency,
+	)
+	log.Println(output)
 	go func() {
 		for {
-			slice = append(slice, slice...)
+			memoryLeakSlice = append(memoryLeakSlice, memoryLeakSlice...)
 			memStats := runtime.MemStats{}
 			runtime.ReadMemStats(&memStats)
 			fmt.Printf("Memory usage: %d MB\n", memStats.Alloc/1024/1024)
 			if memStats.Alloc/1024/1024 > uint64(maxMemory) {
+				log.Println("Memory leak simulation ended")
 				break
 			}
 			time.Sleep(time.Second * time.Duration(frequency))
 		}
 	}()
+	return output
 }
