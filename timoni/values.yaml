@@ -1,6 +1,6 @@
 values:
   image:
-    tag: "1.4.78"
+    tag: "9.9.1"
   ingress:
     className: traefik
     host: sillydemo.127.0.0.1.nip.io
