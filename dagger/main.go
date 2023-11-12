@@ -24,22 +24,14 @@ func main() {
 	}
 	defer client.Close()
 
-	// binary := buildBinary(client)
-	// publishImages(client, binary, tag)
+	// TODO: Uncomment
+	binary := buildBinary(client)
+	// TODO: Uncomment
+	publish(client, binary, tag)
+	// TODO: Uncomment
 	// pushTimoni(client, tag)
-	updateHelm(client, tag)
-
-	//   - name: Commit changes
-	// 	run: |
-	// 	  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-	// 	  git config --local user.name "github-actions[bot]"
-	// 	  git add .
-	// 	  git commit -m "Release ${{ env.VERSION }} [skip ci]"
-	//   - name: Push changes
-	// 	uses: ad-m/github-push-action@master
-	// 	with:
-	// 	  github_token: ${{ secrets.GITHUB_TOKEN }}
-	// 	  branch: ${{ github.ref }}
+	// TODO: Uncomment
+	// updateHelm(client, tag)
 }
 
 func buildBinary(client *dagger.Client) *dagger.File {
@@ -49,24 +41,23 @@ func buildBinary(client *dagger.Client) *dagger.File {
 			Include: []string{"go.mod", "go.sum", "*.go", "vendor"},
 		}).
 		WithWorkdir("src").
-		WithEnvVariable("GOOS", "linux").
-		WithEnvVariable("GOARCH", "amd64").
-		WithExec([]string{"go", "build", "-o", "silly-demo", "-mod=vendor"}).
-		WithExec([]string{"chmod", "+x", "silly-demo"}).
+		WithEntrypoint([]string{"sh", "-c"}).
+		WithExec([]string{"GOOS=linux GOARCH=amd64 go build -o silly-demo"}).
+		WithExec([]string{"chmod +x silly-demo"}).
 		File("silly-demo")
 	return binary
 }
 
-func publishImages(client *dagger.Client, binary *dagger.File, tag string) {
+func publish(client *dagger.Client, binary *dagger.File, tag string) {
 	// TODO: Uncomment
 	// image.Publish(ctx, fmt.Sprintf("c8n.io/vfarcic/silly-demo:%s", "latest"))
-	publish(client, binary, client.Container(), []string{tag})
+	publishImages(client, binary, client.Container(), []string{tag})
 	// TODO: Uncomment
 	// imageAlpine.Publish(ctx, fmt.Sprintf("c8n.io/vfarcic/silly-demo:latest-alpine", tag))
-	publish(client, binary, client.Container().From("alpine:3.18.4"), []string{fmt.Sprintf("%s-alpine", tag)})
+	publishImages(client, binary, client.Container().From("alpine:3.18.4"), []string{fmt.Sprintf("%s-alpine", tag)})
 }
 
-func publish(client *dagger.Client, binary *dagger.File, baseImage *dagger.Container, tags []string) {
+func publishImages(client *dagger.Client, binary *dagger.File, baseImage *dagger.Container, tags []string) {
 	image := baseImage.
 		WithEnvVariable("DB_PORT", "5432").
 		WithEnvVariable("DB_USER", "postgres").
@@ -80,17 +71,18 @@ func publish(client *dagger.Client, binary *dagger.File, baseImage *dagger.Conta
 		if err != nil {
 			panic(err)
 		}
-		// TODO: Uncomment
-		// output, err := client.Container().
-		// 	From("bitnami/cosign:2.2.1").
-		// 	WithEnvVariable("COSIGN_PRIVATE_KEY", os.Getenv("COSIGN_PRIVATE_KEY")).
-		// 	WithEnvVariable("COSIGN_PASSWORD", os.Getenv("COSIGN_PASSWORD")).
-		// 	WithExec([]string{"sign", "--yes", "--key", "env://COSIGN_PRIVATE_KEY", imageAddr}).
-		// 	Stderr(ctx)
-		// if err != nil {
-		// 	println(output)
-		// 	panic(err)
-		// }
+		output, err := client.Container().
+			From("bitnami/cosign:2.2.1").
+			WithEnvVariable("COSIGN_PRIVATE_KEY", os.Getenv("COSIGN_PRIVATE_KEY")).
+			WithEnvVariable("COSIGN_PASSWORD", os.Getenv("COSIGN_PASSWORD")).
+			WithEnvVariable("REGISTRY_PASSWORD", os.Getenv("REGISTRY_PASSWORD")).
+			WithEntrypoint([]string{"sh", "-c"}).
+			WithExec([]string{fmt.Sprintf("cosign login c8n.io --username vfarcic --password $REGISTRY_PASSWORD && cosign sign --yes --key env://COSIGN_PRIVATE_KEY %s", imageAddr)}).
+			Stderr(ctx)
+		if err != nil {
+			println(output)
+			panic(err)
+		}
 		fmt.Printf("Published image %s\n", imageAddr)
 	}
 }

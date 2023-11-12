@@ -1,6 +1,6 @@
 image:
   repository: c8n.io/vfarcic/silly-demo
-  tag: 9.9.2
+  tag: 9.9.1
 ingress:
   host: devopstoolkitseries.com
 db:
