@@ -24,47 +24,20 @@ func main() {
 	}
 	defer client.Close()
 
-	// TODO: Uncomment
-	binary := buildBinary(client)
-	// TODO: Uncomment
-	publish(client, binary, tag)
-	// TODO: Uncomment
-	// pushTimoni(client, tag)
-	// TODO: Uncomment
-	// updateHelm(client, tag)
+	publish(client, tag)
+	pushTimoni(client, tag)
+	updateHelm(client, tag)
 }
 
-func buildBinary(client *dagger.Client) *dagger.File {
-	binary := client.Container().
-		From("golang:1.21.4").
-		WithDirectory("src", client.Host().Directory("."), dagger.ContainerWithDirectoryOpts{
-			Include: []string{"go.mod", "go.sum", "*.go"},
-		}).
-		WithWorkdir("src").
-		WithEntrypoint([]string{"sh", "-c"}).
-		WithExec([]string{"GOOS=linux GOARCH=amd64 go build -o silly-demo"}).
-		WithExec([]string{"chmod +x silly-demo"}).
-		File("silly-demo")
-	return binary
+func publish(client *dagger.Client, tag string) {
+	publishImages(client, "Dockerfile", []string{tag, "latest"})
+	publishImages(client, "Dockerfile-alpine", []string{fmt.Sprintf("%s-alpine", tag), "latest-alpine"})
 }
 
-func publish(client *dagger.Client, binary *dagger.File, tag string) {
-	// TODO: Uncomment
-	// image.Publish(ctx, fmt.Sprintf("c8n.io/vfarcic/silly-demo:%s", "latest"))
-	publishImages(client, binary, client.Container(), []string{tag})
-	// TODO: Uncomment
-	// imageAlpine.Publish(ctx, fmt.Sprintf("c8n.io/vfarcic/silly-demo:latest-alpine", tag))
-	publishImages(client, binary, client.Container().From("alpine:3.18.4"), []string{fmt.Sprintf("%s-alpine", tag)})
-}
-
-func publishImages(client *dagger.Client, binary *dagger.File, baseImage *dagger.Container, tags []string) {
-	image := baseImage.
-		WithEnvVariable("DB_PORT", "5432").
-		WithEnvVariable("DB_USER", "postgres").
-		WithEnvVariable("DB_NAME", "silly-demo").
-		WithFile("/usr/local/bin/silly-demo", binary).
-		WithExposedPort(8080).
-		WithEntrypoint([]string{"silly-demo"})
+func publishImages(client *dagger.Client, dockerfile string, tags []string) {
+	image := client.Host().Directory(".").DockerBuild(dagger.DirectoryDockerBuildOpts{
+		Dockerfile: dockerfile,
+	})
 	for _, tag := range tags {
 		imageTag := fmt.Sprintf("c8n.io/vfarcic/silly-demo:%s", tag)
 		imageAddr, err := image.Publish(ctx, imageTag)
