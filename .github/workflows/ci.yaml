@@ -32,7 +32,9 @@ jobs:
       - name: Install Dagger CLI
         run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
       - name: Run Dagger pipeline
-        run: dagger run go run dagger/main.go
+        run: |
+          export REGISTRY_PASSWORD=${{ secrets.REGISTRY_PASSWORD }}
+          dagger run go run dagger/main.go
       - name: Commit changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
