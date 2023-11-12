@@ -3,8 +3,8 @@ RUN mkdir /src
 WORKDIR /src
 ADD ./go.mod .
 ADD ./go.sum .
-ADD ./*.go .
 ADD ./vendor .
+ADD ./*.go .
 RUN GOOS=linux GOARCH=amd64 go build -o silly-demo
 RUN chmod +x silly-demo
 
