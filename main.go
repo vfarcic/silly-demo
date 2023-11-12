@@ -41,6 +41,5 @@ func httpErrorInternalServerError(err error, ctx *gin.Context) {
 
 func httpError(err error, ctx *gin.Context, status int) {
 	log.Println(err.Error())
-	println("777")
 	ctx.String(status, err.Error())
 }
