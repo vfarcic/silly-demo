@@ -38,7 +38,7 @@ func buildBinary(client *dagger.Client) *dagger.File {
 	binary := client.Container().
 		From("golang:1.21.4").
 		WithDirectory("src", client.Host().Directory("."), dagger.ContainerWithDirectoryOpts{
-			Include: []string{"go.mod", "go.sum", "*.go", "vendor"},
+			Include: []string{"go.mod", "go.sum", "*.go"},
 		}).
 		WithWorkdir("src").
 		WithEntrypoint([]string{"sh", "-c"}).
