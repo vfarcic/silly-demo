@@ -6,7 +6,5 @@ providers:
         path: projects/vfarcic/secrets/cosign/versions/1
       COSIGN_PASSWORD:
         path: projects/vfarcic/secrets/cosign-password/versions/1
-      # REGISTRY_USER:
-      #   path: projects/vfarcic/secrets/c8n-user/versions/1
       REGISTRY_PASSWORD:
         path: projects/vfarcic/secrets/c8n-secret/versions/1
