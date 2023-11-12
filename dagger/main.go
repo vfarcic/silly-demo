@@ -35,6 +35,7 @@ func publish(client *dagger.Client, tag string) {
 }
 
 func publishImages(client *dagger.Client, dockerfile string, tags []string) {
+	signed := false
 	image := client.Host().Directory(".").DockerBuild(dagger.DirectoryDockerBuildOpts{
 		Dockerfile: dockerfile,
 	})
@@ -44,17 +45,20 @@ func publishImages(client *dagger.Client, dockerfile string, tags []string) {
 		if err != nil {
 			panic(err)
 		}
-		output, err := client.Container().
-			From("bitnami/cosign:2.2.1").
-			WithEnvVariable("COSIGN_PRIVATE_KEY", os.Getenv("COSIGN_PRIVATE_KEY")).
-			WithEnvVariable("COSIGN_PASSWORD", os.Getenv("COSIGN_PASSWORD")).
-			WithEnvVariable("REGISTRY_PASSWORD", os.Getenv("REGISTRY_PASSWORD")).
-			WithEntrypoint([]string{"sh", "-c"}).
-			WithExec([]string{fmt.Sprintf("cosign login c8n.io --username vfarcic --password $REGISTRY_PASSWORD && cosign sign --yes --key env://COSIGN_PRIVATE_KEY %s", imageAddr)}).
-			Stderr(ctx)
-		if err != nil {
-			println(output)
-			panic(err)
+		if !signed {
+			output, err := client.Container().
+				From("bitnami/cosign:2.2.1").
+				WithEnvVariable("COSIGN_PRIVATE_KEY", os.Getenv("COSIGN_PRIVATE_KEY")).
+				WithEnvVariable("COSIGN_PASSWORD", os.Getenv("COSIGN_PASSWORD")).
+				WithEnvVariable("REGISTRY_PASSWORD", os.Getenv("REGISTRY_PASSWORD")).
+				WithEntrypoint([]string{"sh", "-c"}).
+				WithExec([]string{fmt.Sprintf("cosign login c8n.io --username vfarcic --password $REGISTRY_PASSWORD && cosign sign --yes --key env://COSIGN_PRIVATE_KEY %s", imageAddr)}).
+				Stderr(ctx)
+			if err != nil {
+				println(output)
+				panic(err)
+			}
+			signed = true
 		}
 		fmt.Printf("Published image %s\n", imageAddr)
 	}
