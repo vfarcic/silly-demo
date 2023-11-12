@@ -4,7 +4,7 @@
 package main
 
 values: {
-	image: tag: "9.9.1"
+	image: tag: "1.4.85"
 	// ingress: {
 	// 	className: "traefik"
 	// 	host: "sillydemo.127.0.0.1.nip.io"
