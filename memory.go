@@ -52,7 +52,7 @@ func memoryLeak(maxMemory, frequency int) {
 		memStats := runtime.MemStats{}
 		runtime.ReadMemStats(&memStats)
 		fmt.Printf("Memory usage: %d MB\n", memStats.Alloc/1024/1024)
-		if memStats.Alloc/1024/1024 > uint64(maxMemory) {
+		if maxMemory > 0 && memStats.Alloc/1024/1024 > uint64(maxMemory) {
 			log.Println("Memory leak simulation ended")
 			break
 		}
