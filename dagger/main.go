@@ -102,6 +102,7 @@ func publishImages(client *dagger.Client, dockerfile string, tags []string) {
 }
 
 func deploy(client *dagger.Client, valuesPath, destination string) error {
+	message := "Deployed the app"
 	command := fmt.Sprintf("timoni build silly-demo timoni --values %s", valuesPath)
 	out, err := client.Container().From("golang:1.21.4").
 		WithExec([]string{"go", "install", "github.com/stefanprodan/timoni/cmd/timoni@latest"}).
@@ -111,7 +112,6 @@ func deploy(client *dagger.Client, valuesPath, destination string) error {
 	if err != nil {
 		return err
 	}
-	message := "Deployed the app"
 	if destination == DestinationCluster {
 		cmd := exec.Command("sh", "-c", fmt.Sprintf("echo '%s' | kubectl apply --filename -", out))
 		_, err = cmd.CombinedOutput()
@@ -119,6 +119,8 @@ func deploy(client *dagger.Client, valuesPath, destination string) error {
 		path := "k8s/app.yaml"
 		err = writeFile(out, path)
 		message = fmt.Sprintf("Output Kubernetes manifests to %s\n", path)
+		println(path)
+		println(out)
 	} else {
 		err = fmt.Errorf("Unknown destination %s", destination)
 	}
