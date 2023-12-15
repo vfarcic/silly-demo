@@ -47,10 +47,10 @@ func main() {
 	publish(client, tag)
 	publishTimoni(client, tag)
 	if dev {
-		deploy(client, DestinationCluster)
+		deploy(client, "timoni/values-dev.yaml", DestinationCluster)
 	} else {
 		updateHelm(client, tag)
-		deploy(client, DestinationFile)
+		deploy(client, "timoni/values.yaml", DestinationFile)
 	}
 }
 
@@ -97,11 +97,12 @@ func publishImages(client *dagger.Client, dockerfile string, tags []string) {
 	}
 }
 
-func deploy(client *dagger.Client, destination string) {
+func deploy(client *dagger.Client, valuesPath, destination string) {
+	command := fmt.Sprintf("timoni build silly-demo timoni --values %s", valuesPath)
 	out, err := client.Container().From("golang:1.21.4").
 		WithExec([]string{"go", "install", "github.com/stefanprodan/timoni/cmd/timoni@latest"}).
 		WithDirectory("timoni", client.Host().Directory("timoni")).
-		WithExec([]string{"sh", "-c", "timoni build silly-demo timoni --values timoni/values-dev.yaml"}).
+		WithExec([]string{"sh", "-c", command}).
 		Stdout(ctx)
 	if err != nil {
 		panic(err)
