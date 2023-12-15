@@ -108,19 +108,22 @@ func deploy(client *dagger.Client, valuesPath, destination string) error {
 		WithDirectory("timoni", client.Host().Directory("timoni")).
 		WithExec([]string{"sh", "-c", command}).
 		Stdout(ctx)
-	if err == nil {
+	if err != nil {
 		return err
 	}
+	message := "Deployed the app"
 	if destination == DestinationCluster {
 		cmd := exec.Command("sh", "-c", fmt.Sprintf("echo '%s' | kubectl apply --filename -", out))
 		_, err = cmd.CombinedOutput()
-		fmt.Println("Deployed the app")
 	} else if destination == DestinationFile {
 		path := "k8s/app.yaml"
 		err = writeFile(out, path)
-		fmt.Printf("Output Kubernetes manifests to %s\n", path)
+		message = fmt.Sprintf("Output Kubernetes manifests to %s\n", path)
 	} else {
 		err = fmt.Errorf("Unknown destination %s", destination)
+	}
+	if err == nil {
+		fmt.Println(message)
 	}
 	return err
 }
