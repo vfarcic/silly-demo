@@ -47,10 +47,14 @@ func main() {
 	publish(client, tag)
 	publishTimoni(client, tag)
 	if dev {
-		deploy(client, "timoni/values-dev.yaml", DestinationCluster)
+		if deploy(client, "timoni/values-dev.yaml", DestinationCluster) != nil {
+			panic(err)
+		}
 	} else {
 		updateHelm(client, tag)
-		deploy(client, "timoni/values.yaml", DestinationFile)
+		if deploy(client, "timoni/values.yaml", DestinationFile) != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -97,28 +101,28 @@ func publishImages(client *dagger.Client, dockerfile string, tags []string) {
 	}
 }
 
-func deploy(client *dagger.Client, valuesPath, destination string) {
+func deploy(client *dagger.Client, valuesPath, destination string) error {
 	command := fmt.Sprintf("timoni build silly-demo timoni --values %s", valuesPath)
 	out, err := client.Container().From("golang:1.21.4").
 		WithExec([]string{"go", "install", "github.com/stefanprodan/timoni/cmd/timoni@latest"}).
 		WithDirectory("timoni", client.Host().Directory("timoni")).
 		WithExec([]string{"sh", "-c", command}).
 		Stdout(ctx)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		return err
 	}
 	if destination == DestinationCluster {
 		cmd := exec.Command("sh", "-c", fmt.Sprintf("echo '%s' | kubectl apply --filename -", out))
 		_, err = cmd.CombinedOutput()
+		fmt.Println("Deployed the app")
 	} else if destination == DestinationFile {
-		writeFile(out, "k8s/app.yaml")
+		path := "k8s/app.yaml"
+		err = writeFile(out, path)
+		fmt.Printf("Output Kubernetes manifests to %s\n", path)
 	} else {
 		err = fmt.Errorf("Unknown destination %s", destination)
 	}
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Deployed the app")
+	return err
 }
 
 func publishTimoni(client *dagger.Client, tag string) {
