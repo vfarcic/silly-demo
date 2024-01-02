@@ -24,7 +24,7 @@ dbProvider: "local-k8s" | "aws-official" | "azure-official"
 	selectorLabels:  *{"app.kubernetes.io/name": metadata.name} | {[ string]: string}
 	podAnnotations?: {[ string]: string}
 	image: {
-		repository: *"c8n.io/vfarcic/silly-demo" | string
+		repository: *"ghcr.io/vfarcic/silly-demo" | string
 		tag:        *"latest" | string
 	}
 	_resources: {
