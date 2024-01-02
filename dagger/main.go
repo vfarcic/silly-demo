@@ -21,6 +21,7 @@ const (
 )
 
 func main() {
+	// Initialize
 	if len(os.Getenv("DEV")) > 0 {
 		dev = true
 	}
