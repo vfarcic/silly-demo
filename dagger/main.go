@@ -12,7 +12,7 @@ import (
 )
 
 var ctx = context.Background()
-var image = "c8n.io/vfarcic/silly-demo"
+var image = "ghcr.io/vfarcic/silly-demo"
 var dev = false
 
 const (
