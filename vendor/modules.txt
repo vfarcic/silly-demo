@@ -1,11 +1,3 @@
-# dagger.io/dagger v0.9.3
-## explicit; go 1.20
-# github.com/99designs/gqlgen v0.17.31
-## explicit; go 1.18
-# github.com/Khan/genqlient v0.6.0
-## explicit; go 1.18
-# github.com/adrg/xdg v0.4.0
-## explicit; go 1.14
 # github.com/bytedance/sonic v1.9.1
 ## explicit; go 1.15
 github.com/bytedance/sonic
@@ -32,6 +24,9 @@ github.com/bytedance/sonic/utf8
 # github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311
 ## explicit; go 1.15
 github.com/chenzhuoyu/base64x
+# github.com/davecgh/go-spew v1.1.1
+## explicit
+github.com/davecgh/go-spew/spew
 # github.com/gabriel-vasile/mimetype v1.4.2
 ## explicit; go 1.20
 github.com/gabriel-vasile/mimetype
@@ -103,8 +98,6 @@ github.com/leodido/go-urn
 # github.com/mattn/go-isatty v0.0.19
 ## explicit; go 1.15
 github.com/mattn/go-isatty
-# github.com/mitchellh/go-homedir v1.1.0
-## explicit
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 ## explicit
 github.com/modern-go/concurrent
@@ -118,8 +111,14 @@ github.com/pelletier/go-toml/v2/internal/characters
 github.com/pelletier/go-toml/v2/internal/danger
 github.com/pelletier/go-toml/v2/internal/tracker
 github.com/pelletier/go-toml/v2/unstable
+# github.com/pmezard/go-difflib v1.0.0
+## explicit
+github.com/pmezard/go-difflib/difflib
 # github.com/rogpeppe/go-internal v1.11.0
 ## explicit; go 1.19
+# github.com/stretchr/testify v1.8.3
+## explicit; go 1.20
+github.com/stretchr/testify/assert
 # github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
 ## explicit
 github.com/tmthrgd/go-hex
@@ -145,8 +144,6 @@ github.com/twitchyliquid64/golang-asm/unsafeheader
 # github.com/ugorji/go/codec v1.2.11
 ## explicit; go 1.11
 github.com/ugorji/go/codec
-# github.com/vektah/gqlparser/v2 v2.5.6
-## explicit; go 1.16
 # github.com/vmihailenco/bufpool v0.1.11
 ## explicit; go 1.13
 github.com/vmihailenco/bufpool
@@ -171,8 +168,6 @@ golang.org/x/arch/x86/x86asm
 ## explicit; go 1.17
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/sha3
-# golang.org/x/exp v0.0.0-20231006140011-7918f672742d
-## explicit; go 1.20
 # golang.org/x/net v0.17.0
 ## explicit; go 1.17
 golang.org/x/net/html
@@ -183,8 +178,6 @@ golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/publicsuffix
-# golang.org/x/sync v0.4.0
-## explicit; go 1.17
 # golang.org/x/sys v0.13.0
 ## explicit; go 1.17
 golang.org/x/sys/cpu
