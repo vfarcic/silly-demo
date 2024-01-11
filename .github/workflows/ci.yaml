@@ -64,7 +64,7 @@ jobs:
           yq --inplace ".version = \"${{ env.TAG }}\"" helm/Chart.yaml
           yq --inplace ".image.tag = \"${{ env.TAG }}\"" helm/values.yaml
           helm package helm
-          helm push silly-demo-helm-${{ env.TAG }}.tgz oci://c8n.io/vfarcic
+          helm push silly-demo-helm-${{ env.TAG }}.tgz oci://ghcr.io/vfarcic
       - name: Commit changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
