@@ -7,4 +7,4 @@ providers:
       COSIGN_PASSWORD:
         path: projects/vfarcic/secrets/cosign-password/versions/1
       REGISTRY_PASSWORD:
-        path: projects/vfarcic/secrets/c8n-secret/versions/1
+        path: projects/vfarcic/secrets/github-token/versions/2
