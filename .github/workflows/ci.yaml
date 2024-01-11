@@ -20,6 +20,7 @@ jobs:
           echo "TAG=dev-${{ vars.TAG }}" >> "$GITHUB_ENV"
           echo "IMAGE=ttl.sh/silly-demo" >> "$GITHUB_ENV"
       - name: Checkout
+        if: ${{ !env.ACT }}
         uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
