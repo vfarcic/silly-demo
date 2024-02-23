@@ -57,7 +57,12 @@ import (
 									valueFrom: {
 										secretKeyRef: {
 											name: _secretName
-											key: "endpoint"
+											if _config.db.provider == "cnpg" {
+												key: "host"
+											}
+											if _config.db.provider != "cnpg" {
+												key: "endpoint"
+											}
 										}
 									}
 								}, {
@@ -86,7 +91,12 @@ import (
 									}
 								}, {
 									name: "DB_NAME"
-									value: _config.metadata.name
+									if _config.db.provider == "cnpg" {
+										value: "app"
+									}
+									if _config.db.provider != "cnpg" {
+										value: _config.metadata.name
+									}
 								},
 							]
 						}
