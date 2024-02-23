@@ -7,5 +7,6 @@ pkgs.mkShell {
   packages = with pkgs; [
     bat
     yq-go
+    timoni
   ];
 }

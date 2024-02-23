@@ -47,3 +47,19 @@ import (
 		}	
 	}
 }
+
+
+#DBCNPG: {
+	_config:    #Config
+	apiVersion: "postgresql.cnpg.io/v1"
+	kind: 		"Cluster"
+	metadata: {
+		name: _config.metadata.name
+		namespace: _config.metadata.namespace
+		labels: _config.metadata.labels
+	}
+	spec: {
+		instances: 1
+  		storage: { size: "1Gi" }
+	}
+}

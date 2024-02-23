@@ -6,7 +6,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-dbProvider: "local-k8s" | "aws-official" | "azure-official"
+dbProvider: "local-k8s" | "aws-official" | "azure-official" | "cnpg"
 
 #Config: {
 	metadata: metav1.#ObjectMeta
@@ -71,8 +71,13 @@ dbProvider: "local-k8s" | "aws-official" | "azure-official"
 		}
 		"\(config.metadata.name)-ingress": #Ingress & {_config: config}
 		if config.db.enabled {
-			"\(config.metadata.name)-db-secret": #DBSecret & {_config: config}
-			"\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
+			if config.db.provider == "cnpg" {
+				"\(config.metadata.name)-db-cnpg": #DBCNPG & {_config: config}
+			}
+			if config.db.provider != "cnpg" {
+				"\(config.metadata.name)-db-secret": #DBSecret & {_config: config}
+				"\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
+			}
 		}
 	}
 }
