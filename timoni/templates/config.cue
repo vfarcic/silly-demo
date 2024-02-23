@@ -6,7 +6,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-dbProvider: "local-k8s" | "aws-official" | "azure-official" | "cnpg"
+dbProvider: "aws" | "azure" | "google" | "cnpg"
 
 #Config: {
 	metadata: metav1.#ObjectMeta
@@ -55,7 +55,7 @@ dbProvider: "local-k8s" | "aws-official" | "azure-official" | "cnpg"
 	}
 	db: {
 		enabled: *false | bool
-		provider: *"google-official" | dbProvider
+		provider: *"google" | dbProvider
 		type: *"postgres" | string
 	}
 }

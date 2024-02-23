@@ -12,6 +12,6 @@ values: {
 	// autoscaling: enabled: true
 	// db: {
 	// 	enabled: true
-	// 	provider: "google-official"
+	// 	provider: "google"
 	// }
 }

@@ -7,6 +7,13 @@ import (
 
 #Deployment: appsv1.#Deployment & {
 	_config:    #Config
+	_secretName: string
+	if _config.db.provider == "cnpg" {
+		_secretName: _config.metadata.name + "-app"
+	}
+	if _config.db.provider != "cnpg" {
+		_secretName: _config.metadata.name
+	}
 	apiVersion: "apps/v1"
 	kind:       "Deployment"
 	metadata:   _config.metadata
@@ -27,11 +34,7 @@ import (
 					{
 						name: _config.metadata.name
 						image: "\(_config.image.repository):\(_config.image.tag)"
-						ports: [
-							{
-								containerPort: _config.service.targetPort
-							},
-						]
+						ports: [ { containerPort: _config.service.targetPort } ]
 						livenessProbe: {
 							httpGet: {
 								path: "/"
@@ -53,7 +56,7 @@ import (
 									name: "DB_ENDPOINT"
 									valueFrom: {
 										secretKeyRef: {
-											name: _config.metadata.name
+											name: _secretName
 											key: "endpoint"
 										}
 									}
