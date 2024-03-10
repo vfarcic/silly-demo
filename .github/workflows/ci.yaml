@@ -55,7 +55,6 @@ jobs:
         uses: stefanprodan/timoni/actions/setup@main
       - name: Timoni package
         run: |
-          yq --inplace ".values.image.tag = \"${{ env.TAG }}\"" timoni/values.yaml
           cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"${{ env.TAG }}\"@g" | tee timoni/values.cue.tmp
           mv timoni/values.cue.tmp timoni/values.cue
           timoni mod push timoni oci://${{ env.IMAGE }}-package --version ${{ env.TAG }}
