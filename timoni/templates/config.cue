@@ -6,7 +6,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-dbProvider: "local-k8s" | "aws-official" | "azure-official"
+dbProvider: "aws" | "azure" | "google" | "cnpg"
 
 #Config: {
 	metadata: metav1.#ObjectMeta
@@ -24,7 +24,7 @@ dbProvider: "local-k8s" | "aws-official" | "azure-official"
 	selectorLabels:  *{"app.kubernetes.io/name": metadata.name} | {[ string]: string}
 	podAnnotations?: {[ string]: string}
 	image: {
-		repository: *"c8n.io/vfarcic/silly-demo" | string
+		repository: *"ghcr.io/vfarcic/silly-demo" | string
 		tag:        *"latest" | string
 	}
 	_resources: {
@@ -55,7 +55,7 @@ dbProvider: "local-k8s" | "aws-official" | "azure-official"
 	}
 	db: {
 		enabled: *false | bool
-		provider: *"google-official" | dbProvider
+		provider: *"google" | dbProvider
 		type: *"postgres" | string
 	}
 }
@@ -71,8 +71,13 @@ dbProvider: "local-k8s" | "aws-official" | "azure-official"
 		}
 		"\(config.metadata.name)-ingress": #Ingress & {_config: config}
 		if config.db.enabled {
-			"\(config.metadata.name)-db-secret": #DBSecret & {_config: config}
-			"\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
+			if config.db.provider == "cnpg" {
+				"\(config.metadata.name)-db-cnpg": #DBCNPG & {_config: config}
+			}
+			if config.db.provider != "cnpg" {
+				"\(config.metadata.name)-db-secret": #DBSecret & {_config: config}
+				"\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
+			}
 		}
 	}
 }

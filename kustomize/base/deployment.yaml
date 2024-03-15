@@ -16,23 +16,22 @@ spec:
         app.kubernetes.io/name: silly-demo
     spec:
       containers:
-      - name: silly-demo
-        image: c8n.io/vfarcic/silly-demo:1.4.37
-        ports:
-          - containerPort: 8080
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8080
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
-
+        - name: silly-demo
+          image: ghcr.io/vfarcic/silly-demo:1.4.37
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080

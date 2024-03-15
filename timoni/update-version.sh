@@ -1,0 +1,1 @@
+cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"$1\"@g" | tee timoni/values.cue.tmp

@@ -1,6 +1,6 @@
 image:
-  repository: c8n.io/vfarcic/silly-demo
-  tag: 1.4.78
+  repository: ghcr.io/vfarcic/silly-demo
+  tag: 1.4.114
 ingress:
   host: devopstoolkitseries.com
 db:

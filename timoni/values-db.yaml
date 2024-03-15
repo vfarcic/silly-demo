@@ -1,0 +1,10 @@
+values:
+  ingress:
+    className: traefik
+    host: sillydemo.127.0.0.1.nip.io
+  # autoscaling:
+  #   enabled: true
+  #   minReplicas: 3
+  # db:
+  #   enabled: true
+  #   provider: "google-official"

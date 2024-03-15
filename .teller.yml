@@ -1,0 +1,10 @@
+project: dot
+providers:
+  google_secretmanager:
+    env:
+      COSIGN_PRIVATE_KEY:
+        path: projects/vfarcic/secrets/cosign/versions/1
+      COSIGN_PASSWORD:
+        path: projects/vfarcic/secrets/cosign-password/versions/1
+      REGISTRY_PASSWORD:
+        path: projects/vfarcic/secrets/github-token/versions/2

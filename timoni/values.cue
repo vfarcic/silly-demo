@@ -4,7 +4,7 @@
 package main
 
 values: {
-	image: tag: "1.4.78"
+	image: tag: "1.4.114"
 	// ingress: {
 	// 	className: "traefik"
 	// 	host: "sillydemo.127.0.0.1.nip.io"
@@ -12,6 +12,6 @@ values: {
 	// autoscaling: enabled: true
 	// db: {
 	// 	enabled: true
-	// 	provider: "google-official"
+	// 	provider: "google"
 	// }
 }
