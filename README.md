@@ -13,3 +13,11 @@ timoni build silly-demo timoni \
     --values timoni/values-db-cnpg.yaml \
     | kubectl apply --filename -
 ```
+
+## App with OTEL
+
+```sh
+timoni build silly-demo timoni \
+    --values timoni/values-db-cnpg.yaml \
+    | kubectl apply --filename -
+```

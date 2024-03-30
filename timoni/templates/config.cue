@@ -58,6 +58,10 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         provider: *"google" | dbProvider
         type: *"postgres" | string
     }
+    otel: {
+        enabled: *false | bool
+        jaegerAddr: *"http://jaeger.kube-system:4318" | string
+    }
 }
 
 #Instance: {

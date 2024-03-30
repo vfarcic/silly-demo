@@ -9,7 +9,6 @@ metadata:
   labels:
     app.kubernetes.io/name: silly-demo
   name: silly-demo
-  namespace: default
 spec:
   replicas: 2
   selector:
@@ -20,8 +19,9 @@ spec:
       labels:
         app.kubernetes.io/name: silly-demo
     spec:
+      shareProcessNamespace: true
       containers:
-      - image: ghcr.io/vfarcic/silly-demo:1.4.103
+      - image: ghcr.io/vfarcic/silly-demo:1.4.117
         livenessProbe:
           httpGet:
             path: /
@@ -52,7 +52,6 @@ metadata:
   labels:
     app.kubernetes.io/name: silly-demo
   name: silly-demo
-  namespace: default
 spec:
   ports:
   - name: http
@@ -74,7 +73,6 @@ metadata:
   labels:
     app.kubernetes.io/name: silly-demo
   name: silly-demo
-  namespace: default
 spec:
   ingressClassName: traefik
   rules:

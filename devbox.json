@@ -1,0 +1,16 @@
+{
+  "packages": [
+    "kind@0.22.0",
+    "gh@2.44.1",
+    "kubectl@1.29.2",
+    "bat@0.24.0",
+    "timoni@0.20.0"
+  ],
+  "shell": {
+    "init_hook": [
+      "alias cat='bat --paging never --theme DarkNeon --style plain'",
+      "PS1=\"➜ \""
+    ],
+    "scripts": {}
+  }
+}

@@ -14,4 +14,5 @@ values: {
 	// 	enabled: true
 	// 	provider: "google"
 	// }
+	// otel: enabled: false
 }

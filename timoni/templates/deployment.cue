@@ -30,6 +30,9 @@ import (
                 }
             }
             spec: corev1.#PodSpec & {
+                if _config.otel.enabled == true {
+                    shareProcessNamespace: true
+                }
                 containers: [{
                     name: _config.metadata.name
                     image: "\(_config.image.repository):\(_config.image.tag)"
@@ -97,7 +100,31 @@ import (
                             }
                         }]
                     }
-                }]
+                },
+                if _config.otel.enabled == true {
+                    {
+                        name: _config.metadata.name + "-instrumentation"
+                        image: "otel/autoinstrumentation-go"
+                        env: [{
+                            name: "OTEL_GO_AUTO_TARGET_EXE"
+                            value: "/usr/local/bin/silly-demo"
+                        }, {
+                            name: "OTEL_EXPORTER_OTLP_ENDPOINT"
+                            value: _config.otel.jaegerAddr
+                        }, {
+                            name: "OTEL_SERVICE_NAME"
+                            value: _config.metadata.name
+                        }, {
+                            name: "OTEL_PROPAGATORS"
+                            value: "tracecontext,baggage"
+                        }]
+                        securityContext: {
+                            runAsUser: 0
+                            privileged: true
+                        }
+                    }
+                }
+                ]
             }
         }
     }

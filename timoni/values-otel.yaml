@@ -1,0 +1,4 @@
+values:
+  otel:
+    enabled: true
+    jaegerAddr: http://jaeger.production:4318
