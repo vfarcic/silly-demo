@@ -60,9 +60,9 @@ jobs:
           timoni mod push timoni oci://${{ env.IMAGE }}-package --version ${{ env.TAG }}
       - name: Helm package
         run: |
-          yq --inplace ".version = \"${{ env.TAG }}\"" helm/Chart.yaml
-          yq --inplace ".image.tag = \"${{ env.TAG }}\"" helm/values.yaml
-          helm package helm
+          yq --inplace ".version = \"${{ env.TAG }}\"" helm/app/Chart.yaml
+          yq --inplace ".image.tag = \"${{ env.TAG }}\"" helm/app/values.yaml
+          helm package helm/app
           helm push silly-demo-helm-${{ env.TAG }}.tgz oci://ghcr.io/vfarcic
       - name: Commit changes
         run: |
