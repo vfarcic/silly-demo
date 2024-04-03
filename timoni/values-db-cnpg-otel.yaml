@@ -21,3 +21,6 @@ values:
         primary key (id),
         CONSTRAINT fk_videos FOREIGN KEY(video_id) REFERENCES videos(id)
       );
+  otel:
+    enabled: true
+    jaegerAddr: http://jaeger-collector.monitoring:4318

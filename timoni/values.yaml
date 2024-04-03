@@ -3,6 +3,3 @@ values:
   ingress:
     className: traefik
     host: ping.34.74.23.75.nip.io
-  otel:
-    enabled: true
-    jaegerAddr: http://jaeger-collector.monitoring:4318

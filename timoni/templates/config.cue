@@ -57,6 +57,7 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         enabled: *false | bool
         provider: *"google" | dbProvider
         type: *"postgres" | string
+        schema: *"" | string
     }
     otel: {
         enabled: *false | bool
@@ -77,6 +78,9 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         if config.db.enabled {
             if config.db.provider == "cnpg" {
                 "\(config.metadata.name)-db-cnpg": #DBCNPG & {_config: config}
+                if config.db.schema != "" {
+                    "\(config.metadata.name)-db-schema": #DBSchema & {_config: config}
+                }
             }
             if config.db.provider != "cnpg" {
                 "\(config.metadata.name)-db-secret": #DBSecret & {_config: config}

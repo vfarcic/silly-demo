@@ -63,3 +63,36 @@ import (
   		storage: { size: "1Gi" }
 	}
 }
+
+#DBSchema: {
+    _config:    #Config
+    apiVersion: "db.atlasgo.io/v1alpha1"
+    kind: "AtlasSchema"
+    metadata: {
+        name: _config.metadata.name + "-videos"
+		namespace: _config.metadata.namespace
+		labels: _config.metadata.labels
+    }
+    spec: {
+        credentials: {
+            scheme: "postgres"
+            host: _config.metadata.name + "-rw" + "." + _config.metadata.namespace
+            port: 5432
+            user: "app"
+            passwordFrom: {
+                secretKeyRef: {
+                    key: "password"
+                    name: _config.metadata.name + "-app"
+                }
+            }
+            database: "app"
+            parameters: {
+                sslmode: "disable"
+            }
+        }
+        schema: {
+            sql: _config.db.schema
+        }
+    }
+}
+

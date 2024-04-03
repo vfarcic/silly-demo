@@ -70,7 +70,7 @@ import (
                             name: "DB_PORT"
                             valueFrom: {
                                 secretKeyRef: {
-                                    name: _config.metadata.name
+                                    name: _secretName
                                     key: "port"
                                 }
                             }
@@ -78,7 +78,7 @@ import (
                             name: "DB_USER"
                             valueFrom: {
                                 secretKeyRef: {
-                                    name: _config.metadata.name
+                                    name: _secretName
                                     key: "username"
                                 }
                             }
@@ -86,7 +86,7 @@ import (
                             name: "DB_PASS"
                             valueFrom: {
                                 secretKeyRef: {
-                                    name: _config.metadata.name
+                                    name: _secretName
                                     key: "password"
                                 }
                             }

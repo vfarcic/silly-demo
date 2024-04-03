@@ -12,6 +12,6 @@ allInOne:
   enabled: true
   ingress:
     enabled: true
-    ingressClassName: nginx
+    ingressClassName: traefik
     hosts:
-      - jaeger.127.0.0.1.nip.io
+      - jaeger.34.74.23.75.nip.io
