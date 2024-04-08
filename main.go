@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -11,6 +12,9 @@ import (
 
 func main() {
 	log.SetOutput(os.Stderr)
+	if os.Getenv("DEBUG") == "true" {
+		slog.SetLogLoggerLevel(slog.LevelDebug)
+	}
 	if os.Getenv("MEMORY_LEAK_MAX_MEMORY") != "" {
 		go func() { memoryLeak(0, 0) }()
 	}

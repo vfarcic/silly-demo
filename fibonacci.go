@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func fibonacciHandler(ctx *gin.Context) {
+	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	number, err := strconv.Atoi(ctx.Query("number"))
 	if err != nil {
 		ctx.String(http.StatusBadRequest, err.Error())

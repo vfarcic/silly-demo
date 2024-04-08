@@ -2,7 +2,7 @@ package main
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -11,6 +11,7 @@ import (
 )
 
 func pingHandler(ctx *gin.Context) {
+	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	req := resty.New().R().SetHeaderMultiValues(ctx.Request.Header).SetHeader("Content-Type", "application/text")
 	url := ctx.Query("url")
 	if len(url) == 0 {
@@ -20,12 +21,12 @@ func pingHandler(ctx *gin.Context) {
 			return
 		}
 	}
-	log.Printf("Sending a ping to %s", url)
+	slog.Info("Sending a ping", "URL", url)
 	resp, err := req.Get(url)
 	if err != nil {
 		httpErrorBadRequest(err, ctx)
 		return
 	}
-	log.Println(resp.String())
+	slog.Info(resp.String())
 	ctx.String(http.StatusOK, resp.String())
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -24,13 +24,13 @@ func getDB(c *gin.Context) *pg.DB {
 	}
 	endpoint := os.Getenv("DB_ENDPOINT")
 	if len(endpoint) == 0 {
-		log.Println("Environment variable `DB_ENDPOINT` is empty")
+		slog.Error("Environment variable `DB_ENDPOINT` is empty")
 		c.String(http.StatusBadRequest, "Environment variable `DB_ENDPOINT` is empty")
 		return nil
 	}
 	port := os.Getenv("DB_PORT")
 	if len(port) == 0 {
-		log.Println("Environment variable `DB_PORT` is empty")
+		slog.Error("Environment variable `DB_PORT` is empty")
 		c.String(http.StatusBadRequest, "Environment variable `DB_PORT` is empty")
 		return nil
 	}
@@ -38,7 +38,7 @@ func getDB(c *gin.Context) *pg.DB {
 	if len(user) == 0 {
 		user = os.Getenv("DB_USERNAME")
 		if len(user) == 0 {
-			log.Println("Environment variables `DB_USER` and `DB_USERNAME` are empty")
+			slog.Error("Environment variables `DB_USER` and `DB_USERNAME` are empty")
 			c.String(http.StatusBadRequest, "Environment variables `DB_USER` and `DB_USERNAME` are empty")
 			return nil
 		}
@@ -47,14 +47,14 @@ func getDB(c *gin.Context) *pg.DB {
 	if len(pass) == 0 {
 		pass = os.Getenv("DB_PASSWORD")
 		if len(pass) == 0 {
-			log.Println("Environment variables `DB_PASS` and `DB_PASSWORD are empty")
+			slog.Error("Environment variables `DB_PASS` and `DB_PASSWORD are empty")
 			c.String(http.StatusBadRequest, "Environment variables `DB_PASS` and `DB_PASSWORD are empty")
 			return nil
 		}
 	}
 	name := os.Getenv("DB_NAME")
 	if len(name) == 0 {
-		log.Println("Environment variable `DB_NAME` is empty")
+		slog.Error("Environment variable `DB_NAME` is empty")
 		c.String(http.StatusBadRequest, "Environment variable `DB_NAME` is empty")
 		return nil
 	}
@@ -68,6 +68,7 @@ func getDB(c *gin.Context) *pg.DB {
 }
 
 func videosGetHandler(ctx *gin.Context) {
+	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	db := getDB(ctx)
 	if db == nil {
 		return
@@ -82,6 +83,7 @@ func videosGetHandler(ctx *gin.Context) {
 }
 
 func videoPostHandler(ctx *gin.Context) {
+	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	db := getDB(ctx)
 	if db == nil {
 		return
