@@ -5,14 +5,24 @@ package main
 
 values: {
 	image: tag: "1.4.124"
-	// ingress: {
-	// 	className: "traefik"
-	// 	host: "sillydemo.127.0.0.1.nip.io"
-	// }
-	// autoscaling: enabled: true
-	// db: {
-	// 	enabled: true
-	// 	provider: "google"
-	// }
-	// otel: enabled: false
+	image: repository: "ghcr.io/vfarcic/silly-demo"
+    replicas: 2
+    autoscaling: {
+        enabled:     false
+        cpu:         80
+        memory:      80
+        maxReplicas: 6
+    }
+    ingress: host: "sillydemo.com"
+    db: {
+        enabled:  false
+        provider: "google"
+        type:     "postgres"
+        schema:   ""
+    }
+    otel: {
+        enabled:    false
+        jaegerAddr: "http://jaeger.kube-system:4318"
+    }
+    debug: enabled: false
 }
