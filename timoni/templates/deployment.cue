@@ -52,53 +52,63 @@ import (
                     if _config.resources != _|_ {
                         resources: _config.resources
                     }
-                    if _config.db.enabled == true {
-                        env: [ {
-                            name: "DB_ENDPOINT"
-                            valueFrom: {
-                                secretKeyRef: {
-                                    name: _secretName
+                    if _config.db.enabled == true || _config.debug.enabled == true {
+                        env: [
+                            if _config.db.enabled == true {
+                                {
+                                    name: "DB_ENDPOINT"
+                                    valueFrom: {
+                                        secretKeyRef: {
+                                            name: _secretName
+                                            if _config.db.provider == "cnpg" {
+                                                key: "host"
+                                            }
+                                            if _config.db.provider != "cnpg" {
+                                                key: "endpoint"
+                                            }
+                                        }
+                                    }
+                                }, {
+                                    name: "DB_PORT"
+                                    valueFrom: {
+                                        secretKeyRef: {
+                                            name: _secretName
+                                            key: "port"
+                                        }
+                                    }
+                                }, {
+                                    name: "DB_USER"
+                                    valueFrom: {
+                                        secretKeyRef: {
+                                            name: _secretName
+                                            key: "username"
+                                        }
+                                    }
+                                }, {
+                                    name: "DB_PASS"
+                                    valueFrom: {
+                                        secretKeyRef: {
+                                            name: _secretName
+                                            key: "password"
+                                        }
+                                    }
+                                }, {
+                                    name: "DB_NAME"
                                     if _config.db.provider == "cnpg" {
-                                        key: "host"
+                                        value: "app"
                                     }
                                     if _config.db.provider != "cnpg" {
-                                        key: "endpoint"
+                                        value: _config.metadata.name
                                     }
-                                }
+                                },
                             }
-                        }, {
-                            name: "DB_PORT"
-                            valueFrom: {
-                                secretKeyRef: {
-                                    name: _secretName
-                                    key: "port"
-                                }
+                            if _config.debug.enabled == true {
+                                {
+                                    name: "DEBUG"
+                                    value: "true"
+                                },
                             }
-                        }, {
-                            name: "DB_USER"
-                            valueFrom: {
-                                secretKeyRef: {
-                                    name: _secretName
-                                    key: "username"
-                                }
-                            }
-                        }, {
-                            name: "DB_PASS"
-                            valueFrom: {
-                                secretKeyRef: {
-                                    name: _secretName
-                                    key: "password"
-                                }
-                            }
-                        }, {
-                            name: "DB_NAME"
-                            if _config.db.provider == "cnpg" {
-                                value: "app"
-                            }
-                            if _config.db.provider != "cnpg" {
-                                value: _config.metadata.name
-                            }
-                        }]
+                        ]
                     }
                 },
                 if _config.otel.enabled == true {

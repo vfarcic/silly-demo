@@ -2,3 +2,5 @@ values:
   image:
     repository: ttl.sh/silly-demo
     tag: "0.0.1-1700078698760264000"
+  debug:
+    enabled: true

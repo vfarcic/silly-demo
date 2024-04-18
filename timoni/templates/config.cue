@@ -63,6 +63,9 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         enabled: *false | bool
         jaegerAddr: *"http://jaeger.kube-system:4318" | string
     }
+    debug: {
+        enabled: *false | bool
+    }
 }
 
 #Instance: {
