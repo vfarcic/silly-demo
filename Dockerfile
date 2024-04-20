@@ -15,3 +15,4 @@ ENV DB_PORT=5432 DB_USERNAME=postgres DB_NAME=silly-demo
 COPY --from=build /src/silly-demo /usr/local/bin/silly-demo
 EXPOSE 8080
 CMD ["silly-demo"]
+
