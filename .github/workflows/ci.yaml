@@ -33,6 +33,8 @@ jobs:
           tags: ${{ env.IMAGE }}:latest,${{ env.IMAGE }}:${{ env.TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ env.TAG }}
       - name: Build and push Alpine
         uses: docker/build-push-action@v5
         with:
