@@ -10,7 +10,6 @@ RUN chmod +x silly-demo
 
 FROM scratch
 ARG VERSION
-ENV FAIL=true
 ENV VERSION=$VERSION
 ENV DB_PORT=5432 DB_USERNAME=postgres DB_NAME=silly-demo
 COPY --from=build /src/silly-demo /usr/local/bin/silly-demo
