@@ -10,7 +10,7 @@ import (
 )
 
 func rootHandler(ctx *gin.Context) {
-	if len(ctx.Query("fail")) > 0 {
+	if len(ctx.Query("fail")) > 0 or len(os.Getenv("FAIL")) > 0 {
 		ctx.String(http.StatusInternalServerError, "Something terrible happened")
 		return
 	}
