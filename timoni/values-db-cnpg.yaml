@@ -1,7 +1,7 @@
 values:
   ingress:
-    className: traefik
-    host: silly-demo.34.74.23.75.nip.io
+    className: nginx
+    host: silly-demo.127.0.0.1.nip.io
   autoscaling:
     enabled: true
     minReplicas: 1

@@ -57,42 +57,46 @@ import (
                             if _config.db.enabled == true {
                                 {
                                     name: "DB_ENDPOINT"
-                                    valueFrom: {
-                                        secretKeyRef: {
-                                            name: _secretName
-                                            if _config.db.provider == "cnpg" {
-                                                key: "host"
-                                            }
-                                            if _config.db.provider != "cnpg" {
-                                                key: "endpoint"
-                                            }
+                                    valueFrom: secretKeyRef: {
+                                        name: _secretName
+                                        if _config.db.provider == "cnpg" {
+                                            key: "host"
+                                        }
+                                        if _config.db.provider != "cnpg" {
+                                            key: "endpoint"
                                         }
                                     }
-                                }, {
+                                }
+                            }
+                            if _config.db.enabled == true {
+                                {
                                     name: "DB_PORT"
-                                    valueFrom: {
-                                        secretKeyRef: {
-                                            name: _secretName
-                                            key: "port"
-                                        }
+                                    valueFrom: secretKeyRef: {
+                                        name: _secretName
+                                        key: "port"
                                     }
-                                }, {
+                                }
+                            }
+                            if _config.db.enabled == true {
+                                {
                                     name: "DB_USER"
-                                    valueFrom: {
-                                        secretKeyRef: {
-                                            name: _secretName
-                                            key: "username"
-                                        }
+                                    valueFrom: secretKeyRef: {
+                                        name: _secretName
+                                        key: "username"
                                     }
-                                }, {
+                                }
+                            }
+                            if _config.db.enabled == true {
+                                {
                                     name: "DB_PASS"
-                                    valueFrom: {
-                                        secretKeyRef: {
-                                            name: _secretName
-                                            key: "password"
-                                        }
+                                    valueFrom: secretKeyRef: {
+                                        name: _secretName
+                                        key: "password"
                                     }
-                                }, {
+                                }
+                            }
+                            if _config.db.enabled == true {
+                                {
                                     name: "DB_NAME"
                                     if _config.db.provider == "cnpg" {
                                         value: "app"
@@ -100,13 +104,10 @@ import (
                                     if _config.db.provider != "cnpg" {
                                         value: _config.metadata.name
                                     }
-                                },
+                                }
                             }
                             if _config.debug.enabled == true {
-                                {
-                                    name: "DEBUG"
-                                    value: "true"
-                                },
+                                {name: "DEBUG", value: "true" }
                             }
                         ]
                     }

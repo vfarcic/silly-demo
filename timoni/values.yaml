@@ -1,5 +1,5 @@
 values:
   replicas: 1
   ingress:
-    className: traefik
-    host: ping.34.74.23.75.nip.io
+    className: nginx
+    host: ping.127.0.0.1.nip.io
