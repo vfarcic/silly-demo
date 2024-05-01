@@ -49,6 +49,54 @@
         }
       }
     },
+    "fermyon-spin@2.4.2": {
+      "last_modified": "2024-04-19T17:36:04-04:00",
+      "resolved": "github:NixOS/nixpkgs/92d295f588631b0db2da509f381b4fb1e74173c5#fermyon-spin",
+      "source": "devbox-search",
+      "version": "2.4.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/7wh1i0bi52nqfnr4j7aqy7p28a5ffmwr-fermyon-spin-2.4.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/7wh1i0bi52nqfnr4j7aqy7p28a5ffmwr-fermyon-spin-2.4.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5wqn9cgfq8z2h3apya81i2djkslpf1cc-fermyon-spin-2.4.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/5wqn9cgfq8z2h3apya81i2djkslpf1cc-fermyon-spin-2.4.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/gc6psjhw7064qi3vjnypb63hjliqkyhf-fermyon-spin-2.4.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/gc6psjhw7064qi3vjnypb63hjliqkyhf-fermyon-spin-2.4.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xba0fxmxxhab24vmsqxz07d8gq4xz1g3-fermyon-spin-2.4.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/xba0fxmxxhab24vmsqxz07d8gq4xz1g3-fermyon-spin-2.4.2"
+        }
+      }
+    },
     "gh@2.44.1": {
       "last_modified": "2024-02-24T23:06:34Z",
       "resolved": "github:NixOS/nixpkgs/9a9dae8f6319600fa9aebde37f340975cab4b8c0#gh",
@@ -94,6 +142,54 @@
             }
           ],
           "store_path": "/nix/store/z93n28s3f4izj97pnikh7y7y2zg61qwd-gh-2.44.1"
+        }
+      }
+    },
+    "go@1.22.2": {
+      "last_modified": "2024-04-19T17:36:04-04:00",
+      "resolved": "github:NixOS/nixpkgs/92d295f588631b0db2da509f381b4fb1e74173c5#go",
+      "source": "devbox-search",
+      "version": "1.22.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/x7gzwywk7mvjamdyc4n45fh62jks7lma-go-1.22.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/x7gzwywk7mvjamdyc4n45fh62jks7lma-go-1.22.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ka1iykac1bfvy98p9g2ii3xn2fnl98cn-go-1.22.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ka1iykac1bfvy98p9g2ii3xn2fnl98cn-go-1.22.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/s26vypls3i2rvprj2jq7l1ypb5y12mq9-go-1.22.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/s26vypls3i2rvprj2jq7l1ypb5y12mq9-go-1.22.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/9kriq85qac7phcxgpdqbqr25vlr61ifw-go-1.22.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/9kriq85qac7phcxgpdqbqr25vlr61ifw-go-1.22.2"
         }
       }
     },

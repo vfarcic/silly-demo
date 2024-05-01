@@ -9,7 +9,9 @@
     "yq-go@4.43.1",
     "jq@1.7.1",
     "google-cloud-sdk@452.0.1",
-    "path:gcloud#google-cloud-sdk"
+    "path:gcloud#google-cloud-sdk",
+    "fermyon-spin@2.4.2",
+    "go@1.22.2"
   ],
   "shell": {
     "init_hook": [
