@@ -18,9 +18,6 @@ timoni:
         | sed -e "s@image: tag:.*@image: tag: \"$tag\"@g" \
         >timoni/values.cue.tmp
     SAVE ARTIFACT timoni/values.cue.tmp AS LOCAL timoni/values.cue
-    RUN echo "xxx: timoni mod push timoni \
-        oci://ghcr.io/$user/silly-demo-package --version $tag \
-        --creds $user:$password"
     RUN --push --secret password \
         timoni mod push timoni \
         oci://ghcr.io/$user/silly-demo-package --version $tag \
@@ -50,9 +47,10 @@ helm:
         --username $user --password $password ghcr.io
     RUN --push helm push silly-demo-helm-$tag.tgz oci://ghcr.io/vfarcic
 
-image-common:
+image:
     BUILD +binary
     ARG tag='latest'
+    ARG taglatest='latest'
     ARG base='scratch'
     FROM $base
     ENV DB_PORT=5432 DB_USERNAME=postgres DB_NAME=silly-demo
@@ -61,19 +59,13 @@ image-common:
     ENV VERSION=$tag
     COPY +binary/silly-demo /usr/local/bin/silly-demo
     SAVE IMAGE --push ghcr.io/vfarcic/silly-demo:$tag
-
-image:
-    ARG tag=latest
-    BUILD +image-common --tag $tag --base scratch
-
-image-alpine:
-    ARG tag=latest
-    BUILD +image-common --tag $tag-alpine --base alpine:3.18.4
+    SAVE IMAGE --push ghcr.io/vfarcic/silly-demo:$taglatest
 
 image-all:
     ARG tag
-    BUILD +image --tag latest --tag $tag
-    BUILD +image-alpine --tag latest --tag $tag
+    BUILD +image --tag $tag --taglatest latest
+    BUILD +image --tag $tag-alpine --taglatest latest-alpine \
+        --base alpine:3.18.4
     # BUILD +cosign --tag latest --tag $tag
     # BUILD +cosign --tag latest-alpine --tag $tag-alpine
     # BUILD +timoni --tag $tag
