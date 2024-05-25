@@ -9,6 +9,7 @@ jobs:
   build-container-image:
     runs-on: ubuntu-latest
     env:
+      TAG: 1.4.${{ github.run_number }}
       FORCE_COLOR: 1
     steps:
       # - name: Variables
@@ -32,7 +33,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build and push
         run: |
-          earthly --push +image-all --tag ${{ env.TAG }}
+          earthly --push +image-all --tag $TAG
       # - name: Build and push
       #   uses: docker/build-push-action@v5
       #   with:
