@@ -73,7 +73,7 @@ image-all:
 
 package-all:
     ARG --required tag
-    BUILD +cosign --tag latest --tag $tag
-    BUILD +cosign --tag latest-alpine --tag $tag-alpine
+    BUILD +cosign --tag latest --tag $tag \
+        --tag latest-alpine --tag $tag-alpine
     BUILD +timoni --tag $tag
     BUILD +helm --tag $tag
