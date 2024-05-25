@@ -7,6 +7,7 @@ ARG --global user=vfarcic
 binary:
     COPY go.mod go.sum vendor .
     COPY *.go .
+    RUN go mod vendor
     RUN GOOS=linux GOARCH=amd64 go build -mod vendor -o silly-demo
     SAVE ARTIFACT silly-demo
 
