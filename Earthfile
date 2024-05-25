@@ -42,6 +42,8 @@ helm:
     RUN yq --inplace ".image.tag = \"$tag\"" helm/app/values.yaml
     SAVE ARTIFACT helm/app/values.yaml AS LOCAL helm/app/values.yaml
     RUN helm package helm/app
+    RUN --secret password helm registry login \
+        --username $user --password $password ghcr.io
     RUN --push helm push silly-demo-helm-$tag.tgz oci://ghcr.io/vfarcic
 
 image-common:
@@ -71,7 +73,9 @@ image-all:
     # BUILD +cosign --tag latest --tag $tag
     # BUILD +cosign --tag latest-alpine --tag $tag-alpin
 
-cosign-all:
+package-all:
     ARG --required tag
     BUILD +cosign --tag latest --tag $tag
     BUILD +cosign --tag latest-alpine --tag $tag-alpine
+    BUILD +timoni --tag $tag
+    BUILD +helm --tag $tag

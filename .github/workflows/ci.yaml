@@ -40,8 +40,7 @@ jobs:
             --secret password="$REGISTRY_PASSWORD" \
             +cosign-all --tag $TAG
           earthly --push --secret password="$REGISTRY_PASSWORD" \
-            +timoni
-          earthly --push +helm
+            +package-all
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
