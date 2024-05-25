@@ -34,27 +34,10 @@ jobs:
       - name: Build and push
         run: |
           earthly --push +image-all --tag $TAG
-      # - name: Build and push
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     push: true
-      #     platforms: linux/amd64,linux/arm64/v8
-      #     tags: ${{ env.IMAGE }}:latest,${{ env.IMAGE }}:${{ env.TAG }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     build-args: |
-      #       VERSION=${{ env.TAG }}
-      # - name: Build and push Alpine
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     push: true
-      #     platforms: linux/amd64,linux/arm64/v8
-      #     tags: ${{ env.IMAGE }}:latest-alpine,${{ env.IMAGE }}:${{ env.TAG }}-alpine
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     file: Dockerfile-alpine
-      # - name: Install Cosign
-      #   uses: sigstore/cosign-installer@v3.0.5
+          earthly --push \
+            --secret cosignpassword=$COSIGN_PASSWORD \
+            --secret cosignkey=$COSIGN_PRIVATE_KEY \
+            +cosign --tag $TAG
       # - name: Sign image with a key
       #   run: |
       #     cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}

@@ -30,7 +30,6 @@ cosign:
         --secret password \
         cosign sign --yes --key env://cosignkey \
         --registry-username $user \
-        --registry-password $password \
         ghcr.io/vfarcic/silly-demo:$tag
 
 helm:
