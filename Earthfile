@@ -64,7 +64,7 @@ image-alpine:
     ARG tag=latest
     BUILD +image-common --tag $tag-alpine --base alpine:3.18.4
 
-build-all:
+image-all:
     ARG tag
     BUILD +image --tag latest --tag $tag
     BUILD +image-alpine --tag latest --tag $tag
