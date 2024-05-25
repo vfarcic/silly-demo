@@ -43,12 +43,6 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      # - name: Helm package
-      #   run: |
-      #     yq --inplace ".version = \"${{ env.TAG }}\"" helm/app/Chart.yaml
-      #     yq --inplace ".image.tag = \"${{ env.TAG }}\"" helm/app/values.yaml
-      #     helm package helm/app
-      #     helm push silly-demo-helm-${{ env.TAG }}.tgz oci://ghcr.io/vfarcic
       - name: Commit changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"

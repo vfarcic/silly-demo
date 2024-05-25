@@ -12,18 +12,22 @@ binary:
     SAVE ARTIFACT silly-demo
 
 timoni:
+    ARG --required tag
     COPY timoni/values.cue timoni/values.cue
     RUN cat timoni/values.cue \
         | sed -e "s@image: tag:.*@image: tag: \"$tag\"@g" \
         >timoni/values.cue.tmp
     SAVE ARTIFACT timoni/values.cue.tmp AS LOCAL timoni/values.cue
+    RUN echo "xxx: timoni mod push timoni \
+        oci://ghcr.io/$user/silly-demo-package --version $tag \
+        --creds $user:$password"
     RUN --push --secret password \
         timoni mod push timoni \
         oci://ghcr.io/$user/silly-demo-package --version $tag \
         --creds $user:$password
 
 cosign:
-    ARG tag='latest'
+    ARG --required tag
     RUN echo "USER: $user"
     RUN --push \
         --secret COSIGN_PASSWORD=cosignpassword \
@@ -35,7 +39,7 @@ cosign:
         ghcr.io/vfarcic/silly-demo:$tag
 
 helm:
-    ARG tag='latest'
+    ARG --required tag
     COPY helm helm
     RUN yq --inplace ".version = \"$tag\"" helm/app/Chart.yaml
     SAVE ARTIFACT helm/app/Chart.yaml AS LOCAL helm/app/Chart.yaml
@@ -71,7 +75,9 @@ image-all:
     BUILD +image --tag latest --tag $tag
     BUILD +image-alpine --tag latest --tag $tag
     # BUILD +cosign --tag latest --tag $tag
-    # BUILD +cosign --tag latest-alpine --tag $tag-alpin
+    # BUILD +cosign --tag latest-alpine --tag $tag-alpine
+    # BUILD +timoni --tag $tag
+    # BUILD +helm --tag $tag
 
 package-all:
     ARG --required tag
