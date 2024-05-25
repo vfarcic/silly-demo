@@ -1,7 +1,8 @@
 VERSION 0.8
-# FROM golang:1.22.2-alpine
 FROM ghcr.io/vfarcic/silly-demo-earthly:0.0.5
+ARG --global registry=ghcr.io/vfarcic
 ARG --global user=vfarcic
+ARG --global image=silly-demo
 WORKDIR /go-workdir
 
 binary:
@@ -10,42 +11,6 @@ binary:
     RUN go mod vendor
     RUN GOOS=linux GOARCH=amd64 go build --mod vendor -o silly-demo
     SAVE ARTIFACT silly-demo
-
-timoni:
-    ARG --required tag
-    COPY timoni/values.cue timoni/values.cue
-    RUN cat timoni/values.cue \
-        | sed -e "s@image: tag:.*@image: tag: \"$tag\"@g" \
-        >timoni/values.cue.tmp
-    SAVE ARTIFACT timoni/values.cue.tmp AS LOCAL timoni/values.cue
-    RUN --push --secret password \
-        timoni mod push timoni \
-        oci://ghcr.io/$user/silly-demo-package --version $tag \
-        --creds $user:$password
-
-cosign:
-    ARG --required tag
-    RUN echo "USER: $user"
-    RUN --push \
-        --secret COSIGN_PASSWORD=cosignpassword \
-        --secret cosignkey \
-        --secret password \
-        cosign sign --yes --key env://cosignkey \
-        --registry-username $user \
-        --registry-password $password \
-        ghcr.io/vfarcic/silly-demo:$tag
-
-helm:
-    ARG --required tag
-    COPY helm helm
-    RUN yq --inplace ".version = \"$tag\"" helm/app/Chart.yaml
-    SAVE ARTIFACT helm/app/Chart.yaml AS LOCAL helm/app/Chart.yaml
-    RUN yq --inplace ".image.tag = \"$tag\"" helm/app/values.yaml
-    SAVE ARTIFACT helm/app/values.yaml AS LOCAL helm/app/values.yaml
-    RUN helm package helm/app
-    RUN --secret password helm registry login \
-        --username $user --password $password ghcr.io
-    RUN --push helm push silly-demo-helm-$tag.tgz oci://ghcr.io/vfarcic
 
 image:
     BUILD +binary
@@ -59,8 +24,44 @@ image:
     ENV VERSION=$tag
     COPY +binary/silly-demo /usr/local/bin/silly-demo
     SAVE IMAGE --push \
-        ghcr.io/vfarcic/silly-demo:$tag \
-        ghcr.io/vfarcic/silly-demo:$taglatest
+        $registry/$image:$tag \
+        $registry/$image:$taglatest
+
+timoni:
+    ARG --required tag
+    COPY timoni/values.cue timoni/values.cue
+    RUN cat timoni/values.cue \
+        | sed -e "s@image: tag:.*@image: tag: \"$tag\"@g" \
+        >timoni/values.cue.tmp
+    SAVE ARTIFACT timoni/values.cue.tmp AS LOCAL timoni/values.cue
+    RUN --push --secret password \
+        timoni mod push timoni \
+        oci://$registry/$image-package --version $tag \
+        --creds $user:$password
+
+cosign:
+    ARG --required tag
+    RUN --push \
+        --secret COSIGN_PASSWORD=cosignpassword \
+        --secret cosignkey \
+        --secret password \
+        cosign sign --yes --key env://cosignkey \
+        --registry-username $user \
+        --registry-password $password \
+        $registry/$image:$tag
+
+helm:
+    ARG --required tag
+    COPY helm helm
+    RUN yq --inplace ".version = \"$tag\"" helm/app/Chart.yaml
+    SAVE ARTIFACT helm/app/Chart.yaml AS LOCAL helm/app/Chart.yaml
+    RUN yq --inplace ".image.tag = \"$tag\"" helm/app/values.yaml
+    SAVE ARTIFACT helm/app/values.yaml AS LOCAL helm/app/values.yaml
+    RUN helm package helm/app
+    RUN ls -l
+    RUN --secret password helm registry login \
+        --username $user --password $password $registry
+    RUN --push helm push silly-demo-helm-$tag.tgz oci://$registry
 
 all:
     ARG tag
