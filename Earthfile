@@ -58,21 +58,17 @@ image:
     CMD ["silly-demo"]
     ENV VERSION=$tag
     COPY +binary/silly-demo /usr/local/bin/silly-demo
-    SAVE IMAGE --push ghcr.io/vfarcic/silly-demo:$tag
-    SAVE IMAGE --push ghcr.io/vfarcic/silly-demo:$taglatest
+    SAVE IMAGE --push \
+        ghcr.io/vfarcic/silly-demo:$tag \
+        ghcr.io/vfarcic/silly-demo:$taglatest
 
-image-all:
+all:
     ARG tag
-    BUILD +image --tag $tag --taglatest latest
-    BUILD +image --tag $tag-alpine --taglatest latest-alpine \
-        --base alpine:3.18.4
-    # BUILD +cosign --tag latest --tag $tag
-    # BUILD +cosign --tag latest-alpine --tag $tag-alpine
-    # BUILD +timoni --tag $tag
-    # BUILD +helm --tag $tag
-
-package-all:
-    ARG --required tag
+    WAIT
+        BUILD +image --tag $tag --taglatest latest
+        BUILD +image --tag $tag-alpine \
+            --taglatest latest-alpine --base alpine:3.18.4
+    END
     BUILD +cosign --tag latest --tag $tag \
         --tag latest-alpine --tag $tag-alpine
     BUILD +timoni --tag $tag
