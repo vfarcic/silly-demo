@@ -8,8 +8,6 @@
     "kubernetes-helm@3.14.3",
     "yq-go@4.43.1",
     "jq@1.7.1",
-    "google-cloud-sdk@452.0.1",
-    "path:gcloud#google-cloud-sdk",
     "earthly@0.8.11",
     "go@1.22.3",
     "teller@1.5.6"
