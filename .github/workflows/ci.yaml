@@ -33,9 +33,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build and push
         run: |
+          # earthly --push +image-all --tag $TAG
           earthly --push \
-            --secret cosignpassword=$COSIGN_PASSWORD \
-            --secret cosignkey=$COSIGN_PRIVATE_KEY \
+            --secret cosignpassword="$COSIGN_PASSWORD" \
+            --secret cosignkey="$COSIGN_PRIVATE_KEY" \
             +cosign --tag $TAG
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
