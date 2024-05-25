@@ -10,7 +10,8 @@
     "jq@1.7.1",
     "earthly@0.8.11",
     "go@1.22.3",
-    "teller@1.5.6"
+    "teller@1.5.6",
+    "cosign@2.2.4"
   ],
   "shell": {
     "init_hook": [

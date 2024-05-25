@@ -8,11 +8,16 @@ on:
 jobs:
   build-container-image:
     runs-on: ubuntu-latest
+    env:
+      FORCE_COLOR: 1
     steps:
-      - name: Variables
-        run: |
-          echo "TAG=1.4.${{ github.run_number }}" >> "$GITHUB_ENV"
-          echo "IMAGE=ghcr.io/vfarcic/silly-demo" >> "$GITHUB_ENV"
+      # - name: Variables
+      #   run: |
+      #     echo "TAG=1.4.${{ github.run_number }}" >> "$GITHUB_ENV"
+      #     echo "IMAGE=ghcr.io/vfarcic/silly-demo" >> "$GITHUB_ENV"
+      - uses: earthly/actions-setup@v1
+        with:
+          version: v0.8.0
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up QEMU
@@ -26,46 +31,49 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          platforms: linux/amd64,linux/arm64/v8
-          tags: ${{ env.IMAGE }}:latest,${{ env.IMAGE }}:${{ env.TAG }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            VERSION=${{ env.TAG }}
-      - name: Build and push Alpine
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          platforms: linux/amd64,linux/arm64/v8
-          tags: ${{ env.IMAGE }}:latest-alpine,${{ env.IMAGE }}:${{ env.TAG }}-alpine
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          file: Dockerfile-alpine
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.0.5
-      - name: Sign image with a key
         run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}-alpine
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-      - name: Setup Timoni
-        uses: stefanprodan/timoni/actions/setup@main
-      - name: Timoni package
-        run: |
-          cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"${{ env.TAG }}\"@g" | tee timoni/values.cue.tmp
-          mv timoni/values.cue.tmp timoni/values.cue
-          timoni mod push timoni oci://${{ env.IMAGE }}-package --version ${{ env.TAG }}
-      - name: Helm package
-        run: |
-          yq --inplace ".version = \"${{ env.TAG }}\"" helm/app/Chart.yaml
-          yq --inplace ".image.tag = \"${{ env.TAG }}\"" helm/app/values.yaml
-          helm package helm/app
-          helm push silly-demo-helm-${{ env.TAG }}.tgz oci://ghcr.io/vfarcic
+          earthly --push +image-all --tag ${{ env.TAG }}
+      # - name: Build and push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     push: true
+      #     platforms: linux/amd64,linux/arm64/v8
+      #     tags: ${{ env.IMAGE }}:latest,${{ env.IMAGE }}:${{ env.TAG }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     build-args: |
+      #       VERSION=${{ env.TAG }}
+      # - name: Build and push Alpine
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     push: true
+      #     platforms: linux/amd64,linux/arm64/v8
+      #     tags: ${{ env.IMAGE }}:latest-alpine,${{ env.IMAGE }}:${{ env.TAG }}-alpine
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     file: Dockerfile-alpine
+      # - name: Install Cosign
+      #   uses: sigstore/cosign-installer@v3.0.5
+      # - name: Sign image with a key
+      #   run: |
+      #     cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}
+      #     cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}-alpine
+      #   env:
+      #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+      #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      # - name: Setup Timoni
+      #   uses: stefanprodan/timoni/actions/setup@main
+      # - name: Timoni package
+      #   run: |
+      #     cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"${{ env.TAG }}\"@g" | tee timoni/values.cue.tmp
+      #     mv timoni/values.cue.tmp timoni/values.cue
+      #     timoni mod push timoni oci://${{ env.IMAGE }}-package --version ${{ env.TAG }}
+      # - name: Helm package
+      #   run: |
+      #     yq --inplace ".version = \"${{ env.TAG }}\"" helm/app/Chart.yaml
+      #     yq --inplace ".image.tag = \"${{ env.TAG }}\"" helm/app/values.yaml
+      #     helm package helm/app
+      #     helm push silly-demo-helm-${{ env.TAG }}.tgz oci://ghcr.io/vfarcic
       - name: Commit changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
