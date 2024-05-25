@@ -14,12 +14,12 @@ binary:
 timoni:
     COPY timoni/values.cue timoni/values.cue
     RUN cat timoni/values.cue \
-        | sed -e "s@image: tag:.*@image: tag: \"9.9.9\"@g" \
+        | sed -e "s@image: tag:.*@image: tag: \"$tag\"@g" \
         >timoni/values.cue.tmp
     SAVE ARTIFACT timoni/values.cue.tmp AS LOCAL timoni/values.cue
     RUN --push --secret password \
         timoni mod push timoni \
-        oci://ghcr.io/$user/silly-demo-package --version 9.9.9 \
+        oci://ghcr.io/$user/silly-demo-package --version $tag \
         --creds $user:$password
 
 cosign:
