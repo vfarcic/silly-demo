@@ -2,12 +2,13 @@ VERSION 0.8
 # FROM golang:1.22.2-alpine
 FROM ghcr.io/vfarcic/silly-demo-earthly:0.0.5
 ARG --global user=vfarcic
-# WORKDIR /go-workdir
+WORKDIR /go-workdir
 
 binary:
     COPY go.mod go.sum vendor .
     COPY *.go .
-    RUN GOOS=linux GOARCH=amd64 go build -o silly-demo
+    RUN go mod vendor
+    RUN GOOS=linux GOARCH=amd64 go build --mod vendor -o silly-demo
     SAVE ARTIFACT silly-demo
 
 timoni:
@@ -27,8 +28,10 @@ cosign:
     RUN --push \
         --secret COSIGN_PASSWORD=cosignpassword \
         --secret cosignkey \
+        --secret password \
         cosign sign --yes --key env://cosignkey \
         --registry-username $user \
+        --registry-password $password \
         ghcr.io/vfarcic/silly-demo:$tag
 
 helm:

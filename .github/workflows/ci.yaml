@@ -37,10 +37,12 @@ jobs:
           earthly --push \
             --secret cosignpassword="$COSIGN_PASSWORD" \
             --secret cosignkey="$COSIGN_PRIVATE_KEY" \
+            --secret password="$REGISTRY_PASSWORD" \
             +cosign --tag $TAG
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       # - name: Sign image with a key
       #   run: |
       #     cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}
