@@ -7,7 +7,7 @@ ARG --global user=vfarcic
 binary:
     COPY go.mod go.sum vendor .
     COPY *.go .
-    RUN GOOS=linux GOARCH=amd64 go build -o silly-demo
+    RUN GOOS=linux GOARCH=amd64 go build -mod vendor -o silly-demo
     SAVE ARTIFACT silly-demo
 
 timoni:
@@ -27,7 +27,6 @@ cosign:
     RUN --push \
         --secret COSIGN_PASSWORD=cosignpassword \
         --secret cosignkey \
-        --secret password \
         cosign sign --yes --key env://cosignkey \
         --registry-username $user \
         ghcr.io/vfarcic/silly-demo:$tag
