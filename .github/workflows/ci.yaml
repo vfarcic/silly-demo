@@ -38,25 +38,14 @@ jobs:
             --secret cosignpassword="$COSIGN_PASSWORD" \
             --secret cosignkey="$COSIGN_PRIVATE_KEY" \
             --secret password="$REGISTRY_PASSWORD" \
-            +cosign --tag $TAG
+            +cosign-all --tag $TAG
+          earthly --push --secret password="$REGISTRY_PASSWORD" \
+            +timoni
+          earthly --push +helm
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      # - name: Sign image with a key
-      #   run: |
-      #     cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}
-      #     cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.IMAGE }}:${{ env.TAG }}-alpine
-      #   env:
-      #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-      #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-      # - name: Setup Timoni
-      #   uses: stefanprodan/timoni/actions/setup@main
-      # - name: Timoni package
-      #   run: |
-      #     cat timoni/values.cue | sed -e "s@image: tag:.*@image: tag: \"${{ env.TAG }}\"@g" | tee timoni/values.cue.tmp
-      #     mv timoni/values.cue.tmp timoni/values.cue
-      #     timoni mod push timoni oci://${{ env.IMAGE }}-package --version ${{ env.TAG }}
       # - name: Helm package
       #   run: |
       #     yq --inplace ".version = \"${{ env.TAG }}\"" helm/app/Chart.yaml
