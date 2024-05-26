@@ -12,10 +12,6 @@ jobs:
       TAG: 1.4.${{ github.run_number }}
       FORCE_COLOR: 1
     steps:
-      # - name: Variables
-      #   run: |
-      #     echo "TAG=1.4.${{ github.run_number }}" >> "$GITHUB_ENV"
-      #     echo "IMAGE=ghcr.io/vfarcic/silly-demo" >> "$GITHUB_ENV"
       - uses: earthly/actions-setup@v1
         with:
           version: v0.8.0
