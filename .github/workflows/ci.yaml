@@ -12,11 +12,11 @@ jobs:
       TAG: 1.4.${{ github.run_number }}
       FORCE_COLOR: 1
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - uses: earthly/actions-setup@v1
         with:
           version: v0.8.0
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Build and push
         run: |
           earthly --push \
