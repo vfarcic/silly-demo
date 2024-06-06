@@ -4,7 +4,7 @@
 package main
 
 values: {
-	image: tag: "1.4.171"
+	image: tag: "1.4.172"
 	image: repository: "ghcr.io/vfarcic/silly-demo"
     replicas: 2
     autoscaling: {
