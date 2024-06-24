@@ -1,0 +1,42 @@
+---
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlag
+metadata:
+  name: silly-demo
+  labels:
+    app.kubernetes.io/name: silly-demo
+spec:
+  flagSpec:
+    flags:
+      root-message:
+        state: ENABLED
+        variants:
+          "on": true
+          "off": false
+        defaultVariant: "on"
+---
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlagSource
+metadata:
+  name: silly-demo
+  labels:
+    app.kubernetes.io/name: silly-demo
+spec:
+  sources:
+    - source: silly-demo
+      provider: kubernetes
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: silly-demo-open-feature
+  labels:
+    app.kubernetes.io/name: silly-demo
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: silly-demo
+  ports:
+    - port: 30002
+      targetPort: 8013
+      nodePort: 30002

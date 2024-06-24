@@ -1,0 +1,12 @@
+{
+    "flags": {
+        "root-message": {
+            "variants": {
+                "on": true,
+                "off": false
+            },
+            "state": "ENABLED",
+            "defaultVariant": "on"
+        }
+    }
+}

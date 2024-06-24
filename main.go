@@ -3,18 +3,26 @@ package main
 import (
 	"fmt"
 	"log"
-	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	flagd "github.com/open-feature/go-sdk-contrib/providers/flagd/pkg"
+	"github.com/open-feature/go-sdk/openfeature"
 )
 
-func main() {
-	log.SetOutput(os.Stderr)
-	if os.Getenv("DEBUG") == "true" {
-		slog.SetLogLoggerLevel(slog.LevelDebug)
+var OpenFeatureClient = openfeature.NewClient("silly-demo")
+
+func init() {
+	err := openfeature.SetProviderAndWait(flagd.NewProvider())
+	if err != nil {
+		log.Printf("Failed to set the OpenFeature provider: %v", err)
 	}
+}
+
+func main() {
+	// Logging
+	log.SetOutput(os.Stderr)
 	if os.Getenv("MEMORY_LEAK_MAX_MEMORY") != "" {
 		go func() { memoryLeak(0, 0) }()
 	}
