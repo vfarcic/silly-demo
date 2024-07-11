@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: silly-demo
+  description: Silly description
+  annotations:
+    github.com/project-slug: vfarcic/silly-demo
+    backstage.io/techdocs-ref: dir:. 
+spec:
+  type: backend
+  lifecycle: production
+  owner: vfarcic
+  system: DevOpsCatalog
+  # dependsOn:
+  #   - resource:default/something-db
+  # providesApis:
+  #   - something-api
+
