@@ -6,6 +6,7 @@ metadata:
   annotations:
     github.com/project-slug: vfarcic/silly-demo
     backstage.io/techdocs-ref: dir:. 
+    backstage.io/kubernetes-id: dot
 spec:
   type: backend
   lifecycle: production

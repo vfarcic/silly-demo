@@ -11,13 +11,11 @@
     "earthly@0.8.11",
     "go@1.22.3",
     "teller@1.5.6",
-    "cosign@2.2.4"
+    "cosign@2.2.4",
+    "path:gcloud#google-cloud-sdk"
   ],
   "shell": {
-    "init_hook": [
-      "alias cat='bat --paging never --theme DarkNeon --style plain'",
-      "PS1=\"➜ \""
-    ],
+    "init_hook": [],
     "scripts": {}
   }
 }
