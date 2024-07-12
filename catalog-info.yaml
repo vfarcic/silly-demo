@@ -8,6 +8,7 @@ metadata:
     backstage.io/techdocs-ref: dir:. 
     backstage.io/kubernetes-id: dot
     backstage.io/kubernetes-namespace: a-team
+    backstage.io/kubernetes-label-selector: app.kubernetes.io/name=silly-demo
 spec:
   type: backend
   lifecycle: production
