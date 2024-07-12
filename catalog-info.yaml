@@ -7,6 +7,7 @@ metadata:
     github.com/project-slug: vfarcic/silly-demo
     backstage.io/techdocs-ref: dir:. 
     backstage.io/kubernetes-id: dot
+    backstage.io/kubernetes-namespace: a-team
 spec:
   type: backend
   lifecycle: production
