@@ -6,11 +6,15 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	signals()
 	log.SetOutput(os.Stderr)
 	if os.Getenv("DEBUG") == "true" {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
@@ -33,6 +37,21 @@ func main() {
 		port = "8080"
 	}
 	router.Run(fmt.Sprintf(":%s", port))
+}
+
+func signals() {
+	if os.Getenv("SIGNALS") == "true" {
+		sigs := make(chan os.Signal, 1)
+		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+		go func() {
+			sig := <-sigs
+			fmt.Printf("Received %s\n", sig)
+			fmt.Println("Waiting for current requests to terminate...")
+			time.Sleep(5 * time.Second)
+			fmt.Println("Exiting...")
+			os.Exit(0)
+		}()
+	}
 }
 
 func httpErrorBadRequest(err error, ctx *gin.Context) {
