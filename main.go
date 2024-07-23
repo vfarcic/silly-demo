@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"log"
 	"log/slog"
@@ -14,7 +16,7 @@ import (
 )
 
 func main() {
-	signals()
+	// signals()
 	log.SetOutput(os.Stderr)
 	if os.Getenv("DEBUG") == "true" {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
@@ -36,21 +38,32 @@ func main() {
 	if len(port) == 0 {
 		port = "8080"
 	}
-	router.Run(fmt.Sprintf(":%s", port))
-}
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%s", port),
+		Handler: router.Handler(),
+	}
 
-func signals() {
-	if os.Getenv("SIGNALS") == "true" {
-		sigs := make(chan os.Signal, 1)
-		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	// Signals
+	if len(os.Getenv("NO_SIGNALS")) > 0 {
+		if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("HTTP server error: %v", err)
+		}
+	} else {
 		go func() {
-			sig := <-sigs
-			fmt.Printf("Received %s\n", sig)
-			fmt.Println("Waiting for current requests to terminate...")
-			time.Sleep(5 * time.Second)
-			fmt.Println("Exiting...")
-			os.Exit(0)
+			if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+				log.Fatalf("HTTP server error: %v", err)
+			}
+			log.Println("Stopped serving new connections.")
 		}()
+		sigChan := make(chan os.Signal, 1)
+		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+		<-sigChan
+		shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 60*time.Second)
+		defer shutdownRelease()
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			log.Fatalf("HTTP shutdown error: %v", err)
+		}
+		log.Println("Graceful shutdown complete.")
 	}
 }
 

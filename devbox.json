@@ -12,10 +12,11 @@
     "go@1.22.3",
     "teller@1.5.6",
     "cosign@2.2.4",
-    "path:gcloud#google-cloud-sdk"
+    "path:gcloud#google-cloud-sdk",
+    "zellij@0.40.1"
   ],
   "shell": {
     "init_hook": [],
-    "scripts": {}
+    "scripts":   {}
   }
 }
