@@ -23,7 +23,7 @@ spec:
     spec:
       shareProcessNamespace: true
       containers:
-        - image: 1.4.191
+        - image: 1.4.192
           livenessProbe:
             httpGet:
               path: /
