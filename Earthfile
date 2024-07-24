@@ -66,13 +66,13 @@ helm:
 kustomize:
     ARG --required tag
     COPY kustomize kustomize
-    RUN yq --inplace ".spec.template.spec.containers[0].image = \"$tag\"" kustomize/base/deployment.yaml
+    RUN yq --inplace ".spec.template.spec.containers[0].image = \"ghcr.io/vfarcic/silly-demo:$tag\"" kustomize/base/deployment.yaml
     SAVE ARTIFACT kustomize/base/deployment.yaml AS LOCAL kustomize/base/deployment.yaml
 
 kubernetes:
     ARG --required tag
     COPY k8s k8s
-    RUN yq --inplace ".spec.template.spec.containers[0].image = \"$tag\"" k8s/deployment.yaml
+    RUN yq --inplace ".spec.template.spec.containers[0].image = \"ghcr.io/vfarcic/silly-demo:$tag\"" k8s/deployment.yaml
     SAVE ARTIFACT k8s/deployment.yaml AS LOCAL k8s/deployment.yaml
 
 all:
