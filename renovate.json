@@ -1,14 +1,12 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+      "config:recommended"
   ],
   "kubernetes": {
     "fileMatch": [
       "k8s/.+\\.yaml$",
       "kustomize/base"
     ]
-  },
-  {
-    "commitBody": "[skip ci]"
   }
 }
