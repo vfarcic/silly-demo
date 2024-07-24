@@ -1,0 +1,12 @@
+layout {
+    tab name="Do" focus=true {
+        pane {
+            name "server"
+            size "50%"
+        }
+        pane {
+            name "tests"
+            size "50%"
+        }
+    }
+}
