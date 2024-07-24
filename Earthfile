@@ -88,3 +88,4 @@ all:
     BUILD +helm --tag $tag
     BUILD +kustomize --tag $tag
     BUILD +kubernetes --tag $tag
+
