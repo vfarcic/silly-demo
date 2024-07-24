@@ -28,7 +28,7 @@ require (
 	github.com/stretchr/testify v1.8.3
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
 	github.com/twitchyliquid64/golang-asm v0.15.1
-	github.com/ugorji/go/codec v1.2.11
+	github.com/ugorji/go/codec v1.2.12
 	github.com/vmihailenco/bufpool v0.1.11
 	github.com/vmihailenco/msgpack/v5 v5.3.4
 	github.com/vmihailenco/tagparser v0.1.2
