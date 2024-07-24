@@ -3,7 +3,7 @@ module silly-demo
 go 1.21
 
 require (
-	github.com/bytedance/sonic v1.9.1
+	github.com/bytedance/sonic v1.11.9
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311
 	github.com/davecgh/go-spew v1.1.1
 	github.com/gabriel-vasile/mimetype v1.4.2
@@ -44,6 +44,9 @@ require (
 )
 
 require (
+	github.com/bytedance/sonic/loader v0.1.1 // indirect
+	github.com/cloudwego/base64x v0.1.4 // indirect
+	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
