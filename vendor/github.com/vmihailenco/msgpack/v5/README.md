@@ -5,11 +5,15 @@
 [![Documentation](https://img.shields.io/badge/msgpack-documentation-informational)](https://msgpack.uptrace.dev/)
 [![Chat](https://discordapp.com/api/guilds/752070105847955518/widget.png)](https://discord.gg/rWtp5Aj)
 
-> :heart:
-> [**Uptrace.dev** - All-in-one tool to optimize performance and monitor errors & logs](https://uptrace.dev/?utm_source=gh-msgpack&utm_campaign=gh-msgpack-var2)
+> msgpack is brought to you by :star: [**uptrace/uptrace**](https://github.com/uptrace/uptrace).
+> Uptrace is an [open source APM](https://uptrace.dev/get/open-source-apm.html) and blazingly fast
+> [distributed tracing tool](https://get.uptrace.dev/compare/distributed-tracing-tools.html) powered
+> by OpenTelemetry and ClickHouse. Give it a star as well!
 
-- Join [Discord](https://discord.gg/rWtp5Aj) to ask questions.
+## Resources
+
 - [Documentation](https://msgpack.uptrace.dev)
+- [Chat](https://discord.gg/rWtp5Aj)
 - [Reference](https://pkg.go.dev/github.com/vmihailenco/msgpack/v5)
 - [Examples](https://pkg.go.dev/github.com/vmihailenco/msgpack/v5#pkg-examples)
 
@@ -82,4 +86,15 @@ func ExampleMarshal() {
 
 ## See also
 
-- [Fast and flexible ORM for sql.DB](https://bun.uptrace.dev)
+- [Golang ORM](https://github.com/uptrace/bun) for PostgreSQL, MySQL, MSSQL, and SQLite
+- [Golang PostgreSQL](https://bun.uptrace.dev/postgres/)
+- [Golang HTTP router](https://github.com/uptrace/bunrouter)
+- [Golang ClickHouse ORM](https://github.com/uptrace/go-clickhouse)
+
+## Contributors
+
+Thanks to all the people who already contributed!
+
+<a href="https://github.com/vmihailenco/msgpack/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=vmihailenco/msgpack" />
+</a>

@@ -147,8 +147,8 @@ github.com/ugorji/go/codec
 # github.com/vmihailenco/bufpool v0.1.11
 ## explicit; go 1.13
 github.com/vmihailenco/bufpool
-# github.com/vmihailenco/msgpack/v5 v5.3.4
-## explicit; go 1.11
+# github.com/vmihailenco/msgpack/v5 v5.4.1
+## explicit; go 1.19
 github.com/vmihailenco/msgpack/v5
 github.com/vmihailenco/msgpack/v5/msgpcode
 # github.com/vmihailenco/tagparser v0.1.2
