@@ -25,7 +25,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2
 	github.com/pelletier/go-toml/v2 v2.0.8
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.9.0
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
 	github.com/twitchyliquid64/golang-asm v0.15.1
 	github.com/ugorji/go/codec v1.2.11
