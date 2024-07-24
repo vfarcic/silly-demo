@@ -37,3 +37,13 @@ timoni build silly-demo timoni \
     --values timoni/values-otel.yaml --namespace a-team \
     | kubectl apply --filename -
 ```
+
+## App in a KinD Cluster
+
+```sh
+kind create cluster --config kind.yaml
+
+helm upgrade --install traefik traefik \
+    --repo https://helm.traefik.io/traefik \
+    --namespace traefik --create-namespace --wait
+```
