@@ -33,7 +33,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.4
 	github.com/vmihailenco/tagparser v0.1.2
 	github.com/vmihailenco/tagparser/v2 v2.0.0
-	golang.org/x/arch v0.3.0
+	golang.org/x/arch v0.8.0
 	golang.org/x/crypto v0.17.0
 	golang.org/x/net v0.17.0
 	golang.org/x/sys v0.15.0
