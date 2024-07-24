@@ -30,7 +30,7 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1
 	github.com/ugorji/go/codec v1.2.11
 	github.com/vmihailenco/bufpool v0.1.11
-	github.com/vmihailenco/msgpack/v5 v5.3.4
+	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/vmihailenco/tagparser/v2 v2.0.0
 	golang.org/x/arch v0.8.0
 	golang.org/x/crypto v0.25.0
