@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: silly-demo
-          image: 1.4.194
+          image: 1.4.195
           ports:
             - containerPort: 8080
           resources:
