@@ -9,7 +9,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.2
 	github.com/gin-contrib/sse v0.1.0
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-pg/pg/v10 v10.11.2
+	github.com/go-pg/pg/v10 v10.13.0
 	github.com/go-pg/zerochecker v0.2.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
@@ -34,11 +34,11 @@ require (
 	github.com/vmihailenco/tagparser v0.1.2
 	github.com/vmihailenco/tagparser/v2 v2.0.0
 	golang.org/x/arch v0.3.0
-	golang.org/x/crypto v0.17.0
-	golang.org/x/net v0.17.0
-	golang.org/x/sys v0.15.0
+	golang.org/x/crypto v0.21.0
+	golang.org/x/net v0.23.0
+	golang.org/x/sys v0.18.0
 	golang.org/x/text v0.14.0
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/protobuf v1.33.0
 	gopkg.in/yaml.v3 v3.0.1
 	mellium.im/sasl v0.3.1
 )
