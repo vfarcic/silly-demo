@@ -18,7 +18,7 @@ require (
 	github.com/goccy/go-json v0.10.2
 	github.com/jinzhu/inflection v1.0.0
 	github.com/json-iterator/go v1.1.12
-	github.com/klauspost/cpuid/v2 v2.2.4
+	github.com/klauspost/cpuid/v2 v2.2.8
 	github.com/leodido/go-urn v1.2.4
 	github.com/mattn/go-isatty v0.0.19
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
