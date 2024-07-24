@@ -63,6 +63,18 @@ helm:
         --username $user --password $password $registry
     RUN --push helm push silly-demo-helm-$tag.tgz oci://$registry
 
+kustomize:
+    ARG --required tag
+    COPY kustomize kustomize
+    RUN yq --inplace ".spec.template.spec.containers[0].image = \"$tag\"" kustomize/base/deployment.yaml
+    SAVE ARTIFACT kustomize/base/deployment.yaml AS LOCAL kustomize/base/deployment.yaml
+
+kubernetes:
+    ARG --required tag
+    COPY k8s k8s
+    RUN yq --inplace ".spec.template.spec.containers[0].image = \"$tag\"" k8s/deployment.yaml
+    SAVE ARTIFACT k8s/deployment.yaml AS LOCAL k8s/deployment.yaml
+
 all:
     ARG tag
     WAIT
@@ -74,3 +86,5 @@ all:
         --tag latest-alpine --tag $tag-alpine
     BUILD +timoni --tag $tag
     BUILD +helm --tag $tag
+    BUILD +kustomize --tag $tag
+    BUILD +kubernetes --tag $tag
