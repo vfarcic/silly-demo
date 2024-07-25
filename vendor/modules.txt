@@ -47,8 +47,8 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
-# github.com/go-pg/pg/v10 v10.11.2
-## explicit; go 1.11
+# github.com/go-pg/pg/v10 v10.13.0
+## explicit; go 1.19
 github.com/go-pg/pg/v10
 github.com/go-pg/pg/v10/internal
 github.com/go-pg/pg/v10/internal/parser
@@ -197,8 +197,8 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# google.golang.org/protobuf v1.30.0
-## explicit; go 1.11
+# google.golang.org/protobuf v1.33.0
+## explicit; go 1.17
 google.golang.org/protobuf/encoding/protowire
 google.golang.org/protobuf/internal/detrand
 google.golang.org/protobuf/internal/encoding/messageset
