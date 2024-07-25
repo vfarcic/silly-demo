@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/vfarcic/silly-demo
-  tag: 1.4.207
+  tag: 1.4.208
 ingress:
   host: devopstoolkitseries.com
 db:
