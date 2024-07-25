@@ -6,7 +6,7 @@ require (
 	github.com/bytedance/sonic v1.9.1
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311
 	github.com/davecgh/go-spew v1.1.1
-	github.com/gabriel-vasile/mimetype v1.4.3
+	github.com/gabriel-vasile/mimetype v1.4.4
 	github.com/gin-contrib/sse v0.1.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-pg/pg/v10 v10.11.2

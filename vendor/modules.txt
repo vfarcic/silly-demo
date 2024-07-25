@@ -27,7 +27,7 @@ github.com/chenzhuoyu/base64x
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/gabriel-vasile/mimetype v1.4.3
+# github.com/gabriel-vasile/mimetype v1.4.4
 ## explicit; go 1.20
 github.com/gabriel-vasile/mimetype
 github.com/gabriel-vasile/mimetype/internal/charset
