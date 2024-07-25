@@ -37,7 +37,7 @@ require (
 	golang.org/x/net v0.27.0
 	golang.org/x/sys v0.22.0
 	golang.org/x/text v0.16.0
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/protobuf v1.34.2
 	gopkg.in/yaml.v3 v3.0.1
 	mellium.im/sasl v0.3.1
 )
