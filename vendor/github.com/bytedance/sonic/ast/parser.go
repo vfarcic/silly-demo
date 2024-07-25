@@ -18,6 +18,7 @@ package ast
 
 import (
     `fmt`
+
     `github.com/bytedance/sonic/internal/native/types`
     `github.com/bytedance/sonic/internal/rt`
 )
@@ -33,7 +34,10 @@ const (
 )
 
 var (
+    // ErrNotExist means both key and value doesn't exist 
     ErrNotExist error = newError(_ERR_NOT_FOUND, "value not exists")
+
+    // ErrUnsupportType means API on the node is unsupported
     ErrUnsupportType error = newError(_ERR_UNSUPPORT_TYPE, "unsupported type")
 )
 
@@ -42,6 +46,7 @@ type Parser struct {
     s           string
     noLazy      bool
     skipValue   bool
+    dbuf        *byte
 }
 
 /** Parser Private Methods **/
@@ -152,7 +157,7 @@ func (self *Parser) decodeArray(ret *linkedNodes) (Node, types.ParsingError) {
         }
 
         /* add the value to result */
-        ret.Add(val)
+        ret.Push(val)
         self.p = self.lspace(self.p)
 
         /* check for EOF */
@@ -239,7 +244,7 @@ func (self *Parser) decodeObject(ret *linkedPairs) (Node, types.ParsingError) {
 
         /* add the value to result */
         // FIXME: ret's address may change here, thus previous referred node in ret may be invalid !!
-        ret.Add(Pair{Key: key, Value: val})
+        ret.Push(Pair{Key: key, Value: val})
         self.p = self.lspace(self.p)
 
         /* check for EOF */
@@ -470,7 +475,7 @@ func (self *Node) skipNextNode() *Node {
     }
 
     /* add the value to result */
-    ret.Add(val)
+    ret.Push(val)
     self.l++
     parser.p = parser.lspace(parser.p)
 
@@ -553,7 +558,7 @@ func (self *Node) skipNextPair() (*Pair) {
     }
 
     /* add the value to result */
-    ret.Add(Pair{Key: key, Value: val})
+    ret.Push(Pair{Key: key, Value: val})
     self.l++
     parser.p = parser.lspace(parser.p)
 
@@ -623,6 +628,20 @@ func NewParserObj(src string) Parser {
     return Parser{s: src}
 }
 
+// decodeNumber controls if parser decodes the number values instead of skip them
+//   WARN: once you set decodeNumber(true), please set decodeNumber(false) before you drop the parser 
+//   otherwise the memory CANNOT be reused
+func (self *Parser) decodeNumber(decode bool) {
+    if !decode && self.dbuf != nil {
+        types.FreeDbuf(self.dbuf)
+        self.dbuf = nil
+        return
+    }
+    if decode && self.dbuf == nil {
+        self.dbuf = types.NewDbuf()
+    }
+}
+
 // ExportError converts types.ParsingError to std Error
 func (self *Parser) ExportError(err types.ParsingError) error {
     if err == _ERR_NOT_FOUND {
@@ -633,4 +652,9 @@ func (self *Parser) ExportError(err types.ParsingError) error {
         Src : self.s,
         Code: err,
     }.Description())
+}
+
+func backward(src string, i int) int {
+    for ; i>=0 && isSpace(src[i]); i-- {}
+    return i
 }
