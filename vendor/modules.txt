@@ -1,4 +1,4 @@
-# github.com/bytedance/sonic v1.11.6
+# github.com/bytedance/sonic v1.11.9
 ## explicit; go 1.16
 github.com/bytedance/sonic
 github.com/bytedance/sonic/ast
@@ -10,7 +10,6 @@ github.com/bytedance/sonic/internal/decoder
 github.com/bytedance/sonic/internal/encoder
 github.com/bytedance/sonic/internal/jit
 github.com/bytedance/sonic/internal/native
-github.com/bytedance/sonic/internal/native/avx
 github.com/bytedance/sonic/internal/native/avx2
 github.com/bytedance/sonic/internal/native/neon
 github.com/bytedance/sonic/internal/native/sse
