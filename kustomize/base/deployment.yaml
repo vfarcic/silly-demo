@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: silly-demo
-          image: ghcr.io/vfarcic/silly-demo:1.4.202
+          image: ghcr.io/vfarcic/silly-demo:1.4.203
           ports:
             - containerPort: 8080
           resources:
