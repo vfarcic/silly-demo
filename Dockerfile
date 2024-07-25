@@ -1,4 +1,4 @@
-FROM golang:1.22.2-alpine AS build
+FROM golang:1.22.5-alpine AS build
 RUN mkdir /src
 WORKDIR /src
 ADD ./go.mod .
