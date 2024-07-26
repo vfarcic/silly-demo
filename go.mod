@@ -3,7 +3,7 @@ module silly-demo
 go 1.21
 
 require (
-	github.com/bytedance/sonic v1.11.6
+	github.com/bytedance/sonic v1.11.9
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d
 	github.com/davecgh/go-spew v1.1.1
 	github.com/gabriel-vasile/mimetype v1.4.4
