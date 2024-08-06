@@ -1,4 +1,4 @@
-# github.com/bytedance/sonic v1.12.0
+# github.com/bytedance/sonic v1.12.1
 ## explicit; go 1.17
 github.com/bytedance/sonic
 github.com/bytedance/sonic/ast
