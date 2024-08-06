@@ -189,7 +189,7 @@ github.com/vmihailenco/tagparser/v2/internal/parser
 # golang.org/x/arch v0.9.0
 ## explicit; go 1.18
 golang.org/x/arch/x86/x86asm
-# golang.org/x/crypto v0.25.0
+# golang.org/x/crypto v0.26.0
 ## explicit; go 1.20
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/sha3
@@ -207,7 +207,7 @@ golang.org/x/net/publicsuffix
 ## explicit; go 1.18
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
-# golang.org/x/text v0.16.0
+# golang.org/x/text v0.17.0
 ## explicit; go 1.18
 golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
