@@ -1,0 +1,6 @@
+{
+    "image": {
+        "repository": "{{.Name}}",
+        "tag": "{{.Tag}}"
+    }
+}

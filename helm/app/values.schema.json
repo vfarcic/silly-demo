@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "properties": {
+    "image": {
+      "description": "Container Image",
+      "properties": {
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ingress": {
+      "description": "Ingress",
+      "properties": {
+        "host": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "db": {
+      "description": "Database",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "schemahero": {
+      "description": "Schema (SchemaHero)",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "image",
+    "ingress",
+    "db",
+    "schemahero"
+  ],
+  "title": "Values",
+  "type": "object"
+}
