@@ -1,6 +1,8 @@
 module silly-demo
 
-go 1.21
+go 1.21.0
+
+toolchain go1.23.0
 
 require (
 	github.com/bytedance/sonic v1.12.1
@@ -23,7 +25,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 	github.com/modern-go/reflect2 v1.0.2
-	github.com/pelletier/go-toml/v2 v2.2.2
+	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/stretchr/testify v1.9.0
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
