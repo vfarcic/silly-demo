@@ -2,13 +2,16 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/go-pg/pg/v10"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/yaml.v2"
 )
 
 var dbSession *pg.DB = nil
@@ -69,25 +72,45 @@ func getDB(c *gin.Context) *pg.DB {
 
 func videosGetHandler(ctx *gin.Context) {
 	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
-	db := getDB(ctx)
-	if db == nil {
-		return
-	}
 	var videos []Video
-	err := db.ModelContext(ctx, &videos).Select()
-	if err != nil {
-		httpErrorInternalServerError(err, ctx)
-		return
+	if strings.ToLower(os.Getenv("DB")) == "fs" {
+		var err error
+		videos, err = getVideosFromFile()
+		if err != nil {
+			httpErrorInternalServerError(err, ctx)
+			return
+		}
+	} else {
+		db := getDB(ctx)
+		if db == nil {
+			return
+		}
+		err := db.ModelContext(ctx, &videos).Select()
+		if err != nil {
+			httpErrorInternalServerError(err, ctx)
+			return
+		}
 	}
 	ctx.JSON(http.StatusOK, videos)
 }
 
+func getVideosFromFile() ([]Video, error) {
+	dir := os.Getenv("FS_DIR")
+	if len(dir) == 0 {
+		dir = "/cache"
+	}
+	path := fmt.Sprintf("%s/videos.yaml", dir)
+	var videos []Video
+	yamlData, err := os.ReadFile(path)
+	if err != nil {
+		return videos, err
+	}
+	err = yaml.Unmarshal(yamlData, &videos)
+	return videos, err
+}
+
 func videoPostHandler(ctx *gin.Context) {
 	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
-	db := getDB(ctx)
-	if db == nil {
-		return
-	}
 	id := ctx.Query("id")
 	if len(id) == 0 {
 		httpErrorBadRequest(errors.New("id is empty"), ctx)
@@ -102,9 +125,32 @@ func videoPostHandler(ctx *gin.Context) {
 		ID:    id,
 		Title: title,
 	}
-	_, err := db.ModelContext(ctx, video).Insert()
-	if err != nil {
-		httpErrorInternalServerError(err, ctx)
-		return
+	if strings.ToLower(os.Getenv("DB")) == "fs" {
+		videos, err := getVideosFromFile()
+		videos = append(videos, *video)
+		dir := os.Getenv("FS_DIR")
+		if len(dir) == 0 {
+			dir = "/cache"
+		}
+		path := fmt.Sprintf("%s/videos.yaml", dir)
+		yamlData, err := yaml.Marshal(videos)
+		if err != nil {
+			httpErrorInternalServerError(err, ctx)
+			return
+		}
+		err = os.WriteFile(path, yamlData, 0644)
+		if err != nil {
+			httpErrorInternalServerError(err, ctx)
+		}
+	} else {
+		db := getDB(ctx)
+		if db == nil {
+			return
+		}
+		_, err := db.ModelContext(ctx, video).Insert()
+		if err != nil {
+			httpErrorInternalServerError(err, ctx)
+			return
+		}
 	}
 }
