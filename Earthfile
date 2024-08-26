@@ -81,6 +81,8 @@ all:
         BUILD +image --tag $tag --taglatest latest
         BUILD +image --tag $tag-alpine \
             --taglatest latest-alpine --base alpine:3.18.4
+        BUILD +image --tag $tag-ubuntu \
+            --taglatest latest-ubuntu --base ubuntu:24.10
     END
     BUILD +cosign --tag latest --tag $tag \
         --tag latest-alpine --tag $tag-alpine
