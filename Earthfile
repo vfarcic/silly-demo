@@ -85,7 +85,8 @@ all:
             --taglatest latest-ubuntu --base ubuntu:24.10
     END
     BUILD +cosign --tag latest --tag $tag \
-        --tag latest-alpine --tag $tag-alpine
+        --tag latest-alpine --tag $tag-alpine \
+        --tag latest-ubuntu --tag $tag-ubuntu
     BUILD +timoni --tag $tag
     BUILD +helm --tag $tag
     BUILD +kustomize --tag $tag
