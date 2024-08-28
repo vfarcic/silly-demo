@@ -9,7 +9,7 @@ require (
 	github.com/go-pg/pg/v10 v10.13.0
 	github.com/go-resty/resty/v2 v2.14.0
 	github.com/stretchr/testify v1.9.0
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v3 v3.0.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
