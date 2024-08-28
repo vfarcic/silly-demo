@@ -11,7 +11,7 @@ import (
 	"github.com/go-pg/pg/v10"
 
 	"github.com/gin-gonic/gin"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 var dbSession *pg.DB = nil
