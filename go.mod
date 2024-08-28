@@ -9,7 +9,8 @@ require (
 	github.com/go-pg/pg/v10 v10.13.0
 	github.com/go-resty/resty/v2 v2.14.0
 	github.com/stretchr/testify v1.9.0
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -50,6 +51,5 @@ require (
 	golang.org/x/text v0.17.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	mellium.im/sasl v0.3.1 // indirect
 )
