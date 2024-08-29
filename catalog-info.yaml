@@ -9,10 +9,17 @@ metadata:
     backstage.io/kubernetes-id: dot
     backstage.io/kubernetes-namespace: a-team
     backstage.io/kubernetes-label-selector: app.kubernetes.io/name=silly-demo
+  tags:
+    - go
+  links:
+    - url: https://devopstoolkit.live/
+      title: DevOps Toolkit
+      icon: dashboard
+      type: Website
 spec:
   type: backend
   lifecycle: production
-  owner: vfarcic
+  owner: v1farcic
   system: DevOpsCatalog
   # dependsOn:
   #   - resource:default/something-db
