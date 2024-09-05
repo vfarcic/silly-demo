@@ -6,7 +6,7 @@ helmCharts:
   - name: postgresql
     releaseName: postgresql
     repo: https://charts.bitnami.com/bitnami
-    version: 15.5.27
+    version: 15.5.28
     namespace: production
     valuesFile: postgresql-values.yaml
 patchesStrategicMerge:
