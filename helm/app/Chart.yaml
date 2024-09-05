@@ -1,7 +1,7 @@
 apiVersion: v1
 description: I'm too lazy to write a description
 name: silly-demo-helm
-version: 1.4.249
+version: 1.4.250
 dependencies:
   - name: postgresql
     version: 12.1.2
