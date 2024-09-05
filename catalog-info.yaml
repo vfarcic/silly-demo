@@ -2,6 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: silly-demo
+  title: Silly Demo # FIXME:
   description: Silly description
   annotations:
     github.com/project-slug: vfarcic/silly-demo
@@ -17,12 +18,14 @@ metadata:
       icon: dashboard
       type: Website
 spec:
-  type: backend
+  type: service
   lifecycle: production
-  owner: v1farcic
+  owner: vfarcic
   system: DevOpsCatalog
-  # dependsOn:
-  #   - resource:default/something-db
+  # subcomponentOf: something
   # providesApis:
-  #   - something-api
-
+  #   - something
+  # consumesApis:
+  #   - smoething
+  # dependsOn:
+  #   - something
