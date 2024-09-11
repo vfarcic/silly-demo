@@ -20,29 +20,3 @@ spec:
   selector:
     app.kubernetes.io/name: silly-demo
   type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    description: This is a silly demo
-    language: Go
-    owner: Viktor Farcic (viktor@farcic.com)
-    team: dot
-  labels:
-    app.kubernetes.io/name: silly-demo
-    backstage.io/kubernetes-id: silly-demo
-  name: silly-demo
-spec:
-  ingressClassName: traefik
-  rules:
-  - host: sillydemo.127.0.0.1.nip.io
-    http:
-      paths:
-      - backend:
-          service:
-            name: silly-demo
-            port:
-              number: 8080
-        path: /
-        pathType: ImplementationSpecific
