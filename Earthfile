@@ -19,7 +19,7 @@ image:
     ARG base='scratch'
     FROM $base
     ENV DB_PORT=5432 DB_USERNAME=postgres DB_NAME=silly-demo
-    COPY /cache /cache
+    COPY cache /cache
     EXPOSE 8080
     CMD ["silly-demo"]
     ENV VERSION=$tag
