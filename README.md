@@ -3,6 +3,11 @@
 # Common
 
 ```sh
+kind create cluster --config kind.yaml
+
+kubectl apply \
+    --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
 kubectl create namespace a-team
 ```
 
