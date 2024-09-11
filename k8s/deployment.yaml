@@ -29,9 +29,9 @@ spec:
               path: /
               port: 8080
           name: silly-demo
-          env:
-            - name: DB
-              value: fs
+          # env:
+          #   - name: DB
+          #     value: fs
           ports:
             - containerPort: 8080
           readinessProbe:
