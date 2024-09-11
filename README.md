@@ -14,7 +14,7 @@ kubectl create namespace a-team
 ## App Alone
 
 ```sh
-kubectl apply --filename k8s
+kubectl --namespace a-team apply --filename k8s
 ```
 
 ## App with CNPG PostgreSQL

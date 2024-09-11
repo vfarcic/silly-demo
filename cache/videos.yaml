@@ -1,16 +1,4 @@
-- id: id1
-  title: title1
-- id: id2
-  title: title2
-- id: id3
-  title: title3
-- id: id4
-  title: title4
-- id: id5
-  title: title5
-- id: id6
-  title: title6
-- id: id7
-  title: title7
-- id: id8
-  title: title8
+- id: 1
+  title: Title 1
+- id: 2
+  title: Title 2
