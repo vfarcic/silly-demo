@@ -1,14 +1,28 @@
 import './App.css';
 import React from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Layout from './Layout';
 import VideoList from './VideoList';
-import AddVideo from './AddVideo';
+import VideoAdd from './VideoAdd';
 
 function App() {
   return (
-    <div className="App">
-      <AddVideo />
-      <VideoList />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="video-add" element={<VideoAdd />} />
+          <Route path="video-list" element={<VideoList />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    // <div className="App">
+    //   <VideoAdd />
+    //   <VideoList />
+    // </div>
   );
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const url = process.env.REACT_APP_BACKEND_URL;
 
-const AddVideo = () => {
+const VideoAdd = () => {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
 
@@ -39,4 +39,4 @@ const AddVideo = () => {
   );
 };
 
-export default AddVideo;
+export default VideoAdd;
