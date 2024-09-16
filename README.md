@@ -1,6 +1,16 @@
-# Demo Manifests and Code Used in DevOps Toolkit Videos
+# Silly Demo
 
-[![Stop Losing Requests! Learn Graceful Shutdown Techniques](https://img.youtube.com/vi/eQPYsGrZW_E/0.jpg)](https://youtu.be/eQPYsGrZW_E)eploy.yaml
+## Demo Manifests and Code Used in DevOps Toolkit Videos
+
+[![Stop Losing Requests! Learn Graceful Shutdown Techniques](https://img.youtube.com/vi/eQPYsGrZW_E/0.jpg)](https://youtu.be/eQPYsGrZW_E)
+
+## Common
+
+```sh
+kind create cluster --config kind.yaml
+
+kubectl apply \
+    --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 kubectl create namespace a-team
 ```
