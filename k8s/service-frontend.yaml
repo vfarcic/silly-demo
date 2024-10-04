@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: This is a silly demo
+    language: NodeJS
+    owner: Viktor Farcic (viktor@farcic.com)
+    team: dot
+  labels:
+    app.kubernetes.io/name: silly-demo-frontend
+    backstage.io/kubernetes-id: silly-demo-frontend
+  name: silly-demo-frontend
+spec:
+  ports:
+  - name: http
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/name: silly-demo-frontend
+  type: ClusterIP

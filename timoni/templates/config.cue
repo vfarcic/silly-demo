@@ -9,23 +9,28 @@ import (
 dbProvider: "aws" | "azure" | "google" | "cnpg"
 
 #Config: {
+    isFrontend: *false | bool
+    name: *"silly-demo" | string & =~"^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" & strings.MaxRunes(63)
+    language: *"Go" | string
     metadata: metav1.#ObjectMeta
-    metadata: name:         *"silly-demo" | string & =~"^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$" & strings.MaxRunes(63)
-    metadata: namespace:    *"default" | string & strings.MaxRunes(63)
-    metadata: labels:       *selectorLabels | {[ string]: string}
-    metadata: annotations: {
-        "description": "This is a silly demo",
-        "owner": "Viktor Farcic (viktor@farcic.com)",
-        "team": "dot",
-        "language": "Go",
+    metadata: {
+        name:         name
+        namespace:    *"default" | string & strings.MaxRunes(63)
+        labels:       *selectorLabels | {[ string]: string}
+        annotations: {
+            "description": "This is a silly demo",
+            "owner": "Viktor Farcic (viktor@farcic.com)",
+            "team": "dot",
+            "language": language,
+        }
     }
 
     replicas:        *2 | int & >0
-    selectorLabels:  *{"app.kubernetes.io/name": metadata.name} | {[ string]: string}
+    selectorLabels:  *{"app.kubernetes.io/name": name} | {[string]: string}
     podAnnotations?: {[ string]: string}
     image: {
-        repository: *"ghcr.io/vfarcic/silly-demo" | string
-        tag:        *"latest" | string
+        repository: string
+        tag:        string
     }
     _resources: {
         limits: {
@@ -38,10 +43,7 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         }
     }
     resources: *_resources | corev1.#ResourceRequirements
-    service: {
-        port:       *8080 | int & >0 & <=65535
-        targetPort: *8080 | int & >0 & <=65535
-    }
+    service: port: *8080 | int & >0 & <=65535
     autoscaling: {
         enabled:     *false | bool
         cpu:         *80 | int & >0 & <=100
@@ -50,7 +52,7 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         maxReplicas: *6 | int & >=minReplicas
     }
     ingress: {
-        host:    *"sillydemo.com" | string
+        host:    *"silly-demo.com" | string
         className?: string
     }
     db: {
@@ -66,14 +68,22 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
     debug: {
         enabled: *false | bool
     }
+    frontend: {
+        image: {
+            repository: string
+            tag:        string
+        }
+        service: port: 3000
+        ingress: host: *"silly-demo-frontend.com" | string
+    }
 }
 
 #Instance: {
     config: #Config
 
     objects: {
-        "\(config.metadata.name)-deploy": #Deployment & {_config:     config}
-        "\(config.metadata.name)-svc":    #Service & {_config:        config}
+        "\(config.metadata.name)-deploy": #Deployment & { _config: config }
+        "\(config.metadata.name)-svc": #Service & { _config: config }
         if config.autoscaling.enabled {
             "\(config.metadata.name)-hpa": #HorizontalPodAutoscaler & {_config: config}
         }
@@ -88,6 +98,30 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
             if config.db.provider != "cnpg" {
                 "\(config.metadata.name)-db-secret": #DBSecret & {_config: config}
                 "\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
+            }
+        }
+        "\(config.metadata.name)-deploy-frontend": #Deployment & {
+            _config: config
+            _config: {
+                isFrontend: true
+                name: "silly-demo-frontend",
+                language: "Node",
+            }
+        }
+        "\(config.metadata.name)-svc-frontend": #Service & {
+            _config: config
+            _config: {
+                isFrontend: true
+                name: "silly-demo-frontend",
+                language: "Node",
+            }
+        }
+        "\(config.metadata.name)-ingress-frontend": #Ingress & {
+            _config: config
+            _config: {
+                isFrontend: true
+                name: "silly-demo-frontend",
+                language: "Node",
             }
         }
     }

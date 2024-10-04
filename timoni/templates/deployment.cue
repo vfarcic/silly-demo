@@ -6,22 +6,104 @@ import (
 )
 
 #Deployment: appsv1.#Deployment & {
-    _config:    #Config
+    _config:     #Config
     _secretName: string
+    _image:      string
+    _port:       int
+    _env:        [...]
+    if _config.isFrontend == false {
+        _image: _config.image.repository + ":" + _config.image.tag
+        _port: _config.service.port
+        if (_config.db.enabled == true || _config.debug.enabled == true) {
+            _env: [
+                if _config.db.enabled == true {
+                    {
+                        name: "DB_ENDPOINT"
+                        valueFrom: secretKeyRef: {
+                            name: _secretName
+                            if _config.db.provider == "cnpg" {
+                                key: "host"
+                            }
+                            if _config.db.provider != "cnpg" {
+                                key: "endpoint"
+                            }
+                        }
+                    }
+                }
+                if _config.db.enabled == true {
+                    {
+                        name: "DB_PORT"
+                        valueFrom: secretKeyRef: {
+                            name: _secretName
+                            key: "port"
+                        }
+                    }
+                }
+                if _config.db.enabled == true {
+                    {
+                        name: "DB_USER"
+                        valueFrom: secretKeyRef: {
+                            name: _secretName
+                            key: "username"
+                        }
+                    }
+                }
+                if _config.db.enabled == true {
+                    {
+                        name: "DB_PASS"
+                        valueFrom: secretKeyRef: {
+                            name: _secretName
+                            key: "password"
+                        }
+                    }
+                }
+                if _config.db.enabled == true {
+                    {
+                        name: "DB_NAME"
+                        if _config.db.provider == "cnpg" {
+                            value: "app"
+                        }
+                        if _config.db.provider != "cnpg" {
+                            value: _config.name
+                        }
+                    }
+                }
+                if _config.debug.enabled == true {
+                    {name: "DEBUG", value: "true" }
+                }
+            ]
+        }
+    }
+    if _config.isFrontend == true {
+        _image: _config.frontend.image.repository + ":" + _config.frontend.image.tag
+        _port: _config.frontend.service.port
+        _env: [
+            {
+                name: "REACT_APP_BACKEND_URL"
+                value: "http://" + _config.ingress.host
+            }
+        ]
+    }
     if _config.db.provider == "cnpg" {
-        _secretName: _config.metadata.name + "-app"
+        _secretName: _config.name + "-app"
     }
     if _config.db.provider != "cnpg" {
-        _secretName: _config.metadata.name
+        _secretName: _config.name
     }
+
     apiVersion: "apps/v1"
     kind:       "Deployment"
-    metadata:   _config.metadata
+    metadata: {
+        name:        _config.name
+        namespace:   _config.metadata.namespace
+        labels:      _config.metadata.labels
+        annotations: _config.metadata.annotations
+    }
     spec:       appsv1.#DeploymentSpec & {
         if !_config.autoscaling.enabled {
             replicas: _config.replicas
         }
-        selector: matchLabels: _config.selectorLabels
+        selector: matchLabels: {"app.kubernetes.io/name": _config.name}
         template: {
             metadata: {
                 labels: _config.selectorLabels
@@ -34,87 +116,29 @@ import (
                     shareProcessNamespace: true
                 }
                 containers: [{
-                    name: _config.metadata.name
-                    image: "\(_config.image.repository):\(_config.image.tag)"
-                    ports: [ { containerPort: _config.service.targetPort } ]
+                    name: _config.name
+                    image: _image
+                    ports: [ { containerPort: _port } ]
                     livenessProbe: {
                         httpGet: {
                             path: "/"
-                            port: _config.service.targetPort
+                            port: _port
                         }
                     }
                     readinessProbe: {
                         httpGet: {
                             path: "/"
-                            port: _config.service.targetPort
+                            port: _port
                         }
                     }
                     if _config.resources != _|_ {
                         resources: _config.resources
                     }
-                    if _config.db.enabled == true || _config.debug.enabled == true {
-                        env: [
-                            if _config.db.enabled == true {
-                                {
-                                    name: "DB_ENDPOINT"
-                                    valueFrom: secretKeyRef: {
-                                        name: _secretName
-                                        if _config.db.provider == "cnpg" {
-                                            key: "host"
-                                        }
-                                        if _config.db.provider != "cnpg" {
-                                            key: "endpoint"
-                                        }
-                                    }
-                                }
-                            }
-                            if _config.db.enabled == true {
-                                {
-                                    name: "DB_PORT"
-                                    valueFrom: secretKeyRef: {
-                                        name: _secretName
-                                        key: "port"
-                                    }
-                                }
-                            }
-                            if _config.db.enabled == true {
-                                {
-                                    name: "DB_USER"
-                                    valueFrom: secretKeyRef: {
-                                        name: _secretName
-                                        key: "username"
-                                    }
-                                }
-                            }
-                            if _config.db.enabled == true {
-                                {
-                                    name: "DB_PASS"
-                                    valueFrom: secretKeyRef: {
-                                        name: _secretName
-                                        key: "password"
-                                    }
-                                }
-                            }
-                            if _config.db.enabled == true {
-                                {
-                                    name: "DB_NAME"
-                                    if _config.db.provider == "cnpg" {
-                                        value: "app"
-                                    }
-                                    if _config.db.provider != "cnpg" {
-                                        value: _config.metadata.name
-                                    }
-                                }
-                            }
-                            if _config.debug.enabled == true {
-                                {name: "DEBUG", value: "true" }
-                            }
-                        ]
-                    }
+                    env: _env
                 },
                 if _config.otel.enabled == true {
                     {
-                        name: _config.metadata.name + "-instrumentation"
+                        name: _config.name + "-instrumentation"
                         image: "otel/autoinstrumentation-go"
                         env: [{
                             name: "OTEL_GO_AUTO_TARGET_EXE"
@@ -124,7 +148,7 @@ import (
                             value: _config.otel.jaegerAddr
                         }, {
                             name: "OTEL_SERVICE_NAME"
-                            value: _config.metadata.name
+                            value: _config.name
                         }, {
                             name: "OTEL_PROPAGATORS"
                             value: "tracecontext,baggage"

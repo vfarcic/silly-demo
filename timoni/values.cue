@@ -4,8 +4,10 @@
 package main
 
 values: {
-	image: tag: "1.4.282"
-	image: repository: "ghcr.io/vfarcic/silly-demo"
+	image: {
+        tag: "1.4.282"
+	    repository: "ghcr.io/vfarcic/silly-demo"
+    }
     replicas: 2
     autoscaling: {
         enabled:     false
@@ -13,7 +15,7 @@ values: {
         memory:      80
         maxReplicas: 6
     }
-    ingress: host: "sillydemo.com"
+    ingress: host: "silly-demo.com"
     db: {
         enabled:  false
         provider: "google"
@@ -23,6 +25,13 @@ values: {
     otel: {
         enabled:    false
         jaegerAddr: "http://jaeger.kube-system:4318"
+    }
+	frontend: {
+        image: {
+            tag: "0.0.3"
+	        repository: "ghcr.io/vfarcic/silly-demo-frontend"
+        }
+        ingress: host: "silly-demo-frontend.com"
     }
     debug: enabled: false
 }
