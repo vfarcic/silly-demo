@@ -6,19 +6,16 @@ const VideoAdd = () => {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     fetch(`${url}/video?id=${id}&title=${title}`, {
       method: 'POST',
-    })
-      .then(response => {
-        if (response.ok) {
-          alert('Video added successfully');
-        } else {
-          alert('Failed to add video');
-        }
-      })
-      .catch(error => console.error('Error adding video:', error));
+      mode: 'no-cors',
+    }).then(response => {
+      alert('Video added successfully');
+    }).catch(error => {
+      console.error('Error adding video:', error)
+    });
   };
 
   return (

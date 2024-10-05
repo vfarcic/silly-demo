@@ -8,6 +8,23 @@ import {
 import Layout from './Layout';
 import VideoList from './VideoList';
 import VideoAdd from './VideoAdd';
+import { H } from 'highlight.run';
+
+const hProject = process.env.REACT_APP_HIGHLIGHT_PROJECT_ID;
+
+H.init(`${hProject}`, {
+	serviceName: "silly-demo-frontend",
+	tracingOrigins: true,
+	networkRecording: {
+		enabled: true,
+		recordHeadersAndBody: true,
+	},
+    enableOtelTracing: true
+});
+H.identify('viktor@farcic.com', {
+  id: 'vfarcic',
+  name: 'Viktor Farcic'
+})
 
 function App() {
   return (

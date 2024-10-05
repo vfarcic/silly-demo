@@ -4,10 +4,8 @@
 package main
 
 values: {
-	image: {
-        tag: "1.4.282"
-	    repository: "ghcr.io/vfarcic/silly-demo"
-    }
+    image: tag: "1.4.282"
+    image: repository: "ghcr.io/vfarcic/silly-demo"
     replicas: 2
     autoscaling: {
         enabled:     false
@@ -28,7 +26,7 @@ values: {
     }
 	frontend: {
         image: {
-            tag: "0.0.3"
+            tag: "highlight"
 	        repository: "ghcr.io/vfarcic/silly-demo-frontend"
         }
         ingress: host: "silly-demo-frontend.com"

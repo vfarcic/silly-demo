@@ -14,7 +14,9 @@
     "path:gcloud#google-cloud-sdk",
     "zellij@0.40.1",
     "nodejs@22.6.0",
-    "timoni@0.22.0"
+    "timoni@0.22.0",
+    "hey@0.1.4",
+    "oha@1.4.6"
   ],
   "shell": {
     "init_hook": [],
