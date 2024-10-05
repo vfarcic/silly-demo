@@ -1,7 +1,7 @@
 values:
   replicas: 1
   ingress:
-    className: traefik
+    className: nginx
     host: silly-demo.127.0.0.1.nip.io
   frontend:
     ingress:
