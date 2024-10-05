@@ -19,10 +19,6 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-    // <div className="App">
-    //   <VideoAdd />
-    //   <VideoList />
-    // </div>
   );
 }
 

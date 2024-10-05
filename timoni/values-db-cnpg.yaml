@@ -1,13 +1,4 @@
 values:
-  ingress:
-    className: nginx
-    host: silly-demo.127.0.0.1.nip.io
-  frontend:
-    ingress:
-      host: silly-demo-frontend.127.0.0.1.nip.io
-  autoscaling:
-    enabled: true
-    minReplicas: 1
   db:
     enabled: true
     provider: "cnpg"

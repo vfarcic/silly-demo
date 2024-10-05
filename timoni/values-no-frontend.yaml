@@ -1,0 +1,3 @@
+values:
+  frontend:
+    enabled: false

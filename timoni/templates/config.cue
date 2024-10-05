@@ -69,6 +69,7 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         enabled: *false | bool
     }
     frontend: {
+        enabled: *true | bool
         image: {
             repository: string
             tag:        string
@@ -100,28 +101,30 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
                 "\(config.metadata.name)-db-claim": #DBClaim & {_config: config}
             }
         }
-        "\(config.metadata.name)-deploy-frontend": #Deployment & {
-            _config: config
-            _config: {
-                isFrontend: true
-                name: "silly-demo-frontend",
-                language: "Node",
+        if config.frontend.enabled {
+            "\(config.metadata.name)-deploy-frontend": #Deployment & {
+                _config: config
+                _config: {
+                    isFrontend: true
+                    name: "silly-demo-frontend",
+                    language: "Node",
+                }
             }
-        }
-        "\(config.metadata.name)-svc-frontend": #Service & {
-            _config: config
-            _config: {
-                isFrontend: true
-                name: "silly-demo-frontend",
-                language: "Node",
+            "\(config.metadata.name)-svc-frontend": #Service & {
+                _config: config
+                _config: {
+                    isFrontend: true
+                    name: "silly-demo-frontend",
+                    language: "Node",
+                }
             }
-        }
-        "\(config.metadata.name)-ingress-frontend": #Ingress & {
-            _config: config
-            _config: {
-                isFrontend: true
-                name: "silly-demo-frontend",
-                language: "Node",
+            "\(config.metadata.name)-ingress-frontend": #Ingress & {
+                _config: config
+                _config: {
+                    isFrontend: true
+                    name: "silly-demo-frontend",
+                    language: "Node",
+                }
             }
         }
     }

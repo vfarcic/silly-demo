@@ -666,51 +666,51 @@
         }
       }
     },
-    "timoni@0.20.0": {
-      "last_modified": "2024-03-22T11:26:23Z",
-      "resolved": "github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351#timoni",
+    "timoni@0.22.0": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#timoni",
       "source": "devbox-search",
-      "version": "0.20.0",
+      "version": "0.22.0",
       "systems": {
         "aarch64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/6q2jyv54hgfxky5jk1a8a99d326qckrg-timoni-0.20.0",
+              "path": "/nix/store/mgxszv4d24xxshw3h0hfqcnl70qmwd4n-timoni-0.22.0",
               "default": true
             }
           ],
-          "store_path": "/nix/store/6q2jyv54hgfxky5jk1a8a99d326qckrg-timoni-0.20.0"
+          "store_path": "/nix/store/mgxszv4d24xxshw3h0hfqcnl70qmwd4n-timoni-0.22.0"
         },
         "aarch64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/b49adh4hpx6yvw5kxsvrki2vb6wdjc77-timoni-0.20.0",
+              "path": "/nix/store/06m5dq7ifqlw0ldakvjwfvn7ir3106x3-timoni-0.22.0",
               "default": true
             }
           ],
-          "store_path": "/nix/store/b49adh4hpx6yvw5kxsvrki2vb6wdjc77-timoni-0.20.0"
+          "store_path": "/nix/store/06m5dq7ifqlw0ldakvjwfvn7ir3106x3-timoni-0.22.0"
         },
         "x86_64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/a449r2wdjpmxcflgij4jgrvgmq0qkqkd-timoni-0.20.0",
+              "path": "/nix/store/5zfa4yfnggvw3d7z62q9cbnsqa5l07nj-timoni-0.22.0",
               "default": true
             }
           ],
-          "store_path": "/nix/store/a449r2wdjpmxcflgij4jgrvgmq0qkqkd-timoni-0.20.0"
+          "store_path": "/nix/store/5zfa4yfnggvw3d7z62q9cbnsqa5l07nj-timoni-0.22.0"
         },
         "x86_64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/c9m9jwigzhf84z703dwyf8r9l4gjsrcn-timoni-0.20.0",
+              "path": "/nix/store/qm40mnfws9kp0akkgf1jnrdzxzfg2hk1-timoni-0.22.0",
               "default": true
             }
           ],
-          "store_path": "/nix/store/c9m9jwigzhf84z703dwyf8r9l4gjsrcn-timoni-0.20.0"
+          "store_path": "/nix/store/qm40mnfws9kp0akkgf1jnrdzxzfg2hk1-timoni-0.22.0"
         }
       }
     },
