@@ -25,6 +25,8 @@ func main() {
 		go func() { memoryLeak(0, 0) }()
 	}
 
+	NatsSubscribe()
+
 	// Server
 	log.Println("Starting server...")
 	router := gin.New()
@@ -73,6 +75,7 @@ func main() {
 		}
 		log.Println("Graceful shutdown complete.")
 	}
+	// <-ctx.Done()
 }
 
 func httpErrorBadRequest(err error, ctx *gin.Context) {

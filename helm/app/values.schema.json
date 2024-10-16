@@ -30,22 +30,12 @@
         }
       },
       "type": "object"
-    },
-    "schemahero": {
-      "description": "Schema (SchemaHero)",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      },
-      "type": "object"
     }
   },
   "required": [
     "image",
     "ingress",
-    "db",
-    "schemahero"
+    "db"
   ],
   "title": "Values",
   "type": "object"

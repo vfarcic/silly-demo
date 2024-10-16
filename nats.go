@@ -1,0 +1,83 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/nats-io/nats.go"
+)
+
+type NatsResponse func(string) string
+
+func NatsSubscribe() {
+	if os.Getenv("SUBSCRIBE") == "nats" {
+		ctx, _ := context.WithCancel(context.Background())
+		go natsSubscribe(ctx, "silly-demo.hello", func(message string) string {
+			return "I'm the silliest demo you ever saw. Nice to meet you."
+		})
+		go natsSubscribe(ctx, "ci.silly-demo", func(message string) string {
+			return "Thanks for doing the CI/CD for me."
+		})
+		go natsSubscribe(ctx, "fibonacci.request", func(message string) string {
+			number, err := strconv.Atoi(message)
+			if err != nil {
+				return fmt.Sprintf("%s is not a number", message)
+			}
+			return strconv.Itoa(calculateFibonacci(number))
+		})
+	}
+}
+
+func NatsPublish(message string) error {
+	natsURL := nats.DefaultURL
+	if len(os.Getenv("NATS_URL")) > 0 {
+		natsURL = os.Getenv("NATS_URL")
+	}
+	nc, err := nats.Connect(natsURL)
+	if err != nil {
+		return err
+	}
+	defer nc.Close()
+	log.Printf("publishing message: %s\n", message)
+	err = nc.Publish("silly-demo", []byte(message))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func natsSubscribe(ctx context.Context, channel string, fn NatsResponse) {
+	natsURL := nats.DefaultURL
+	if len(os.Getenv("NATS_URL")) > 0 {
+		natsURL = os.Getenv("NATS_URL")
+	}
+	nc, err := nats.Connect(natsURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer nc.Close()
+
+	messages := make(chan *nats.Msg, 1000)
+	subscription, err := nc.ChanSubscribe(channel, messages)
+	if err != nil {
+		log.Fatal("Failed to subscribe to subject:", err)
+	}
+	defer func() {
+		subscription.Unsubscribe()
+		close(messages)
+	}()
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("exiting from the message subscriber")
+			return
+		case message := <-messages:
+			log.Printf("received message: %s\n", string(message.Data))
+			response := fn(string(message.Data))
+			message.Respond([]byte(response))
+		}
+	}
+}

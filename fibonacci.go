@@ -4,10 +4,19 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
+
+func RespondFibonacci(message string) string {
+	number, err := strconv.Atoi(message)
+	if err != nil {
+		return fmt.Sprintf("%s is not a number", message)
+	}
+	return strconv.Itoa(calculateFibonacci(number))
+}
 
 func fibonacciHandler(ctx *gin.Context) {
 	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
@@ -17,6 +26,9 @@ func fibonacciHandler(ctx *gin.Context) {
 		return
 	}
 	fib := calculateFibonacci(number)
+	if os.Getenv("PUBLISH") == "nats" {
+		NatsPublish(fmt.Sprintf("Fibonacci %d = %d", number, fib))
+	}
 	ctx.String(http.StatusOK, fmt.Sprintf("%d", fib))
 }
 
