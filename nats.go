@@ -42,8 +42,8 @@ func NatsSubscribe() {
 func NatsPublishLoop() {
 	if os.Getenv("NATS_PUBLISH") == "true" {
 		for {
-			natsPublish("ping", "Silly demo is here. Is there anyone else around? Say hi to on the silly-demo.hello channel.")
-			time.Sleep(10 * time.Second)
+			natsPublish("ping", "Silly demo is here. Is there anyone else around? Say hi on the silly-demo.hello channel.")
+			time.Sleep(1 * time.Minute)
 		}
 	}
 }
