@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -26,9 +25,6 @@ func fibonacciHandler(ctx *gin.Context) {
 		return
 	}
 	fib := calculateFibonacci(number)
-	if os.Getenv("NATS_PUBLISH") == "true" {
-		NatsPublish(fmt.Sprintf("Fibonacci %d = %d", number, fib))
-	}
 	ctx.String(http.StatusOK, fmt.Sprintf("%d", fib))
 }
 

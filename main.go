@@ -26,6 +26,7 @@ func main() {
 	}
 
 	NatsSubscribe()
+	go NatsPublishLoop()
 
 	// Server
 	log.Println("Starting server...")

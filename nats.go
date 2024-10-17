@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/nats-io/nats.go"
 )
@@ -38,14 +39,23 @@ func NatsSubscribe() {
 	}
 }
 
-func NatsPublish(message string) error {
+func NatsPublishLoop() {
+	if os.Getenv("NATS_PUBLISH") == "true" {
+		for {
+			natsPublish("ping", "Silly demo is here. Is there anyone else around? Say hi to on the silly-demo.hello channel.")
+			time.Sleep(10 * time.Second)
+		}
+	}
+}
+
+func natsPublish(channel, message string) error {
 	nc, err := nats.Connect(getNatsURL())
 	if err != nil {
 		return err
 	}
 	defer nc.Close()
 	log.Printf("publishing message: %s\n", message)
-	err = nc.Publish("silly-demo", []byte(message))
+	err = nc.Publish(channel, []byte(message))
 	if err != nil {
 		return err
 	}
