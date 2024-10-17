@@ -1,0 +1,4 @@
+values:
+  nats:
+    enabled: true
+    url: xxx

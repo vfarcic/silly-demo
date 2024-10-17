@@ -12,8 +12,15 @@ import (
 
 type NatsResponse func(string) string
 
+func getNatsURL() string {
+	if len(os.Getenv("NATS_URL")) > 0 {
+		return os.Getenv("NATS_URL")
+	}
+	return nats.DefaultURL
+}
+
 func NatsSubscribe() {
-	if os.Getenv("SUBSCRIBE") == "nats" {
+	if os.Getenv("NATS_SUBSCRIBE") == "nats" {
 		ctx, _ := context.WithCancel(context.Background())
 		go natsSubscribe(ctx, "silly-demo.hello", func(message string) string {
 			return "I'm the silliest demo you ever saw. Nice to meet you."
@@ -32,11 +39,7 @@ func NatsSubscribe() {
 }
 
 func NatsPublish(message string) error {
-	natsURL := nats.DefaultURL
-	if len(os.Getenv("NATS_URL")) > 0 {
-		natsURL = os.Getenv("NATS_URL")
-	}
-	nc, err := nats.Connect(natsURL)
+	nc, err := nats.Connect(getNatsURL())
 	if err != nil {
 		return err
 	}
@@ -50,11 +53,7 @@ func NatsPublish(message string) error {
 }
 
 func natsSubscribe(ctx context.Context, channel string, fn NatsResponse) {
-	natsURL := nats.DefaultURL
-	if len(os.Getenv("NATS_URL")) > 0 {
-		natsURL = os.Getenv("NATS_URL")
-	}
-	nc, err := nats.Connect(natsURL)
+	nc, err := nats.Connect(getNatsURL())
 	if err != nil {
 		log.Fatal(err)
 	}

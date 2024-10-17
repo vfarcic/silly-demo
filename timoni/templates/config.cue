@@ -77,6 +77,10 @@ dbProvider: "aws" | "azure" | "google" | "cnpg"
         service: port: 3000
         ingress: host: *"silly-demo-frontend.com" | string
     }
+    nats: {
+        enabled:   *false | bool
+        url:       *"" | string
+    }
 }
 
 #Instance: {

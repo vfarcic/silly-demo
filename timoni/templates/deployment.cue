@@ -14,65 +14,72 @@ import (
     if _config.isFrontend == false {
         _image: _config.image.repository + ":" + _config.image.tag
         _port: _config.service.port
-        if (_config.db.enabled == true || _config.debug.enabled == true) {
-            _env: [
-                if _config.db.enabled == true {
-                    {
-                        name: "DB_ENDPOINT"
-                        valueFrom: secretKeyRef: {
-                            name: _secretName
-                            if _config.db.provider == "cnpg" {
-                                key: "host"
-                            }
-                            if _config.db.provider != "cnpg" {
-                                key: "endpoint"
-                            }
-                        }
-                    }
-                }
-                if _config.db.enabled == true {
-                    {
-                        name: "DB_PORT"
-                        valueFrom: secretKeyRef: {
-                            name: _secretName
-                            key: "port"
-                        }
-                    }
-                }
-                if _config.db.enabled == true {
-                    {
-                        name: "DB_USER"
-                        valueFrom: secretKeyRef: {
-                            name: _secretName
-                            key: "username"
-                        }
-                    }
-                }
-                if _config.db.enabled == true {
-                    {
-                        name: "DB_PASS"
-                        valueFrom: secretKeyRef: {
-                            name: _secretName
-                            key: "password"
-                        }
-                    }
-                }
-                if _config.db.enabled == true {
-                    {
-                        name: "DB_NAME"
+        _env: [
+            if _config.db.enabled == true {
+                {
+                    name: "DB_ENDPOINT"
+                    valueFrom: secretKeyRef: {
+                        name: _secretName
                         if _config.db.provider == "cnpg" {
-                            value: "app"
+                            key: "host"
                         }
                         if _config.db.provider != "cnpg" {
-                            value: _config.name
+                            key: "endpoint"
                         }
                     }
                 }
-                if _config.debug.enabled == true {
-                    {name: "DEBUG", value: "true" }
+            }
+            if _config.db.enabled == true {
+                {
+                    name: "DB_PORT"
+                    valueFrom: secretKeyRef: {
+                        name: _secretName
+                        key: "port"
+                    }
                 }
-            ]
-        }
+            }
+            if _config.db.enabled == true {
+                {
+                    name: "DB_USER"
+                    valueFrom: secretKeyRef: {
+                        name: _secretName
+                        key: "username"
+                    }
+                }
+            }
+            if _config.db.enabled == true {
+                {
+                    name: "DB_PASS"
+                    valueFrom: secretKeyRef: {
+                        name: _secretName
+                        key: "password"
+                    }
+                }
+            }
+            if _config.db.enabled == true {
+                {
+                    name: "DB_NAME"
+                    if _config.db.provider == "cnpg" {
+                        value: "app"
+                    }
+                    if _config.db.provider != "cnpg" {
+                        value: _config.name
+                    }
+                },
+            }
+            if _config.debug.enabled == true {
+                {name: "DEBUG", value: "true" },
+            }
+            if _config.nats.enabled == true {
+                {name: "NATS_URL", value: _config.nats.url }
+            }
+            if _config.nats.enabled == true {
+                {name: "NATS_SUBSCRIBE", value: "true" }
+            }
+            if _config.nats.enabled == true {
+                {name: "NATS_PUBLISH", value: "true" }
+            }
+        ]
     }
     if _config.isFrontend == true {
         _image: _config.frontend.image.repository + ":" + _config.frontend.image.tag
