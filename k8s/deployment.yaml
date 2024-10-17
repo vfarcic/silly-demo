@@ -23,7 +23,7 @@ spec:
     spec:
       shareProcessNamespace: true
       containers:
-        - image: ghcr.io/vfarcic/silly-demo:1.4.296
+        - image: ghcr.io/vfarcic/silly-demo:1.4.297
           livenessProbe:
             httpGet:
               path: /
