@@ -714,6 +714,54 @@
         }
       }
     },
+    "viddy@1.1.5": {
+      "last_modified": "2024-10-01T19:40:07Z",
+      "resolved": "github:NixOS/nixpkgs/1839883cd0068572aed75fb9442b508bbd9ef09c#viddy",
+      "source": "devbox-search",
+      "version": "1.1.5",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xn4biw10z7sd2k2ngzva0590dqsvsjmd-viddy-1.1.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/xn4biw10z7sd2k2ngzva0590dqsvsjmd-viddy-1.1.5"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/220rlshb76m4x2clb0swpr2wzpr9dqxf-viddy-1.1.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/220rlshb76m4x2clb0swpr2wzpr9dqxf-viddy-1.1.5"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4g1scfy9q1sjpmqhiclvc6lk01wbpzpw-viddy-1.1.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4g1scfy9q1sjpmqhiclvc6lk01wbpzpw-viddy-1.1.5"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/45cm75haqy0lhhmwm8q1x99wh85kpjvd-viddy-1.1.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/45cm75haqy0lhhmwm8q1x99wh85kpjvd-viddy-1.1.5"
+        }
+      }
+    },
     "yq-go@4.43.1": {
       "last_modified": "2024-03-25T12:46:37Z",
       "resolved": "github:NixOS/nixpkgs/c726225724e681b3626acc941c6f95d2b0602087#yq-go",
