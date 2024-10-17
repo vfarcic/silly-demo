@@ -40,9 +40,15 @@ timoni build silly-demo timoni \
 ## App with OTEL
 
 ```sh
-kubectl create namespace a-team
-
 timoni build silly-demo timoni \
     --values timoni/values-otel.yaml --namespace a-team \
+    | kubectl apply --filename -
+```
+
+## App with NATS
+
+```sh
+timoni build silly-demo timoni \
+    --values timoni/values-nats.yaml --namespace a-team \
     | kubectl apply --filename -
 ```

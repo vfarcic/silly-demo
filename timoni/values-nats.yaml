@@ -1,4 +1,4 @@
 values:
   nats:
     enabled: true
-    url: nats.acme.com
+    url: nats.nats:4222
