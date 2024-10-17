@@ -20,7 +20,7 @@ func getNatsURL() string {
 }
 
 func NatsSubscribe() {
-	if os.Getenv("NATS_SUBSCRIBE") == "nats" {
+	if os.Getenv("NATS_SUBSCRIBE") == "true" {
 		ctx, _ := context.WithCancel(context.Background())
 		go natsSubscribe(ctx, "silly-demo.hello", func(message string) string {
 			return "I'm the silliest demo you ever saw. Nice to meet you."
