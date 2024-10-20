@@ -5,10 +5,13 @@ go 1.21.0
 toolchain go1.23.2
 
 require (
+	github.com/cloudevents/sdk-go/protocol/nats/v2 v2.15.2
+	github.com/cloudevents/sdk-go/v2 v2.15.2
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-pg/pg/v10 v10.13.0
 	github.com/go-resty/resty/v2 v2.15.3
+	github.com/google/uuid v1.1.1
 	github.com/nats-io/nats.go v1.37.0
 	github.com/stretchr/testify v1.9.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -48,6 +51,9 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser v0.1.2 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
+	go.uber.org/atomic v1.4.0 // indirect
+	go.uber.org/multierr v1.1.0 // indirect
+	go.uber.org/zap v1.10.0 // indirect
 	golang.org/x/arch v0.9.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/net v0.28.0 // indirect

@@ -1,0 +1,11 @@
+{
+  "specversion": "1.0",
+  "id": "365d4631-4884-4c76-a014-5a08db198ad9",
+  "source": "https://devopstoolkit.live/demo/silly-demo/ping",
+  "type": "live.devopstoolkit.silly-demo.ping.sent",
+  "datacontenttype": "application/json",
+  "time": "2024-10-20T18:42:46.380341Z",
+  "data": {
+    "message": "Silly demo is here. Is there anyone else around? Say hi on the silly-demo.hello channel."
+  }
+}

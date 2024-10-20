@@ -15,7 +15,8 @@
     "zellij@0.40.1",
     "nodejs@22.6.0",
     "timoni@0.22.0",
-    "viddy@1.1.5"
+    "viddy@1.1.5",
+    "natscli@0.1.5"
   ],
   "shell": {
     "init_hook": [],

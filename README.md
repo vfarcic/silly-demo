@@ -7,6 +7,8 @@
 ## Common
 
 ```sh
+devbox shell
+
 kind create cluster --config kind.yaml
 
 kubectl apply \
@@ -48,7 +50,17 @@ timoni build silly-demo timoni \
 ## App with NATS
 
 ```sh
+helm upgrade --install nats nats \
+    --repo https://nats-io.github.io/k8s/helm/charts \
+    --namespace nats --create-namespace --wait
+
 timoni build silly-demo timoni \
     --values timoni/values-nats.yaml --namespace a-team \
     | kubectl apply --filename -
+
+kubectl --namespace nats exec -it deployment/nats-box \
+    -- nats request fibonacci.request 20
+
+kubectl --namespace nats exec -it deployment/nats-box \
+    -- nats request fibonacci.request 20
 ```
