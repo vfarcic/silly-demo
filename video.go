@@ -100,6 +100,13 @@ func getVideosFromFile() ([]Video, error) {
 		dir = "/cache"
 	}
 	path := fmt.Sprintf("%s/videos.yaml", dir)
+	// Create a file if it doesn't exist
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		_, err := os.Create(path)
+		if err != nil {
+			return nil, err
+		}
+	}
 	var videos []Video
 	yamlData, err := os.ReadFile(path)
 	if err != nil {
