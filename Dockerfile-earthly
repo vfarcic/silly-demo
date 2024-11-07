@@ -1,4 +1,4 @@
-FROM golang:1.23.2-alpine
+FROM golang:1.23.3-alpine
 
 RUN go install github.com/stefanprodan/timoni/cmd/timoni@v0.19.0
 
