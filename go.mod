@@ -10,7 +10,7 @@ require (
 	github.com/go-pg/pg/v10 v10.13.0
 	github.com/go-resty/resty/v2 v2.16.2
 	github.com/nats-io/nats.go v1.37.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
