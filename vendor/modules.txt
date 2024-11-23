@@ -153,9 +153,10 @@ github.com/pelletier/go-toml/v2/unstable
 github.com/pmezard/go-difflib/difflib
 # github.com/rogpeppe/go-internal v1.11.0
 ## explicit; go 1.19
-# github.com/stretchr/testify v1.9.0
+# github.com/stretchr/testify v1.10.0
 ## explicit; go 1.17
 github.com/stretchr/testify/assert
+github.com/stretchr/testify/assert/yaml
 # github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
 ## explicit
 github.com/tmthrgd/go-hex
