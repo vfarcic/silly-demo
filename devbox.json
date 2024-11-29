@@ -20,7 +20,7 @@
   ],
   "shell": {
     "init_hook": [
-      "chmox +x cli",
+      "chmod +x cli",
       "export PATH=$PATH:$PWD"
     ],
     "scripts":   {}
