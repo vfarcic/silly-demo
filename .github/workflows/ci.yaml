@@ -26,7 +26,6 @@ jobs:
         uses: jetify-com/devbox-install-action@v0.11.0
         with:
           project-path: devbox-ci.json
-          enable-cache: true
       - name: Build and push
         run: |
           devbox run --config devbox-ci.json -- ./cli run ci $TAG
