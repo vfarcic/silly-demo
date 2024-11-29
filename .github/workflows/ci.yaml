@@ -15,8 +15,6 @@ jobs:
       # - uses: earthly/actions-setup@v1
       #   with:
       #     version: v0.8.0
-      - name: Install devbox
-        uses: jetify-com/devbox-install-action@v0.11.0
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up QEMU
@@ -27,6 +25,8 @@ jobs:
           registry: ghcr.io
           username: vfarcic
           password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.11.0
       - name: Build and push
         run: |
           devbox run -- cli run ci $TAG
