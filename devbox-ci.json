@@ -1,0 +1,11 @@
+{
+  "packages": [
+    "nushell@0.100.0"
+  ],
+  "shell": {
+    "init_hook": [
+      "chmod +x cli"
+    ],
+    "scripts":   {}
+  }
+}
