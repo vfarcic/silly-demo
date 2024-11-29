@@ -12,9 +12,11 @@ jobs:
       TAG: 1.4.${{ github.run_number }}
       FORCE_COLOR: 1
     steps:
-      - uses: earthly/actions-setup@v1
-        with:
-          version: v0.8.0
+      # - uses: earthly/actions-setup@v1
+      #   with:
+      #     version: v0.8.0
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.11.0
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up QEMU
@@ -27,11 +29,12 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Build and push
         run: |
-          earthly --push \
-            --secret cosignpassword="$COSIGN_PASSWORD" \
-            --secret cosignkey="$COSIGN_PRIVATE_KEY" \
-            --secret password="$REGISTRY_PASSWORD" \
-            +all --tag $TAG
+          devbox run -- cli run ci $TAG
+          # earthly --push \
+          #   --secret cosignpassword="$COSIGN_PASSWORD" \
+          #   --secret cosignkey="$COSIGN_PRIVATE_KEY" \
+          #   --secret password="$REGISTRY_PASSWORD" \
+          #   +all --tag $TAG
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}

@@ -15,10 +15,14 @@
     "zellij@0.40.1",
     "nodejs@22.6.0",
     "timoni@0.22.0",
-    "viddy@1.1.5"
+    "viddy@1.1.5",
+    "nushell@0.100.0"
   ],
   "shell": {
-    "init_hook": [],
+    "init_hook": [
+      "chmox +x cli",
+      "export PATH=$PATH:$PWD"
+    ],
     "scripts":   {}
   }
 }
