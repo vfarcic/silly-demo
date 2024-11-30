@@ -5,7 +5,7 @@
   ],
   "shell": {
     "init_hook": [
-      "chmod +x cli"
+      "chmod +x dot.nu"
     ],
     "scripts":   {}
   }

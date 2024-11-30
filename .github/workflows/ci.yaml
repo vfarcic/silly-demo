@@ -28,7 +28,7 @@ jobs:
           project-path: devbox-ci.json
       - name: Build and push
         run: |
-          devbox run --config devbox-ci.json -- ./dot run ci $TAG
+          devbox run --config devbox-ci.json -- ./dot.nu run ci $TAG
           # earthly --push \
           #   --secret cosignpassword="$COSIGN_PASSWORD" \
           #   --secret cosignkey="$COSIGN_PRIVATE_KEY" \
