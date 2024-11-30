@@ -7,7 +7,7 @@
 ## Common
 
 ```sh
-./cli setup
+dot.nu setup
 ```
 
 ## App Alone
