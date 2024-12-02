@@ -1,6 +1,7 @@
 #!/usr/bin/env nu
 
 source  scripts/image.nu
+source  scripts/tests.nu
 
 def main [] {}
 
