@@ -1,0 +1,101 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "cosign@2.2.4": {
+      "last_modified": "2024-08-14T11:41:26Z",
+      "resolved": "github:NixOS/nixpkgs/0cb2fd7c59fed0cd82ef858cbcbdb552b9a33465#cosign",
+      "source": "devbox-search",
+      "version": "2.2.4",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8yjz4xrc6qic5jsvdg8laqy33rb8hlf9-cosign-2.2.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8yjz4xrc6qic5jsvdg8laqy33rb8hlf9-cosign-2.2.4"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/m0kdmpbi042brx3kfimihpk7lbbbcdd5-cosign-2.2.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/m0kdmpbi042brx3kfimihpk7lbbbcdd5-cosign-2.2.4"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2586hv1a1dmi0qj4520y10hfhj0dqprl-cosign-2.2.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/2586hv1a1dmi0qj4520y10hfhj0dqprl-cosign-2.2.4"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/v5gs2dbf6ccd8xhvy3l6rxq06hlgnagi-cosign-2.2.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/v5gs2dbf6ccd8xhvy3l6rxq06hlgnagi-cosign-2.2.4"
+        }
+      }
+    },
+    "nushell@0.100.0": {
+      "last_modified": "2024-11-16T04:25:12Z",
+      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#nushell",
+      "source": "devbox-search",
+      "version": "0.100.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/dwha64hw5i445893syncky2ns9fwh4hc-nushell-0.100.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/dwha64hw5i445893syncky2ns9fwh4hc-nushell-0.100.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fp56xjf3gv984cw2vfn87dy533nmqcmy-nushell-0.100.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fp56xjf3gv984cw2vfn87dy533nmqcmy-nushell-0.100.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0002sg179kfnh0s3fs4fsrhggq3ab4mz-nushell-0.100.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0002sg179kfnh0s3fs4fsrhggq3ab4mz-nushell-0.100.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8231h92fhkaa2cagllvn8iagawmsfv4f-nushell-0.100.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8231h92fhkaa2cagllvn8iagawmsfv4f-nushell-0.100.0"
+        }
+      }
+    }
+  }
+}

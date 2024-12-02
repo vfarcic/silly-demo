@@ -25,15 +25,10 @@ jobs:
       - name: Install devbox
         uses: jetify-com/devbox-install-action@v0.11.0
         with:
-          project-path: devbox-ci.json
+          project-path: devbox-plugin/plugin.json
       - name: Build and push
         run: |
-          devbox run --config devbox-ci.json -- ./dot.nu run ci $TAG
-          # earthly --push \
-          #   --secret cosignpassword="$COSIGN_PASSWORD" \
-          #   --secret cosignkey="$COSIGN_PRIVATE_KEY" \
-          #   --secret password="$REGISTRY_PASSWORD" \
-          #   +all --tag $TAG
+          devbox run --config devbox-plugin/plugin.json -- ./dot.nu run ci $TAG
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}

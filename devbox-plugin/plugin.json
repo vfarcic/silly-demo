@@ -1,0 +1,12 @@
+{
+    "name": "base",
+    "packages": [
+        "cosign@2.2.4",
+        "nushell@0.100.0"
+    ],
+    "shell": {
+        "init_hook": [
+          "chmod +x dot.nu"
+        ]
+      }
+  }
