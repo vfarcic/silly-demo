@@ -26,23 +26,23 @@ jobs:
         uses: jetify-com/devbox-install-action@v0.11.0
         with:
           project-path: devbox-plugin/plugin.json
-      - name: Build and push
-        run: |
-          devbox run --config devbox-plugin/plugin.json -- pwd
-          devbox run --config devbox-plugin/plugin.json -- ls
-          devbox run --config devbox-plugin/plugin.json -- ./dot.nu run ci $TAG
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Commit changes
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .
-          git commit -m "Release ${{ env.TAG }} [skip ci]"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      # - name: Build and push
+      #   run: |
+      #     devbox run --config devbox-plugin/plugin.json -- pwd
+      #     devbox run --config devbox-plugin/plugin.json -- ls
+      #     devbox run --config devbox-plugin/plugin.json -- ./dot.nu run ci $TAG
+      #   env:
+      #     COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+      #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      # - name: Commit changes
+      #   run: |
+      #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #     git config --local user.name "github-actions[bot]"
+      #     git add .
+      #     git commit -m "Release ${{ env.TAG }} [skip ci]"
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
