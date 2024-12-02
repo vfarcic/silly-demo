@@ -136,7 +136,7 @@ def "main run ci" [
 
     print $"(pwd)"
 
-    print $"(ls)"
+    print $"(ls *.go)"
     
     print "-----------------"
 
