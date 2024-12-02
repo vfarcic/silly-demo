@@ -1,7 +1,8 @@
 {
   "packages": [
     "cosign@2.2.4",
-    "nushell@0.100.0"
+    "nushell@0.100.0",
+    "go@1.22.3"
   ],
   "shell": {
     "init_hook": [

@@ -131,6 +131,8 @@ def "main run ci" [
     --image = "silly-demo"         # Image name
 ] {
 
+    main run tests "go"
+
     main build image $tag
 
     main sign image $tag
