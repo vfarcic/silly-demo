@@ -132,7 +132,7 @@ def "main run ci" [
     --image = "silly-demo"         # Image name
 ] {
 
-    main run tests "go"
+    main run tests --language go
 
     main build image $tag
 
