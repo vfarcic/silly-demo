@@ -10,11 +10,13 @@
     "earthly@0.8.11",
     "go@1.22.3",
     "teller@1.5.6",
+    "cosign@2.2.4",
     "path:gcloud#google-cloud-sdk",
     "zellij@0.40.1",
     "nodejs@22.6.0",
     "timoni@0.22.0",
-    "viddy@1.1.5"
+    "viddy@1.1.5",
+    "nushell@0.100.0"
   ],
   "shell": {
     "init_hook": [
@@ -22,8 +24,5 @@
       "export PATH=$PATH:$PWD"
     ],
     "scripts":   {}
-  },
-  "include": [
-    "path:./devbox-plugin"
-  ]
+  }
 }
