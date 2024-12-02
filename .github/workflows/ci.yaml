@@ -28,6 +28,8 @@ jobs:
           project-path: devbox-plugin/plugin.json
       - name: Build and push
         run: |
+          devbox run --config devbox-plugin/plugin.json -- pwd
+          devbox run --config devbox-plugin/plugin.json -- ls
           devbox run --config devbox-plugin/plugin.json -- ./dot.nu run ci $TAG
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
