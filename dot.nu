@@ -132,10 +132,14 @@ def "main run ci" [
     --image = "silly-demo"         # Image name
 ] {
 
-    pwd
+    print "-----------------"
 
-    ls
+    print $"(pwd)"
+
+    print $"(ls)"
     
+    print "-----------------"
+
     main run tests --language go
 
     main build image $tag

@@ -26,7 +26,7 @@ jobs:
         uses: jetify-com/devbox-install-action@v0.11.0
         with:
           project-path: devbox-ci.json
-      - name: Build and push
+      - name: All
         run: |
           devbox run --config devbox-ci.json -- ./dot.nu run ci $TAG
         env:
