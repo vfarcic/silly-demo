@@ -2,7 +2,7 @@ module silly-demo
 
 go 1.21.0
 
-toolchain go1.23.4
+toolchain go1.23.5
 
 require (
 	github.com/gin-contrib/cors v1.7.3
