@@ -19,10 +19,7 @@
     "nushell@0.100.0"
   ],
   "shell": {
-    "init_hook": [
-      "chmod +x dot.nu",
-      "export PATH=$PATH:$PWD"
-    ],
+    "init_hook": [],
     "scripts":   {}
   }
 }
