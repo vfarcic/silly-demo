@@ -23,7 +23,7 @@ jobs:
           username: vfarcic
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Install devbox
-        uses: jetify-com/devbox-install-action@v0.11.0
+        uses: jetify-com/devbox-install-action@v0.12.0
         with:
           project-path: devbox-ci.json
       - name: All
