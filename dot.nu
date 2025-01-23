@@ -2,6 +2,9 @@
 
 source  scripts/image.nu
 source  scripts/tests.nu
+source  scripts/github.nu
+source  scripts/kubernetes.nu
+source  scripts/common.nu
 
 def main [] {}
 
@@ -145,5 +148,25 @@ def "main run ci" [
     main update kustomize $tag
 
     main update yaml $tag
+
+}
+
+def "setup devcontainers" [] {
+
+    main create kubernetes kind
+
+    main get github
+
+    main print source
+
+}
+
+def "destroy devcontainers" [] {
+
+    main create kubernetes kind
+
+    main get github
+
+    main print source
 
 }
