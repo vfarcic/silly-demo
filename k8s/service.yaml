@@ -9,7 +9,6 @@ metadata:
     team: dot
   labels:
     app.kubernetes.io/name: silly-demo
-    backstage.io/kubernetes-id: silly-demo
   name: silly-demo
 spec:
   ports:
