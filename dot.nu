@@ -5,18 +5,17 @@ source  scripts/tests.nu
 source  scripts/github.nu
 source  scripts/kubernetes.nu
 source  scripts/common.nu
+source  scripts/ingress.nu
+source  scripts/cert-manager.nu
 
 def main [] {}
 
 # Creates a local Kubernetes cluster
 def "main setup" [] {
 
-    kind create cluster --config kind.yaml
+    main create kubernetes kind 
 
-    (
-        kubectl apply
-            --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-    )
+    main apply ingress nginx --hyperscaler kind
 
     kubectl create namespace a-team
     

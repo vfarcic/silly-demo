@@ -14,7 +14,16 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	flagd "github.com/open-feature/go-sdk-contrib/providers/flagd/pkg"
+	"github.com/open-feature/go-sdk/openfeature"
 )
+
+var OpenFeatureClient *openfeature.Client
+
+func init() {
+	openfeature.SetProviderAndWait(flagd.NewProvider())
+	OpenFeatureClient = openfeature.NewClient("silly-demo")
+}
 
 func main() {
 	log.SetOutput(os.Stderr)
@@ -74,6 +83,7 @@ func main() {
 		if err := server.Shutdown(shutdownCtx); err != nil {
 			log.Fatalf("HTTP shutdown error: %v", err)
 		}
+		openfeature.Shutdown()
 		log.Println("Graceful shutdown complete.")
 	}
 	// <-ctx.Done()

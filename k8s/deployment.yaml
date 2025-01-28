@@ -8,7 +8,6 @@ metadata:
     team: dot
   labels:
     app.kubernetes.io/name: silly-demo
-    backstage.io/kubernetes-id: silly-demo
   name: silly-demo
 spec:
   replicas: 2
@@ -19,11 +18,10 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: silly-demo
-        backstage.io/kubernetes-id: silly-demo
     spec:
       shareProcessNamespace: true
       containers:
-      - image: ghcr.io/vfarcic/silly-demo:1.4.354
+      - image: ghcr.io/vfarcic/silly-demo:1.4.358
         livenessProbe:
           httpGet:
             path: /

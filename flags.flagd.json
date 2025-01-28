@@ -1,0 +1,20 @@
+{
+  "flags": {
+    "include-version": {
+      "variants": {
+        "on": true,
+        "off": false
+      },
+      "state": "ENABLED",
+      "defaultVariant": "on"
+    },
+    "output": {
+      "variants": {
+        "v2": "This is even sillier demo",
+        "v3": "This is the silliest demo"
+      },
+      "state": "ENABLED",
+      "defaultVariant": "v3"
+    }
+  }
+}
