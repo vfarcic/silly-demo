@@ -2,7 +2,9 @@
 
 source  scripts/image.nu
 source  scripts/tests.nu
+source  scripts/github.nu
 source  scripts/kubernetes.nu
+source  scripts/common.nu
 source  scripts/ingress.nu
 source  scripts/cert-manager.nu
 
@@ -145,5 +147,23 @@ def "main run ci" [
     main update kustomize $tag
 
     main update yaml $tag
+
+}
+
+def "main setup devcontainers" [] {
+
+    main create kubernetes kind
+
+    main get github
+
+    main print source
+
+}
+
+def "main destroy devcontainers" [] {
+
+    rm --force .devcontainer
+
+    main destroy kubernetes kind
 
 }
