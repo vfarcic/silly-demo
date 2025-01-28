@@ -151,7 +151,7 @@ def "main run ci" [
 
 }
 
-def "setup devcontainers" [] {
+def "main setup devcontainers" [] {
 
     main create kubernetes kind
 
@@ -161,12 +161,8 @@ def "setup devcontainers" [] {
 
 }
 
-def "destroy devcontainers" [] {
+def "main destroy devcontainers" [] {
 
-    main create kubernetes kind
-
-    main get github
-
-    main print source
+    main destroy kubernetes kind
 
 }
