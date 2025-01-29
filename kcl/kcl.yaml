@@ -1,0 +1,9 @@
+kcl_options:
+  - key: tag
+    value: "1.4.358"
+  - key: "image"
+    value: "ghcr.io/vfarcic/silly-demo"
+  - key: "replicas"
+    value: 2
+  - key: "autoscaling.enabled"
+    value: false

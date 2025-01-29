@@ -115,15 +115,23 @@ def "main update kustomize" [
 }
 
 # Updates YAML files
-def "main update yaml" [
+def "main generate yaml" [
     tag: string                    # The tag of the image (e.g., 0.0.1)
     --registry = "ghcr.io/vfarcic" # Image registry
     --image = "silly-demo"         # Image name
 ] {
 
-    open k8s/deployment.yaml
-        | upsert spec.template.spec.containers.0.image $"($registry)/($image):($tag)"
-        | save k8s/deployment.yaml --force
+    kcl run kcl/deployment.k | tee k8s/deployment.yaml
+
+}
+
+def "main update kcl" [
+    tag: string # The tag of the image (e.g., 0.0.1)
+] {
+
+    open kcl/kcl.yaml
+        | upsert kcl_options.0.value $tag
+        | save kcl/kcl.yaml --force
 
 }
 
@@ -146,7 +154,9 @@ def "main run ci" [
 
     main update kustomize $tag
 
-    main update yaml $tag
+    main update kcl $tag
+
+    main generate yaml $tag
 
 }
 

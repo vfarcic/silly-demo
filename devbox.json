@@ -16,7 +16,8 @@
     "viddy@1.1.5",
     "nushell@0.100.0",
     "teller@2.0.7",
-    "air@1.61.5"
+    "air@1.61.5",
+    "kcl@0.11.0"
   ],
   "shell": {
     "init_hook": [],
