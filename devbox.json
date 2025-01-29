@@ -17,7 +17,8 @@
     "nushell@0.100.0",
     "teller@2.0.7",
     "air@1.61.5",
-    "kcl@0.11.0"
+    "kcl@0.11.0",
+    "postgresql@17.2"
   ],
   "shell": {
     "init_hook": [],
