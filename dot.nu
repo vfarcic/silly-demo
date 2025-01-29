@@ -124,6 +124,8 @@ def "main generate yaml" [
 
     kcl run kcl/main.k | save k8s/deployment.yaml --force
 
+    kcl run kcl/main.k | save k8s/deployment.yaml --force
+
 }
 
 def "main update kcl" [
