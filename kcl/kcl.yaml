@@ -1,6 +1,6 @@
 kcl_options:
 - key: tag
-  value: 1.4.363
+  value: 1.4.364
 - key: image
   value: ghcr.io/vfarcic/silly-demo
 - key: replicas
