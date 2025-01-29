@@ -1,0 +1,11 @@
+tag: 1.4.363
+image: ghcr.io/vfarcic/silly-demo
+replicas: 2
+autoscaling:
+  enabled: false
+db:
+  enabled: false
+  provider: cnpg
+ingress:
+  host: silly-demo.127.0.0.1.nip.io
+  className: nginx

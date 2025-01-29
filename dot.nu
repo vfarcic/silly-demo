@@ -7,6 +7,7 @@ source  scripts/kubernetes.nu
 source  scripts/common.nu
 source  scripts/ingress.nu
 source  scripts/cert-manager.nu
+source  scripts/cnpg.nu
 
 def main [] {}
 
@@ -121,7 +122,7 @@ def "main generate yaml" [
     --image = "silly-demo"         # Image name
 ] {
 
-    kcl run kcl/deployment.k | save k8s/deployment.yaml --force
+    kcl run kcl/main.k | save k8s/deployment.yaml --force
 
 }
 
@@ -129,9 +130,9 @@ def "main update kcl" [
     tag: string # The tag of the image (e.g., 0.0.1)
 ] {
 
-    open kcl/kcl.yaml
-        | upsert kcl_options.0.value $tag
-        | save kcl/kcl.yaml --force
+    open kcl/values.yaml
+        | upsert tag $tag
+        | save kcl/values.yaml --force
 
 }
 
@@ -163,6 +164,10 @@ def "main run ci" [
 def "main setup devcontainers" [] {
 
     main create kubernetes kind
+
+    main apply ingress nginx --hyperscaler kind
+
+    kubectl create namespace a-team
 
     main get github
 

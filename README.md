@@ -7,7 +7,11 @@
 ## Common
 
 ```sh
-dot.nu setup
+chmod +x dot.nu
+
+./dot.nu setup
+
+source .env
 ```
 
 ## App Alone
@@ -19,17 +23,19 @@ kubectl --namespace a-team apply --filename k8s
 ## App with CNPG PostgreSQL
 
 ```sh
-helm upgrade --install cnpg cloudnative-pg \
-    --repo https://cloudnative-pg.github.io/charts \
-    --namespace cnpg-system --create-namespace --wait
+./dot.nu apply cnpg
 
-helm upgrade --install atlas-operator \
-    oci://ghcr.io/ariga/charts/atlas-operator \
-    --namespace atlas-operator --create-namespace --wait
+kcl run kcl/main.k -D db.enabled=true \
+    | kubectl --namespace a-team apply --filename -
 
-timoni build silly-demo timoni \
-    --values timoni/values-db-cnpg.yaml --namespace a-team \
-    | kubectl apply --filename -
+kubectl --namespace a-team \
+    get all,ingresses,clusters,atlasschemas
+
+curl -X POST "http://silly-demo.127.0.0.1.nip.io/video?id=1&title=something"
+
+curl -X POST "http://silly-demo.127.0.0.1.nip.io/video?id=2&title=else"
+
+curl "http://silly-demo.127.0.0.1.nip.io/videos" | jq .
 ```
 
 ## App with OTEL
