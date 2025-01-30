@@ -122,6 +122,8 @@ def "main generate yaml" [
     --image = "silly-demo"         # Image name
 ] {
 
+    kcl run kcl/main.k
+    
     kcl run kcl/main.k | save k8s/app.yaml --force
 
 }
