@@ -25,6 +25,8 @@ kubectl --namespace a-team apply --filename k8s
 ```sh
 ./dot.nu apply cnpg
 
+./dot.nu apply atlas
+
 kcl run kcl/main.k -D db.enabled=true \
     | kubectl --namespace a-team apply --filename -
 

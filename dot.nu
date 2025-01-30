@@ -8,6 +8,7 @@ source  scripts/common.nu
 source  scripts/ingress.nu
 source  scripts/cert-manager.nu
 source  scripts/cnpg.nu
+source  scripts/atlas.nu
 
 def main [] {}
 
@@ -122,9 +123,11 @@ def "main generate yaml" [
     --image = "silly-demo"         # Image name
 ] {
 
-    kcl run kcl/main.k | save k8s/deployment.yaml --force
+    cat k8s/app.yaml
 
-    kcl run kcl/main.k | save k8s/deployment.yaml --force
+    kcl run kcl/main.k | save k8s/app.yaml --force
+
+    cat k8s/app.yaml
 
 }
 
@@ -161,13 +164,28 @@ def "main run ci" [
 
     main generate yaml $tag
 
+    # FIXME: Move to a separate defs
+
     main create kubernetes kind
+
+    main apply ingress nginx --hyperscaler kind
 
     kubectl create namespace a-team
 
-    kubectl --namespace a-team apply --filename k8s/
+    main apply cnpg
 
-# FIXME: Deploy the app in GHA
+    main apply atlas
+
+    kcl run kcl/main.k -D db.enabled=true
+        | kubectl --namespace a-team apply --filename -
+
+    (
+        kubectl --namespace a-team wait atlasschema silly-demo
+            --for=condition=ready --timeout=60s
+    )
+
+    go test -v -tags integration
+
 # FIXME: Run some tests in GHA
 # FIXME: Shut it all down (Neon will shut itself down) in GHA
 # FIXME: Create `NEON_API_KEY` secret in GHA?
