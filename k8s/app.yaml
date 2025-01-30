@@ -1,4 +1,3 @@
-downloading 'kcl-lang/k8s:1.29' from 'ghcr.io/kcl-lang/k8s:1.29'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,7 +20,7 @@ spec:
         app.kubernetes.io/name: silly-demo
     spec:
       containers:
-      - image: ghcr.io/vfarcic/silly-demo:1.4.372
+      - image: ghcr.io/vfarcic/silly-demo:1.4.373
         livenessProbe:
           httpGet:
             path: /
