@@ -1,7 +1,8 @@
-import k8s.api.networking.v1 as net
 import common
 
-Ingress = net.Ingress {
+Ingress = {
+    apiVersion = "networking.k8s.io/v1"
+    kind = "Ingress"
     metadata = common.Metadata
     spec = {
         ingressClassName = common.Values.ingress.className

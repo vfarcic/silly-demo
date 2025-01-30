@@ -123,9 +123,12 @@ def "main generate yaml" [
     --image = "silly-demo"         # Image name
 ] {
 
+    print "xxxxxxxxxxxxx"
     cat k8s/app.yaml
 
     kcl run kcl/main.k | save k8s/app.yaml --force
+
+    print "xxxxxxxxxxxxx"
 
     cat k8s/app.yaml
 
