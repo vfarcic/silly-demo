@@ -12,34 +12,41 @@ jobs:
       TAG: 1.4.${{ github.run_number }}
       FORCE_COLOR: 1
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v4
-      - name: Set up QEMU
+      - name: setup-qemu
         uses: docker/setup-qemu-action@v3
-      - name: Login to ghcr
+      - name: login-to-ghcr
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: vfarcic
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Install devbox
+      - name: install-devbox
         uses: jetify-com/devbox-install-action@v0.12.0
         with:
           project-path: devbox-ci.json
-      - name: All
-        run: |
-          devbox run --config devbox-ci.json -- ./dot.nu run ci $TAG
+      - name: run-unit-tests
+        run: devbox run --config devbox-ci.json -- ./dot.nu main run unit_tests
+      - name: build-image
+        run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Commit changes
+      - name: update-manifests
+        run: devbox run --config devbox-ci.json -- ./dot.nu update manifests $TAG
+      - name: deploy-app
+        run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
+      - name: run-integration-tests
+        run: devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
+      - name: commit-changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
           git commit -m "Release ${{ env.TAG }} [skip ci]"
-      - name: Push changes
+      - name: push-changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

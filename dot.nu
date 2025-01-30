@@ -142,11 +142,9 @@ def "main run unit_tests" [] {
 
 }
 
-def "main build image" [
+def "main update manifests" [
     tag: string # The tag of the image (e.g., 0.0.1)
 ] {
-
-    main build image $tag
 
     main sign image $tag
 
@@ -200,6 +198,8 @@ def "main run ci" [
     main run unit_tests
 
     main build image $tag
+
+    main update manifests $tag
 
     main deploy app
 
