@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -8,66 +9,25 @@ import (
 	"os"
 	"strings"
 
-	"github.com/go-pg/pg/v10"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/yaml.v3"
 )
-
-var dbSession *pg.DB = nil
 
 type Video struct {
 	ID    string `json:"id"`
 	Title string `json:"title"`
 }
 
-func getDB(c *gin.Context) *pg.DB {
-	if dbSession != nil {
-		return dbSession
-	}
-	endpoint := os.Getenv("DB_ENDPOINT")
-	if len(endpoint) == 0 {
-		slog.Error("Environment variable `DB_ENDPOINT` is empty")
-		c.String(http.StatusBadRequest, "Environment variable `DB_ENDPOINT` is empty")
+func getConn() *pgx.Conn {
+	url := os.Getenv("DB_URI")
+	conn, err := pgx.Connect(context.Background(), url)
+	if err != nil {
+		slog.Error("Failed to parse DB_URL", "error", err)
 		return nil
 	}
-	port := os.Getenv("DB_PORT")
-	if len(port) == 0 {
-		slog.Error("Environment variable `DB_PORT` is empty")
-		c.String(http.StatusBadRequest, "Environment variable `DB_PORT` is empty")
-		return nil
-	}
-	user := os.Getenv("DB_USER")
-	if len(user) == 0 {
-		user = os.Getenv("DB_USERNAME")
-		if len(user) == 0 {
-			slog.Error("Environment variables `DB_USER` and `DB_USERNAME` are empty")
-			c.String(http.StatusBadRequest, "Environment variables `DB_USER` and `DB_USERNAME` are empty")
-			return nil
-		}
-	}
-	pass := os.Getenv("DB_PASS")
-	if len(pass) == 0 {
-		pass = os.Getenv("DB_PASSWORD")
-		if len(pass) == 0 {
-			slog.Error("Environment variables `DB_PASS` and `DB_PASSWORD are empty")
-			c.String(http.StatusBadRequest, "Environment variables `DB_PASS` and `DB_PASSWORD are empty")
-			return nil
-		}
-	}
-	name := os.Getenv("DB_NAME")
-	if len(name) == 0 {
-		slog.Error("Environment variable `DB_NAME` is empty")
-		c.String(http.StatusBadRequest, "Environment variable `DB_NAME` is empty")
-		return nil
-	}
-	dbSession := pg.Connect(&pg.Options{
-		Addr:     endpoint + ":" + port,
-		User:     user,
-		Password: pass,
-		Database: name,
-	})
-	return dbSession
+	return conn
 }
 
 func videosGetHandler(ctx *gin.Context) {
@@ -81,14 +41,25 @@ func videosGetHandler(ctx *gin.Context) {
 			return
 		}
 	} else {
-		db := getDB(ctx)
-		if db == nil {
+		conn := getConn()
+		if conn == nil {
 			return
 		}
-		err := db.ModelContext(ctx, &videos).Select()
+		defer conn.Close(context.Background())
+		rows, err := conn.Query(context.Background(), "SELECT id, title FROM videos")
 		if err != nil {
 			httpErrorInternalServerError(err, ctx)
 			return
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var video Video
+			err := rows.Scan(&video.ID, &video.Title)
+			if err != nil {
+				httpErrorInternalServerError(err, ctx)
+				return
+			}
+			videos = append(videos, video)
 		}
 	}
 	ctx.JSON(http.StatusOK, videos)
@@ -134,6 +105,10 @@ func videoPostHandler(ctx *gin.Context) {
 	}
 	if strings.ToLower(os.Getenv("DB")) == "fs" {
 		videos, err := getVideosFromFile()
+		if err != nil {
+			httpErrorInternalServerError(err, ctx)
+			return
+		}
 		videos = append(videos, *video)
 		dir := os.Getenv("FS_DIR")
 		if len(dir) == 0 {
@@ -150,11 +125,12 @@ func videoPostHandler(ctx *gin.Context) {
 			httpErrorInternalServerError(err, ctx)
 		}
 	} else {
-		db := getDB(ctx)
-		if db == nil {
+		conn := getConn()
+		if conn == nil {
 			return
 		}
-		_, err := db.ModelContext(ctx, video).Insert()
+		defer conn.Close(context.Background())
+		_, err := conn.Exec(context.Background(), "INSERT INTO videos(id, title) VALUES ($1, $2)", video.ID, video.Title)
 		if err != nil {
 			httpErrorInternalServerError(err, ctx)
 			return

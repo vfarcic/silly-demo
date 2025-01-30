@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"sort"
 	"strings"
 
 	"github.com/barkimedes/go-deepcopy"
@@ -18,7 +17,7 @@ func (e ErrInvalidOperator) Error() string {
 	return fmt.Sprintf("The operator \"%s\" is not supported", e.operator)
 }
 
-func between(operator string, values []interface{}, data interface{}) interface{} {
+func between(operator string, values []any, data any) any {
 	a := parseValues(values[0], data)
 	b := parseValues(values[1], data)
 	c := parseValues(values[2], data)
@@ -38,7 +37,7 @@ func between(operator string, values []interface{}, data interface{}) interface{
 	return less(c, b) && less(b, a)
 }
 
-func unary(operator string, value interface{}) interface{} {
+func unary(operator string, value any) any {
 	if operator == "+" || operator == "*" || operator == "/" {
 		return toNumber(value)
 	}
@@ -64,12 +63,14 @@ func unary(operator string, value interface{}) interface{} {
 	return b
 }
 
-func _and(values []interface{}) interface{} {
+func _and(values, data any) any {
+	values = getValuesWithoutParsing(values, data)
 	var v float64
 
 	isBoolExpression := true
 
-	for _, value := range values {
+	for _, value := range values.([]any) {
+		value = parseValues(value, data)
 		if isSlice(value) {
 			return value
 		}
@@ -102,18 +103,21 @@ func _and(values []interface{}) interface{} {
 	return v
 }
 
-func _or(values []interface{}) interface{} {
-	for _, value := range values {
-		if isTrue(value) {
-			return value
+func _or(values, data any) any {
+	values = getValuesWithoutParsing(values, data)
+
+	for _, value := range values.([]any) {
+		parsed := parseValues(value, data)
+		if isTrue(parsed) {
+			return parsed
 		}
 	}
 
 	return false
 }
 
-func _inRange(value interface{}, values interface{}) bool {
-	v := values.([]interface{})
+func _inRange(value any, values any) bool {
+	v := values.([]any)
 
 	i := v[0]
 	j := v[1]
@@ -125,41 +129,7 @@ func _inRange(value interface{}, values interface{}) bool {
 	return toString(value) >= toString(i) && toString(j) >= toString(value)
 }
 
-// Expect values to be in alphabetical ascending order
-func _inSorted(value interface{}, values interface{}) bool {
-	valuesSlice := values.([]interface{})
-
-	findElement := func(i int) bool {
-		element := valuesSlice[i]
-
-		if isSlice(valuesSlice[i]) {
-			sliceElement := valuesSlice[i].([]interface{})
-			start := sliceElement[0]
-			end := sliceElement[1]
-
-			return (toString(start) <= toString(value) && toString(end) >= toString(value)) || toString(end) > toString(value)
-		}
-
-		return toString(element) >= toString(value)
-	}
-
-	i := sort.Search(len(valuesSlice), findElement)
-	if i >= len(valuesSlice) {
-		return false
-	}
-
-	if isSlice(valuesSlice[i]) {
-		sliceElement := valuesSlice[i].([]interface{})
-		start := sliceElement[0]
-		end := sliceElement[1]
-
-		return toString(start) <= toString(value) && toString(end) >= toString(value)
-	}
-
-	return toString(valuesSlice[i]) == toString(value)
-}
-
-func _in(value interface{}, values interface{}) bool {
+func _in(value any, values any) bool {
 	if value == nil || values == nil {
 		return false
 	}
@@ -168,7 +138,11 @@ func _in(value interface{}, values interface{}) bool {
 		return strings.Contains(values.(string), value.(string))
 	}
 
-	for _, element := range values.([]interface{}) {
+	if !isSlice(values) {
+		return false
+	}
+
+	for _, element := range values.([]any) {
 		if isSlice(element) {
 			if _inRange(value, element) {
 				return true
@@ -193,8 +167,8 @@ func _in(value interface{}, values interface{}) bool {
 	return false
 }
 
-func max(values interface{}) interface{} {
-	converted := values.([]interface{})
+func max(values any) any {
+	converted := values.([]any)
 	size := len(converted)
 	if size == 0 {
 		return nil
@@ -212,8 +186,8 @@ func max(values interface{}) interface{} {
 	return bigger
 }
 
-func min(values interface{}) interface{} {
-	converted := values.([]interface{})
+func min(values any) any {
+	converted := values.([]any)
 	size := len(converted)
 	if size == 0 {
 		return nil
@@ -231,16 +205,16 @@ func min(values interface{}) interface{} {
 	return smallest
 }
 
-func merge(values interface{}, level int8) interface{} {
-	result := make([]interface{}, 0)
+func merge(values any, level int8) any {
+	result := make([]any, 0)
 
 	if isPrimitive(values) || level > 1 {
 		return append(result, values)
 	}
 
 	if isSlice(values) {
-		for _, value := range values.([]interface{}) {
-			_values := merge(value, level+1).([]interface{})
+		for _, value := range values.([]any) {
+			_values := merge(value, level+1).([]any)
 
 			result = append(result, _values...)
 		}
@@ -249,12 +223,12 @@ func merge(values interface{}, level int8) interface{} {
 	return result
 }
 
-func conditional(values, data interface{}) interface{} {
+func conditional(values, data any) any {
 	if isPrimitive(values) {
 		return values
 	}
 
-	parsed := values.([]interface{})
+	parsed := values.([]any)
 
 	length := len(parsed)
 
@@ -280,8 +254,8 @@ func conditional(values, data interface{}) interface{} {
 	return nil
 }
 
-func setProperty(value, data interface{}) interface{} {
-	_value := value.([]interface{})
+func setProperty(value, data any) any {
+	_value := value.([]any)
 
 	object := _value[0]
 
@@ -295,20 +269,20 @@ func setProperty(value, data interface{}) interface{} {
 		panic(err)
 	}
 
-	_modified := modified.(map[string]interface{})
+	_modified := modified.(map[string]any)
 	_modified[property] = parseValues(_value[2], data)
 
-	return interface{}(_modified)
+	return any(_modified)
 }
 
-func missing(values, data interface{}) interface{} {
+func missing(values, data any) any {
 	if isString(values) {
-		values = []interface{}{values}
+		values = []any{values}
 	}
 
-	missing := make([]interface{}, 0)
+	missing := make([]any, 0)
 
-	for _, _var := range values.([]interface{}) {
+	for _, _var := range values.([]any) {
 		_value := getVar(_var, data)
 
 		if _value == nil {
@@ -319,15 +293,15 @@ func missing(values, data interface{}) interface{} {
 	return missing
 }
 
-func missingSome(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func missingSome(values, data any) any {
+	parsed := values.([]any)
 	number := int(toNumber(parsed[0]))
 	vars := parsed[1]
 
-	missing := make([]interface{}, 0)
-	found := make([]interface{}, 0)
+	missing := make([]any, 0)
+	found := make([]any, 0)
 
-	for _, _var := range vars.([]interface{}) {
+	for _, _var := range vars.([]any) {
 		_value := getVar(_var, data)
 
 		if _value == nil {
@@ -341,13 +315,13 @@ func missingSome(values, data interface{}) interface{} {
 		return missing
 	}
 
-	return make([]interface{}, 0)
+	return make([]any, 0)
 }
 
-func all(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func all(values, data any) any {
+	parsed := values.([]any)
 
-	var subject interface{}
+	var subject any
 
 	if isMap(parsed[0]) {
 		subject = apply(parsed[0], data)
@@ -361,7 +335,7 @@ func all(values, data interface{}) interface{} {
 		return false
 	}
 
-	for _, value := range subject.([]interface{}) {
+	for _, value := range subject.([]any) {
 		conditions := solveVars(parsed[1], value)
 		v := apply(conditions, value)
 
@@ -373,10 +347,10 @@ func all(values, data interface{}) interface{} {
 	return true
 }
 
-func none(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func none(values, data any) any {
+	parsed := values.([]any)
 
-	var subject interface{}
+	var subject any
 
 	if isMap(parsed[0]) {
 		subject = apply(parsed[0], data)
@@ -392,7 +366,7 @@ func none(values, data interface{}) interface{} {
 
 	conditions := solveVars(parsed[1], data)
 
-	for _, value := range subject.([]interface{}) {
+	for _, value := range subject.([]any) {
 		v := apply(conditions, value)
 
 		if isTrue(v) {
@@ -403,10 +377,10 @@ func none(values, data interface{}) interface{} {
 	return true
 }
 
-func some(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func some(values, data any) any {
+	parsed := values.([]any)
 
-	var subject interface{}
+	var subject any
 
 	if isMap(parsed[0]) {
 		subject = apply(parsed[0], data)
@@ -420,7 +394,7 @@ func some(values, data interface{}) interface{} {
 		return false
 	}
 
-	for _, value := range subject.([]interface{}) {
+	for _, value := range subject.([]any) {
 		v := apply(
 			solveVars(
 				solveVars(parsed[1], data),
@@ -437,7 +411,7 @@ func some(values, data interface{}) interface{} {
 	return false
 }
 
-func parseValues(values, data interface{}) interface{} {
+func parseValues(values, data any) any {
 	if values == nil || isPrimitive(values) {
 		return values
 	}
@@ -446,9 +420,9 @@ func parseValues(values, data interface{}) interface{} {
 		return apply(values, data)
 	}
 
-	parsed := make([]interface{}, 0)
+	parsed := make([]any, 0)
 
-	for _, value := range values.([]interface{}) {
+	for _, value := range values.([]any) {
 		if isMap(value) {
 			parsed = append(parsed, apply(value, data))
 		} else {
@@ -459,8 +433,24 @@ func parseValues(values, data interface{}) interface{} {
 	return parsed
 }
 
-func apply(rules, data interface{}) interface{} {
-	ruleMap := rules.(map[string]interface{})
+// If values represents a map (an operation), returns the result. Otherwise returns the
+// values without parsing. This means that each of the returned values might be a subtree
+// of JSONLogic.
+// Used in lazy evaluation of "AND" and "OR" operators
+func getValuesWithoutParsing(values, data any) any {
+	if values == nil || isPrimitive(values) {
+		return values
+	}
+
+	if isMap(values) {
+		return apply(values, data)
+	}
+
+	return values.([]any)
+}
+
+func apply(rules, data any) any {
+	ruleMap := rules.(map[string]any)
 
 	// A map with more than 1 key counts as a primitive
 	// end recursion
@@ -493,11 +483,11 @@ func apply(rules, data interface{}) interface{} {
 			return some(values, data)
 		}
 
-		return operation(operator, parseValues(values, data), data)
+		return operation(operator, values, data)
 	}
 
 	// an empty-map rule should return an empty-map
-	return make(map[string]interface{})
+	return make(map[string]any)
 }
 
 // Apply read the rule and it's data from io.Reader, executes it
@@ -507,8 +497,8 @@ func Apply(rule, data io.Reader, result io.Writer) error {
 		data = strings.NewReader("{}")
 	}
 
-	var _rule interface{}
-	var _data interface{}
+	var _rule any
+	var _data any
 
 	decoder := json.NewDecoder(rule)
 	err := decoder.Decode(&_rule)
@@ -536,8 +526,8 @@ func GetJsonLogicWithSolvedVars(rule, data json.RawMessage) ([]byte, error) {
 	}
 
 	// parse rule and data from json.RawMessage to interface
-	var _rule interface{}
-	var _data interface{}
+	var _rule any
+	var _data any
 
 	err := json.Unmarshal(rule, &_rule)
 	if err != nil {
@@ -559,8 +549,8 @@ func ApplyRaw(rule, data json.RawMessage) (json.RawMessage, error) {
 		data = json.RawMessage("{}")
 	}
 
-	var _rule interface{}
-	var _data interface{}
+	var _rule any
+	var _data any
 
 	err := json.Unmarshal(rule, &_rule)
 	if err != nil {
@@ -580,11 +570,9 @@ func ApplyRaw(rule, data json.RawMessage) (json.RawMessage, error) {
 	return json.Marshal(&result)
 }
 
-// ApplyInterface receives a rule and data as interface{} and returns the result
+// ApplyInterface receives a rule and data as any and returns the result
 // of the rule applied to the data.
-//
-// Deprecated: Use Apply instead because ApplyInterface will be private in the next version.
-func ApplyInterface(rule, data interface{}) (output interface{}, err error) {
+func ApplyInterface(rule, data any) (output any, err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			// fmt.Println("stacktrace from panic: \n" + string(debug.Stack()))
@@ -597,13 +585,13 @@ func ApplyInterface(rule, data interface{}) (output interface{}, err error) {
 	}
 
 	if isSlice(rule) {
-		var parsed []interface{}
+		var parsed []any
 
-		for _, value := range rule.([]interface{}) {
+		for _, value := range rule.([]any) {
 			parsed = append(parsed, parseValues(value, data))
 		}
 
-		return interface{}(parsed), nil
+		return any(parsed), nil
 	}
 
 	return rule, err

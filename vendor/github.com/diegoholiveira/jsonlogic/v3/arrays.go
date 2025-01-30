@@ -1,6 +1,8 @@
 package jsonlogic
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ErrReduceDataType struct {
 	dataType string
@@ -10,10 +12,10 @@ func (e ErrReduceDataType) Error() string {
 	return fmt.Sprintf("The type \"%s\" is not supported", e.dataType)
 }
 
-func filter(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func filter(values, data any) any {
+	parsed := values.([]any)
 
-	var subject interface{}
+	var subject any
 
 	if isSlice(parsed[0]) {
 		subject = parsed[0]
@@ -23,7 +25,7 @@ func filter(values, data interface{}) interface{} {
 		subject = apply(parsed[0], data)
 	}
 
-	result := make([]interface{}, 0)
+	result := make([]any, 0)
 
 	if subject == nil {
 		return result
@@ -31,7 +33,7 @@ func filter(values, data interface{}) interface{} {
 
 	logic := solveVars(parsed[1], data)
 
-	for _, value := range subject.([]interface{}) {
+	for _, value := range subject.([]any) {
 		v := parseValues(logic, value)
 
 		if isTrue(v) {
@@ -42,10 +44,10 @@ func filter(values, data interface{}) interface{} {
 	return result
 }
 
-func _map(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func _map(values, data any) any {
+	parsed := values.([]any)
 
-	var subject interface{}
+	var subject any
 
 	if isSlice(parsed[0]) {
 		subject = parsed[0]
@@ -55,7 +57,7 @@ func _map(values, data interface{}) interface{} {
 		subject = apply(parsed[0], data)
 	}
 
-	result := make([]interface{}, 0)
+	result := make([]any, 0)
 
 	if subject == nil {
 		return result
@@ -63,7 +65,7 @@ func _map(values, data interface{}) interface{} {
 
 	logic := solveVars(parsed[1], data)
 
-	for _, value := range subject.([]interface{}) {
+	for _, value := range subject.([]any) {
 		v := parseValues(logic, value)
 
 		if isTrue(v) || isNumber(v) || isBool(v) {
@@ -74,10 +76,10 @@ func _map(values, data interface{}) interface{} {
 	return result
 }
 
-func reduce(values, data interface{}) interface{} {
-	parsed := values.([]interface{})
+func reduce(values, data any) any {
+	parsed := values.([]any)
 
-	var subject interface{}
+	var subject any
 
 	if isSlice(parsed[0]) {
 		subject = parsed[0]
@@ -92,18 +94,24 @@ func reduce(values, data interface{}) interface{} {
 	}
 
 	var (
-		accumulator interface{}
+		accumulator any
 		valueType   string
 	)
+
 	{
-		if isBool(parsed[2]) {
-			accumulator = isTrue(parsed[2])
+		initialValue := parsed[2]
+		if isMap(initialValue) {
+			initialValue = apply(initialValue, data)
+		}
+
+		if isBool(initialValue) {
+			accumulator = isTrue(initialValue)
 			valueType = "bool"
-		} else if isNumber(parsed[2]) {
-			accumulator = toNumber(parsed[2])
+		} else if isNumber(initialValue) {
+			accumulator = toNumber(initialValue)
 			valueType = "number"
-		} else if isString(parsed[2]) {
-			accumulator = toString(parsed[2])
+		} else if isString(initialValue) {
+			accumulator = toString(initialValue)
 			valueType = "string"
 		} else {
 			panic(ErrReduceDataType{
@@ -112,13 +120,13 @@ func reduce(values, data interface{}) interface{} {
 		}
 	}
 
-	context := map[string]interface{}{
+	context := map[string]any{
 		"current":     float64(0),
 		"accumulator": accumulator,
 		"valueType":   valueType,
 	}
 
-	for _, value := range subject.([]interface{}) {
+	for _, value := range subject.([]any) {
 		if value == nil {
 			continue
 		}

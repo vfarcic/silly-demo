@@ -9,6 +9,8 @@ if option("tag"):
     _values.tag = option("tag")
 if option("db.enabled"):
     _values.db.enabled = option("db.enabled")
+if option("db.provider"):
+    _values.db.provider = option("db.provider")
 
 Values = _values
 

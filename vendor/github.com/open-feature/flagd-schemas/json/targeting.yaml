@@ -380,11 +380,7 @@ definitions:
               - $ref: "#/definitions/semVerString"
               - $ref: "#/definitions/varRule"
   fractionalWeightArg:
-    $comment: if we remove the "sum to 100" restriction, update the descriptions
-      below!
-    description:
-      Distribution for all possible variants, with their associated weighting
-      out of 100.
+    description: Distribution for all possible variants, with their associated weighting.
     type: array
     minItems: 1
     maxItems: 2
@@ -393,7 +389,7 @@ definitions:
           If this bucket is randomly selected, this string is used to as
           a key to retrieve the associated value from the "variants" object.
         type: string
-      - description: Weighted distribution for this variant key (must sum to 100).
+      - description: Weighted distribution for this variant key.
         type: number
   fractionalOp:
     type: array

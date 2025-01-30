@@ -36,20 +36,8 @@ Deployment = apps.Deployment {
                     }
                     if common.Values.db.enabled:
                         env = [{
-                            name = "DB_ENDPOINT"
-                            valueFrom.secretKeyRef = { name = db.SecretName, key = "host" }
-                        }, {
-                            name = "DB_PORT"
-                            valueFrom.secretKeyRef = { name = db.SecretName, key = "port" }
-                        }, {
-                            name = "DB_USER"
-                            valueFrom.secretKeyRef = { name = db.SecretName, key = "username" }
-                        }, {
-                            name = "DB_PASS"
-                            valueFrom.secretKeyRef = { name = db.SecretName, key = "password" }
-                        }, {
-                            name = "DB_NAME"
-                            value = db.Name
+                            name = "DB_URI"
+                            valueFrom.secretKeyRef = { name = db.SecretName, key = "uri" }
                         }]
                 }]
             }

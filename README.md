@@ -29,7 +29,7 @@ kcl run kcl/main.k -D db.enabled=true \
     | kubectl --namespace a-team apply --filename -
 
 kubectl --namespace a-team \
-    get all,ingresses,clusters,atlasschemas
+    get all,ingresses,secrets,clusters,atlasschemas
 
 curl -X POST "http://silly-demo.127.0.0.1.nip.io/video?id=1&title=something"
 

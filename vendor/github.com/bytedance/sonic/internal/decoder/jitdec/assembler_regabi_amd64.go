@@ -67,7 +67,7 @@ import (
  */
 
 const (
-    _FP_args   = 72     // 72 bytes to pass and spill register arguements
+    _FP_args   = 72     // 72 bytes to pass and spill register arguments
     _FP_fargs  = 80     // 80 bytes for passing arguments to other Go functions
     _FP_saves  = 48     // 48 bytes for saving the registers before CALL instructions
     _FP_locals = 144    // 144 bytes for local variables
@@ -203,9 +203,9 @@ var (
 var _VAR_fl = jit.Ptr(_SP, _FP_fargs + _FP_saves + 112)
 
 var (
-    _VAR_et = jit.Ptr(_SP, _FP_fargs + _FP_saves + 120) // save dismatched type
+    _VAR_et = jit.Ptr(_SP, _FP_fargs + _FP_saves + 120) // save mismatched type
     _VAR_pc = jit.Ptr(_SP, _FP_fargs + _FP_saves + 128) // save skip return pc
-    _VAR_ic = jit.Ptr(_SP, _FP_fargs + _FP_saves + 136) // save dismatched position
+    _VAR_ic = jit.Ptr(_SP, _FP_fargs + _FP_saves + 136) // save mismatched position
 )
 
 type _Assembler struct {
@@ -1361,7 +1361,7 @@ func (self *_Assembler) _asm_OP_num(_ *_Instr) {
     self.Emit("MOVQ", _R9, _VAR_pc)
     self.Sjmp("JMP"  , _LB_skip_one)
 
-    /* assgin string */
+    /* assign string */
     self.Link("_num_next_{n}")
     self.slice_from_r(_AX, 0)
     self.Emit("BTQ", jit.Imm(_F_copy_string), _ARG_fv)
@@ -1794,6 +1794,8 @@ func (self *_Assembler) _asm_OP_struct_field(p *_Instr) {
     self.Emit("MOVQ" , _R8, _VAR_sr)                            // MOVQ    R8, sr
     self.Sjmp("JMP"  , "_end_{n}")                              // JMP     _end_{n}
     self.Link("_try_lowercase_{n}")                             // _try_lowercase_{n}:
+    self.Emit("BTQ"  , jit.Imm(_F_case_sensitive), _ARG_fv)     // check if enable option CaseSensitive
+    self.Sjmp("JC"   , "_unknown_{n}")                         
     self.Emit("MOVQ" , jit.Imm(referenceFields(p.vf())), _AX)   // MOVQ    ${p.vf()}, AX
     self.Emit("MOVQ", _ARG_sv_p, _BX)                            // MOVQ   sv, BX
     self.Emit("MOVQ", _ARG_sv_n, _CX)                            // MOVQ   sv, CX
@@ -1801,6 +1803,10 @@ func (self *_Assembler) _asm_OP_struct_field(p *_Instr) {
     self.Emit("MOVQ" , _AX, _VAR_sr)                            // MOVQ    AX, _VAR_sr
     self.Emit("TESTQ", _AX, _AX)                                // TESTQ   AX, AX
     self.Sjmp("JNS"  , "_end_{n}")                              // JNS     _end_{n}
+    self.Link("_unknown_{n}")
+    // HACK: because `_VAR_sr` maybe used in `F_vstring`, so we should clear here again for `_OP_switch`.
+    self.Emit("MOVQ" , jit.Imm(-1), _AX)                        // MOVQ    $-1, AX
+    self.Emit("MOVQ" , _AX, _VAR_sr)                            // MOVQ    AX, sr
     self.Emit("BTQ"  , jit.Imm(_F_disable_unknown), _ARG_fv)    // BTQ     ${_F_disable_unknown}, fv
     self.Sjmp("JC"   , _LB_field_error)                         // JC      _field_error
     self.Link("_end_{n}")                                       // _end_{n}:

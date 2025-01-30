@@ -56,18 +56,6 @@ const (
 	ServiceEventStreamProcedure = "/flagd.evaluation.v1.Service/EventStream"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	serviceServiceDescriptor              = v1.File_flagd_evaluation_v1_evaluation_proto.Services().ByName("Service")
-	serviceResolveAllMethodDescriptor     = serviceServiceDescriptor.Methods().ByName("ResolveAll")
-	serviceResolveBooleanMethodDescriptor = serviceServiceDescriptor.Methods().ByName("ResolveBoolean")
-	serviceResolveStringMethodDescriptor  = serviceServiceDescriptor.Methods().ByName("ResolveString")
-	serviceResolveFloatMethodDescriptor   = serviceServiceDescriptor.Methods().ByName("ResolveFloat")
-	serviceResolveIntMethodDescriptor     = serviceServiceDescriptor.Methods().ByName("ResolveInt")
-	serviceResolveObjectMethodDescriptor  = serviceServiceDescriptor.Methods().ByName("ResolveObject")
-	serviceEventStreamMethodDescriptor    = serviceServiceDescriptor.Methods().ByName("EventStream")
-)
-
 // ServiceClient is a client for the flagd.evaluation.v1.Service service.
 type ServiceClient interface {
 	ResolveAll(context.Context, *connect.Request[v1.ResolveAllRequest]) (*connect.Response[v1.ResolveAllResponse], error)
@@ -88,47 +76,48 @@ type ServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) ServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	serviceMethods := v1.File_flagd_evaluation_v1_evaluation_proto.Services().ByName("Service").Methods()
 	return &serviceClient{
 		resolveAll: connect.NewClient[v1.ResolveAllRequest, v1.ResolveAllResponse](
 			httpClient,
 			baseURL+ServiceResolveAllProcedure,
-			connect.WithSchema(serviceResolveAllMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("ResolveAll")),
 			connect.WithClientOptions(opts...),
 		),
 		resolveBoolean: connect.NewClient[v1.ResolveBooleanRequest, v1.ResolveBooleanResponse](
 			httpClient,
 			baseURL+ServiceResolveBooleanProcedure,
-			connect.WithSchema(serviceResolveBooleanMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("ResolveBoolean")),
 			connect.WithClientOptions(opts...),
 		),
 		resolveString: connect.NewClient[v1.ResolveStringRequest, v1.ResolveStringResponse](
 			httpClient,
 			baseURL+ServiceResolveStringProcedure,
-			connect.WithSchema(serviceResolveStringMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("ResolveString")),
 			connect.WithClientOptions(opts...),
 		),
 		resolveFloat: connect.NewClient[v1.ResolveFloatRequest, v1.ResolveFloatResponse](
 			httpClient,
 			baseURL+ServiceResolveFloatProcedure,
-			connect.WithSchema(serviceResolveFloatMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("ResolveFloat")),
 			connect.WithClientOptions(opts...),
 		),
 		resolveInt: connect.NewClient[v1.ResolveIntRequest, v1.ResolveIntResponse](
 			httpClient,
 			baseURL+ServiceResolveIntProcedure,
-			connect.WithSchema(serviceResolveIntMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("ResolveInt")),
 			connect.WithClientOptions(opts...),
 		),
 		resolveObject: connect.NewClient[v1.ResolveObjectRequest, v1.ResolveObjectResponse](
 			httpClient,
 			baseURL+ServiceResolveObjectProcedure,
-			connect.WithSchema(serviceResolveObjectMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("ResolveObject")),
 			connect.WithClientOptions(opts...),
 		),
 		eventStream: connect.NewClient[v1.EventStreamRequest, v1.EventStreamResponse](
 			httpClient,
 			baseURL+ServiceEventStreamProcedure,
-			connect.WithSchema(serviceEventStreamMethodDescriptor),
+			connect.WithSchema(serviceMethods.ByName("EventStream")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -197,46 +186,47 @@ type ServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewServiceHandler(svc ServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	serviceMethods := v1.File_flagd_evaluation_v1_evaluation_proto.Services().ByName("Service").Methods()
 	serviceResolveAllHandler := connect.NewUnaryHandler(
 		ServiceResolveAllProcedure,
 		svc.ResolveAll,
-		connect.WithSchema(serviceResolveAllMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("ResolveAll")),
 		connect.WithHandlerOptions(opts...),
 	)
 	serviceResolveBooleanHandler := connect.NewUnaryHandler(
 		ServiceResolveBooleanProcedure,
 		svc.ResolveBoolean,
-		connect.WithSchema(serviceResolveBooleanMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("ResolveBoolean")),
 		connect.WithHandlerOptions(opts...),
 	)
 	serviceResolveStringHandler := connect.NewUnaryHandler(
 		ServiceResolveStringProcedure,
 		svc.ResolveString,
-		connect.WithSchema(serviceResolveStringMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("ResolveString")),
 		connect.WithHandlerOptions(opts...),
 	)
 	serviceResolveFloatHandler := connect.NewUnaryHandler(
 		ServiceResolveFloatProcedure,
 		svc.ResolveFloat,
-		connect.WithSchema(serviceResolveFloatMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("ResolveFloat")),
 		connect.WithHandlerOptions(opts...),
 	)
 	serviceResolveIntHandler := connect.NewUnaryHandler(
 		ServiceResolveIntProcedure,
 		svc.ResolveInt,
-		connect.WithSchema(serviceResolveIntMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("ResolveInt")),
 		connect.WithHandlerOptions(opts...),
 	)
 	serviceResolveObjectHandler := connect.NewUnaryHandler(
 		ServiceResolveObjectProcedure,
 		svc.ResolveObject,
-		connect.WithSchema(serviceResolveObjectMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("ResolveObject")),
 		connect.WithHandlerOptions(opts...),
 	)
 	serviceEventStreamHandler := connect.NewServerStreamHandler(
 		ServiceEventStreamProcedure,
 		svc.EventStream,
-		connect.WithSchema(serviceEventStreamMethodDescriptor),
+		connect.WithSchema(serviceMethods.ByName("EventStream")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/flagd.evaluation.v1.Service/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

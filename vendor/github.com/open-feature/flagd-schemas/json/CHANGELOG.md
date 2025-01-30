@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.10](https://github.com/open-feature/flagd-schemas/compare/json/json-schema-v0.2.9...json/json-schema-v0.2.10) (2025-01-06)
+
+
+### ✨ New Features
+
+* rename named top-level prop from id to flagSetId ([#177](https://github.com/open-feature/flagd-schemas/issues/177)) ([bb4d9fd](https://github.com/open-feature/flagd-schemas/commit/bb4d9fd6dc4f0b8a1af77335404c949697b766e2))
+
+## [0.2.9](https://github.com/open-feature/flagd-schemas/compare/json/json-schema-v0.2.8...json/json-schema-v0.2.9) (2024-12-05)
+
+
+### ✨ New Features
+
+* add flag set and flag metadata to schema ([#173](https://github.com/open-feature/flagd-schemas/issues/173)) ([9fe3677](https://github.com/open-feature/flagd-schemas/commit/9fe36777df7f2697d78830125f04f6972cf86e7a))
+
+
+### 🧹 Chore
+
+* remove comment about summing to 100 ([#172](https://github.com/open-feature/flagd-schemas/issues/172)) ([d03b772](https://github.com/open-feature/flagd-schemas/commit/d03b772f167aa21a635e70d22641d792deefcb7f))
+
 ## [0.2.8](https://github.com/open-feature/flagd-schemas/compare/json/json-schema-v0.2.7...json/json-schema-v0.2.8) (2024-07-08)
 
 

@@ -33,7 +33,7 @@ import (
 )
 
 // Version is the semantic version of the connect module.
-const Version = "1.17.0"
+const Version = "1.18.1"
 
 // These constants are used in compile-time handshakes with connect's generated
 // code.
@@ -424,7 +424,7 @@ func receiveUnaryMessage[T any](conn receiveConn, initializer maybeInitializer, 
 	}
 	// In a well-formed stream, the one message must be the only content in the body.
 	// To verify that it is well-formed, try to read another message from the stream.
-	// TODO: optimise this second receive: ideally do it w/out allocation, w/out
+	// TODO: optimize this second receive: ideally do it w/out allocation, w/out
 	//       fully reading next message (if one is present), and w/out trying to
 	//       actually unmarshal the bytes)
 	var msg2 T

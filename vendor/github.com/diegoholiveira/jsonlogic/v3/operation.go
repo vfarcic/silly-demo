@@ -1,14 +1,27 @@
 package jsonlogic
 
 // customOperators holds custom operators
-var customOperators = make(map[string]func(values, data interface{}) (result interface{}))
+var customOperators = make(map[string]func(values, data any) (result any))
 
 // AddOperator allows for custom operators to be used
-func AddOperator(key string, cb func(values, data interface{}) (result interface{})) {
+func AddOperator(key string, cb func(values, data any) (result any)) {
 	customOperators[key] = cb
 }
 
-func operation(operator string, values, data interface{}) interface{} {
+func operation(operator string, values, data any) any {
+	// "AND" evaluates values lazily, so parseValues() is delayed until needed
+	if operator == "and" {
+		return _and(values, data)
+	}
+
+	// "OR" evaluates values lazily, so parseValues() is delayed until needed
+	if operator == "or" {
+		return _or(values, data)
+	}
+
+	// Parse the entire remaining tree and eval recursively for non-lazy eval operators
+	values = parseValues(values, data)
+
 	// Check against any custom operators
 	for index, customOperation := range customOperators {
 		if operator == index {
@@ -64,17 +77,9 @@ func operation(operator string, values, data interface{}) interface{} {
 		return nil
 	}
 
-	parsed := values.([]interface{})
+	parsed := values.([]any)
 
-	if operator == "and" {
-		return _and(parsed)
-	}
-
-	if operator == "or" {
-		return _or(parsed)
-	}
-
-	if len(parsed) == 1 {
+	if operator != "in" && len(parsed) == 1 {
 		return unary(operator, parsed[0])
 	}
 
@@ -103,11 +108,10 @@ func operation(operator string, values, data interface{}) interface{} {
 	}
 
 	if operator == "in" {
-		return _in(parsed[0], parsed[1])
-	}
-
-	if operator == "in_sorted" {
-		return _inSorted(parsed[0], parsed[1])
+		if len(parsed) > 1 {
+			return _in(parsed[0], parsed[1])
+		}
+		return _in(parsed[0], nil)
 	}
 
 	if operator == "%" {
