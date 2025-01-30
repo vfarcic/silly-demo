@@ -18,7 +18,7 @@ import (
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-func TestVideosGetHandler(t *testing.T) {
+func TestVideoPut(t *testing.T) {
 	t.Run("should put a video into the database", func(t *testing.T) {
 		// Test case 1: Post a video
 		rand.Seed(time.Now().UnixNano())
@@ -77,24 +77,3 @@ func TestVideosGetHandler(t *testing.T) {
 		assert.True(t, found, fmt.Sprintf("Expected video ID %s and title %s not found in the response", expectedID, expectedTitle))
 	})
 }
-
-// func TestVideoPostHandler(t *testing.T) {
-// 	gin.SetMode(gin.TestMode)
-
-// 	t.Run("should add video to database", func(t *testing.T) {
-// 		os.Setenv("DB", "pg")
-// 		os.Setenv("DB_URI", "postgres://user:password@localhost:5432/dbname")
-// 		defer os.Unsetenv("DB")
-// 		defer os.Unsetenv("DB_URI")
-
-// 		r := gin.Default()
-// 		r.POST("/video", videoPostHandler)
-
-// 		req, _ := http.NewRequest(http.MethodPost, "/video?id=1&title=New Video", nil)
-// 		w := httptest.NewRecorder()
-// 		r.ServeHTTP(w, req)
-
-// 		require.Equal(t, http.StatusOK, w.Code)
-// 		// Add more assertions based on your database setup
-// 	})
-// }

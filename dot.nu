@@ -1,7 +1,6 @@
 #!/usr/bin/env nu
 
 source  scripts/image.nu
-source  scripts/tests.nu
 source  scripts/github.nu
 source  scripts/kubernetes.nu
 source  scripts/common.nu
@@ -123,14 +122,7 @@ def "main generate yaml" [
     --image = "silly-demo"         # Image name
 ] {
 
-    print "xxxxxxxxxxxxx"
-    cat k8s/app.yaml
-
     kcl run kcl/main.k | save k8s/app.yaml --force
-
-    print "xxxxxxxxxxxxx"
-
-    cat k8s/app.yaml
 
 }
 
@@ -144,14 +136,15 @@ def "main update kcl" [
 
 }
 
-# Runs all CI tasks
-def "main run ci" [
-    tag: string                    # The tag of the image (e.g., 0.0.1)
-    --registry = "ghcr.io/vfarcic" # Image registry
-    --image = "silly-demo"         # Image name
-] {
+def "main run unit_tests" [] {
 
-    main run tests --language go
+    go test -v -tags unit
+
+}
+
+def "main build image" [
+    tag: string # The tag of the image (e.g., 0.0.1)
+] {
 
     main build image $tag
 
@@ -167,7 +160,9 @@ def "main run ci" [
 
     main generate yaml $tag
 
-    # FIXME: Move to a separate defs
+}
+
+def "main deploy app" [] {
 
     main create kubernetes kind
 
@@ -187,7 +182,28 @@ def "main run ci" [
             --for=condition=ready --timeout=60s
     )
 
+}
+
+def "main run integration_tests" [] {
+
     go test -v -tags integration
+
+}
+
+# Runs all CI tasks
+def "main run ci" [
+    tag: string                    # The tag of the image (e.g., 0.0.1)
+    --registry = "ghcr.io/vfarcic" # Image registry
+    --image = "silly-demo"         # Image name
+] {
+
+    main run unit_tests
+
+    main build image $tag
+
+    main deploy app
+
+    main run integration_tests
 
 # FIXME: Run some tests in GHA
 # FIXME: Shut it all down (Neon will shut itself down) in GHA
