@@ -55,3 +55,9 @@ timoni build silly-demo timoni \
     --values timoni/values-nats.yaml --namespace a-team \
     | kubectl apply --filename -
 ```
+
+## Destroy
+
+```sh
+./dot.nu destroy
+```

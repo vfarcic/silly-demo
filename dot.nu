@@ -209,6 +209,12 @@ def "main run ci" [
 
 }
 
+def "main destroy" [] {
+
+    main destroy kubernetes kind
+
+}
+
 def "main setup devcontainers" [] {
 
     main create kubernetes kind
