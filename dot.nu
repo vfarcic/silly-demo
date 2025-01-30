@@ -205,10 +205,6 @@ def "main run ci" [
 
     main run integration_tests
 
-# FIXME: Run some tests in GHA
-# FIXME: Shut it all down (Neon will shut itself down) in GHA
-# FIXME: Create `NEON_API_KEY` secret in GHA?
-
 }
 
 def "main setup devcontainers" [] {
