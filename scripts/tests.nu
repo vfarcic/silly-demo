@@ -6,7 +6,7 @@ def "main run tests" [
 ] {
 
     if $language == "go" {
-        go test -v $"(pwd)/..."
+        go test -v -tags unit
     }
 
 }

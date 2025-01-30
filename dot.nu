@@ -161,6 +161,17 @@ def "main run ci" [
 
     main generate yaml $tag
 
+    main create kubernetes kind
+
+    kubectl create namespace a-team
+
+    kubectl --namespace a-team apply --filename k8s/
+
+# FIXME: Deploy the app in GHA
+# FIXME: Run some tests in GHA
+# FIXME: Shut it all down (Neon will shut itself down) in GHA
+# FIXME: Create `NEON_API_KEY` secret in GHA?
+
 }
 
 def "main setup devcontainers" [] {
