@@ -50,27 +50,34 @@ def "main update manifests" [
 
 }
 
-def "main deploy app" [] {
+def "main deploy app" [
+    --create_cluster = true # Whether to create a cluster
+] {
 
-    main create kubernetes kind
+    if $create_cluster {
 
-    main apply ingress nginx --hyperscaler kind
+        main create kubernetes kind
 
-    kubectl create namespace a-team
+        main apply ingress nginx --hyperscaler kind
 
-    main apply cnpg
+        kubectl create namespace a-team
 
-    main apply atlas
+        main apply cnpg
+
+        main apply atlas
+
+    }
 
     kcl run kcl/main.k -D db.enabled=true
         | kubectl --namespace a-team apply --filename -
 
-    (
-        kubectl --namespace a-team wait atlasschema silly-demo
-            --for=condition=ready --timeout=300s
-    )
-
-    sleep 10sec
+    if $create_cluster {
+        (
+            kubectl --namespace a-team
+                wait atlasschema silly-demo
+                --for=condition=ready --timeout=300s
+        )
+    }
 
 }
 
