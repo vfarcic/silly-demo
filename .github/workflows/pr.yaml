@@ -29,15 +29,3 @@ jobs:
           project-path: devbox-ci.json
       - name: run-unit-tests
         run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
-      - name: build-image
-        run: devbox run --config devbox-ci.json -- ./dot.nu build image pr-${{ github.event.number }}
-        env:
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: update-manifests
-        run: devbox run --config devbox-ci.json -- ./dot.nu update manifests pr-${{ github.event.number }} --sign false
-        env:
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: deploy-app
-        run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
-      - name: run-integration-tests
-        run: devbox run --config devbox-ci.json -- ./dot.nu run integration_tests

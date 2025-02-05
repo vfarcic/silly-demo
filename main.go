@@ -18,9 +18,7 @@ import (
 	"github.com/open-feature/go-sdk/openfeature"
 )
 
-var (
-	OpenFeatureClient *openfeature.Client
-)
+var OpenFeatureClient *openfeature.Client
 
 func init() {
 	openfeature.SetProviderAndWait(flagd.NewProvider())
@@ -101,5 +99,5 @@ func httpErrorInternalServerError(err error, ctx *gin.Context) {
 
 func httpError(err error, ctx *gin.Context, status int) {
 	log.Println(err.Error())
-	ctx.JSON(status, gin.H{"error": err.Error()})
+	ctx.String(status, err.Error())
 }
