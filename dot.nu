@@ -29,8 +29,9 @@ def "main run unit_tests" [] {
 }
 
 def "main update manifests" [
-    tag: string    # The tag of the image (e.g., 0.0.1)
-    --sign = true # Whether to sign the image
+    tag: string                    # The tag of the image (e.g., 0.0.1)
+    --sign = true                  # Whether to sign the image
+    --registry = "ghcr.io/vfarcic" # Image registry
 ] {
 
     if $sign {
@@ -45,7 +46,7 @@ def "main update manifests" [
 
     update kcl $tag
 
-    generate yaml $tag
+    generate yaml $tag --registry $registry
 
 }
 
