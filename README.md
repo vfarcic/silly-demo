@@ -68,6 +68,8 @@ timoni build silly-demo timoni \
 ./dot.nu deploy app
 
 ./dot.nu run integration_tests
+
+./dot.nu destroy app
 ```
 
 ## Destroy

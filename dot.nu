@@ -75,7 +75,13 @@ def "main deploy app" [] {
 
 def "main run integration_tests" [] {
 
-    go test -v -tags integration $"($env.PWD)/..."
+    go test -v -tags integration $"($env.PWD)/..." -count 1
+
+}
+
+def "main destroy app" [] {
+
+    main destroy kubernetes kind
 
 }
 
