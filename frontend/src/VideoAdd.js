@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TextField, Button, Container, Typography, Box } from '@mui/material';
 
 const url = process.env.REACT_APP_BACKEND_URL;
 
@@ -6,8 +7,8 @@ const VideoAdd = () => {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     fetch(`${url}/video?id=${id}&title=${title}`, {
       method: 'POST',
     })
@@ -22,20 +23,34 @@ const VideoAdd = () => {
   };
 
   return (
-    <div>
-      <h1>Add Video</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>ID:</label>
-          <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
-        </div>
-        <div>
-          <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <button type="submit">Add Video</button>
-      </form>
-    </div>
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Add Video
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="ID"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
+          <TextField
+            label="Title"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Add Video
+          </Button>
+        </form>
+      </Box>
+    </Container>
   );
 };
 
