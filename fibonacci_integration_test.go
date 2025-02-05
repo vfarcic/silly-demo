@@ -3,7 +3,10 @@
 package main
 
 import (
+<<<<<<< HEAD
 	"encoding/json"
+=======
+>>>>>>> origin
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -29,12 +32,16 @@ func TestFibonacci(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 	assert.Equal(t, http.StatusOK, res.StatusCode)
+<<<<<<< HEAD
 
 	var response map[string]interface{}
 	err = json.Unmarshal(body, &response)
 	assert.NoError(t, err)
 	assert.Equal(t, float64(5), response["number"])
 	assert.Equal(t, float64(5), response["fibonacci"])
+=======
+	assert.Equal(t, `{"number":5,"fibonacci":5}`, string(body))
+>>>>>>> origin
 
 	// Test case 2: Invalid input
 	url = "http://silly-demo.127.0.0.1.nip.io/fibonacci?number=abc"
