@@ -30,7 +30,7 @@ def "main run unit_tests" [] {
 
 def "main update manifests" [
     tag: string    # The tag of the image (e.g., 0.0.1)
-    --sign = false # Whether to sign the image
+    --sign = true # Whether to sign the image
 ] {
 
     if $sign {
