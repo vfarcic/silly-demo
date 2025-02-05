@@ -34,7 +34,7 @@ jobs:
         env:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: update-manifests
-        run: devbox run --config devbox-ci.json -- ./dot.nu update manifests pr-${{ github.event.number }}
+        run: devbox run --config devbox-ci.json -- ./dot.nu update manifests pr-${{ github.event.number }} --sign false
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
