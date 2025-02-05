@@ -44,7 +44,8 @@ jobs:
         run: |
           source .env
           kubectl get namespaces
-          kubectl --namespace a-team get all
+          kubectl --namespace a-team get all,ingresses
+          kubectl --namespace a-team describe pods --selector app.kubernetes.io/name=silly-demo
       - name: run-integration-tests
         run: |
           source .env
