@@ -34,10 +34,12 @@ def "main update manifests" [
 ] {
 
     if $sign {
-        sign image $tag
-    }
 
-    build helm $tag
+        sign image $tag
+
+        build helm $tag
+
+    }
 
     update kustomize $tag
 
