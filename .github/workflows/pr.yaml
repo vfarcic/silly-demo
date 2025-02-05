@@ -1,5 +1,5 @@
-name: ci
-run-name: ci
+name: pr
+run-name: pr
 on:
   pull_request:
     types:
