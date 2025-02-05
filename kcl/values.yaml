@@ -1,4 +1,4 @@
-tag: 1.4.376
+tag: 1.4.377
 image: ghcr.io/vfarcic/silly-demo
 replicas: 2
 autoscaling:
