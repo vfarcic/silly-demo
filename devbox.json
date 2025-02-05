@@ -8,7 +8,6 @@
     "yq-go@4.43.1",
     "jq@1.7.1",
     "earthly@0.8.11",
-    "go@1.22.3",
     "cosign@2.2.4",
     "path:gcloud#google-cloud-sdk",
     "nodejs@22.6.0",
@@ -18,7 +17,8 @@
     "teller@2.0.7",
     "air@1.61.5",
     "kcl@0.11.0",
-    "postgresql@17.2"
+    "postgresql@17.2",
+    "go@1.23.4"
   ],
   "shell": {
     "init_hook": [],
