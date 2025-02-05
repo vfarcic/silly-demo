@@ -33,12 +33,6 @@ jobs:
         run: devbox run --config devbox-ci.json -- ./dot.nu build image pr-${{ github.event.number }}
         env:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: update-manifests
-        run: devbox run --config devbox-ci.json -- ./dot.nu update manifests pr-${{ github.event.number }}
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: deploy-app
         run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
       - name: run-integration-tests
