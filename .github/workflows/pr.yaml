@@ -36,8 +36,6 @@ jobs:
       - name: update-manifests
         run: devbox run --config devbox-ci.json -- ./dot.nu update manifests pr-${{ github.event.number }} --sign false
         env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: deploy-app
         run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
