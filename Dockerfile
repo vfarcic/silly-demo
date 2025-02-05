@@ -1,5 +1,5 @@
 # Build stage
-FROM golang:1.23.0-alpine AS build
+FROM golang:1.23.6-alpine AS build
 RUN apk add --no-cache ca-certificates git tzdata
 RUN adduser -D -g '' appuser
 
