@@ -21,11 +21,12 @@ func fibonacciHandler(ctx *gin.Context) {
 	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	number, err := strconv.Atoi(ctx.Query("number"))
 	if err != nil {
-		ctx.String(http.StatusBadRequest, err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	fib := calculateFibonacci(number)
-	ctx.String(http.StatusOK, fmt.Sprintf("%d", fib))
+	ctx.JSON(http.StatusOK, gin.H{"number": number, "fibonacci": fib})
 }
 
 func calculateFibonacci(n int) int {
