@@ -42,10 +42,13 @@ jobs:
         run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
       - name: xxx
         run: |
+          source .env
           kubectl get namespaces
           kubectl --namespace a-team get all
       - name: run-integration-tests
-        run: devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
+        run: |
+          source .env
+          devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
       - name: commit-changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
