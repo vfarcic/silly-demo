@@ -22,122 +22,6 @@ def "main setup" [] {
     
 }
 
-# Updates Timoni files
-def "main update timoni" [
-    tag: string # The tag of the image (e.g., 0.0.1)
-] {
-
-    cat timoni/values.cue
-        | sed -e $"s@image: tag:.*@image: tag: \"($tag)\"@g"
-        | save timoni/values.cue.tmp --force
-
-    mv timoni/values.cue.tmp timoni/values.cue
-
-}
-
-# Signs the image
-def "main sign image" [
-    tag: string                    # The tag of the image (e.g., `0.0.1`)
-    --registry_pass: string,       # Registry password. Overwrites environment variable `REGISTRY_PASSWORD`.
-    --registry_user = "vfarcic",   # Registry username
-    --cosign_private_key: string,  # Cosign private key. Overwrites environment variable `COSIGN_PRIVATE_KEY`.
-    --registry = "ghcr.io/vfarcic" # Image registry
-    --image = "silly-demo"         # Image name
-] {
-
-    mut registry_pass = get_registry_pass $registry_pass
-
-    if $cosign_private_key != null {
-        $env.COSIGN_PRIVATE_KEY = $cosign_private_key
-    }
-
-    (
-        cosign sign --yes --key env://COSIGN_PRIVATE_KEY
-            --registry-username $registry_user
-            --registry-password $registry_pass
-            $"($registry)/($image):($tag)"
-    )
-
-}
-
-# Updates Helm files
-def "main build helm" [
-    tag: string                    # The tag of the image (e.g., 0.0.1)
-    --push = true                  # Whether to push the chart to the registry
-    --registry = "ghcr.io/vfarcic" # Image registry
-    --registry_pass: string,       # Registry password. Overwrites environment variable `REGISTRY_PASSWORD`.
-    --registry_user = "vfarcic"    # Registry username
-] {
-
-    mut registry_pass = get_registry_pass $registry_pass
-
-    open helm/app/Chart.yaml
-        | upsert version $tag
-        | save helm/app/Chart.yaml --force
-
-    open helm/app/values.yaml
-        | upsert image.tag $tag
-        | save helm/app/values.yaml --force
-
-    helm package helm/app
-
-    if $push {
-        (
-            helm registry login
-                --username $registry_user
-                --password $registry_pass
-                $registry
-        )
-    }
-
-    helm push $"silly-demo-helm-($tag).tgz" $"oci://($registry)"
-
-}
-
-def get_registry_pass [registry_pass] {
-    mut registry_pass = $registry_pass
-    if $registry_pass == "" or $registry_pass == null {
-        $registry_pass = $env.REGISTRY_PASSWORD
-    }
-    $registry_pass
-}
-
-# Updates Kustomize files
-def "main update kustomize" [
-    tag: string                    # The tag of the image (e.g., 0.0.1)
-    --registry = "ghcr.io/vfarcic" # Image registry
-    --image = "silly-demo"         # Image name
-] {
-
-    open kustomize/base/deployment.yaml
-        | upsert spec.template.spec.containers.0.image $"($registry)/($image):($tag)"
-        | save kustomize/base/deployment.yaml --force
-
-}
-
-# Updates YAML files
-def "main generate yaml" [
-    tag: string                    # The tag of the image (e.g., 0.0.1)
-    --registry = "ghcr.io/vfarcic" # Image registry
-    --image = "silly-demo"         # Image name
-] {
-
-    kcl run kcl/main.k
-    
-    kcl run kcl/main.k | save k8s/app.yaml --force
-
-}
-
-def "main update kcl" [
-    tag: string # The tag of the image (e.g., 0.0.1)
-] {
-
-    open kcl/values.yaml
-        | upsert tag $tag
-        | save kcl/values.yaml --force
-
-}
-
 def "main run unit_tests" [] {
 
     go test -v -tags unit
@@ -148,17 +32,15 @@ def "main update manifests" [
     tag: string # The tag of the image (e.g., 0.0.1)
 ] {
 
-    main sign image $tag
+    sign image $tag
 
-    main update timoni $tag
+    build helm $tag
 
-    main build helm $tag
+    update kustomize $tag
 
-    main update kustomize $tag
+    update kcl $tag
 
-    main update kcl $tag
-
-    main generate yaml $tag
+    generate yaml $tag
 
 }
 
@@ -179,7 +61,7 @@ def "main deploy app" [] {
 
     (
         kubectl --namespace a-team wait atlasschema silly-demo
-            --for=condition=ready --timeout=60s
+            --for=condition=ready --timeout=300s
     )
 
 }
@@ -234,5 +116,108 @@ def "main destroy devcontainers" [] {
     rm --force .devcontainer
 
     main destroy kubernetes kind
+
+}
+
+# Signs the image
+def "sign image" [
+    tag: string                    # The tag of the image (e.g., `0.0.1`)
+    --registry_pass: string,       # Registry password. Overwrites environment variable `REGISTRY_PASSWORD`.
+    --registry_user = "vfarcic",   # Registry username
+    --cosign_private_key: string,  # Cosign private key. Overwrites environment variable `COSIGN_PRIVATE_KEY`.
+    --registry = "ghcr.io/vfarcic" # Image registry
+    --image = "silly-demo"         # Image name
+] {
+
+    mut registry_pass = get_registry_pass $registry_pass
+
+    if $cosign_private_key != null {
+        $env.COSIGN_PRIVATE_KEY = $cosign_private_key
+    }
+
+    (
+        cosign sign --yes --key env://COSIGN_PRIVATE_KEY
+            --registry-username $registry_user
+            --registry-password $registry_pass
+            $"($registry)/($image):($tag)"
+    )
+
+}
+
+# Updates Helm files
+def "build helm" [
+    tag: string                    # The tag of the image (e.g., 0.0.1)
+    --push = true                  # Whether to push the chart to the registry
+    --registry = "ghcr.io/vfarcic" # Image registry
+    --registry_pass: string,       # Registry password. Overwrites environment variable `REGISTRY_PASSWORD`.
+    --registry_user = "vfarcic"    # Registry username
+] {
+
+    mut registry_pass = get_registry_pass $registry_pass
+
+    open helm/app/Chart.yaml
+        | upsert version $tag
+        | save helm/app/Chart.yaml --force
+
+    open helm/app/values.yaml
+        | upsert image.tag $tag
+        | save helm/app/values.yaml --force
+
+    helm package helm/app
+
+    if $push {
+        (
+            helm registry login
+                --username $registry_user
+                --password $registry_pass
+                $registry
+        )
+    }
+
+    helm push $"silly-demo-helm-($tag).tgz" $"oci://($registry)"
+
+}
+
+def get_registry_pass [registry_pass] {
+    mut registry_pass = $registry_pass
+    if $registry_pass == "" or $registry_pass == null {
+        $registry_pass = $env.REGISTRY_PASSWORD
+    }
+    $registry_pass
+}
+
+# Updates Kustomize files
+def "update kustomize" [
+    tag: string                    # The tag of the image (e.g., 0.0.1)
+    --registry = "ghcr.io/vfarcic" # Image registry
+    --image = "silly-demo"         # Image name
+] {
+
+    open kustomize/base/deployment.yaml
+        | upsert spec.template.spec.containers.0.image $"($registry)/($image):($tag)"
+        | save kustomize/base/deployment.yaml --force
+
+}
+
+# Updates YAML files
+def "generate yaml" [
+    tag: string                    # The tag of the image (e.g., 0.0.1)
+    --registry = "ghcr.io/vfarcic" # Image registry
+    --image = "silly-demo"         # Image name
+] {
+
+    kcl run kcl/main.k
+    
+    kcl run kcl/main.k | save k8s/app.yaml --force
+
+}
+
+def "update kcl" [
+    tag: string # The tag of the image (e.g., 0.0.1)
+] {
+
+    open kcl/values.yaml
+        | upsert tag $tag
+        | save kcl/values.yaml --force
 
 }
