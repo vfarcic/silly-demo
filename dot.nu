@@ -29,10 +29,13 @@ def "main run unit_tests" [] {
 }
 
 def "main update manifests" [
-    tag: string # The tag of the image (e.g., 0.0.1)
+    tag: string    # The tag of the image (e.g., 0.0.1)
+    --sign = false # Whether to sign the image
 ] {
 
-    sign image $tag
+    if $sign {
+        sign image $tag
+    }
 
     build helm $tag
 
