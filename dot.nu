@@ -69,11 +69,13 @@ def "main deploy app" [] {
             --for=condition=ready --timeout=300s
     )
 
+    sleep 10sec
+
 }
 
 def "main run integration_tests" [] {
 
-    go test -v -tags integration
+    go test -v -tags integration $"($env.PWD)/..."
 
 }
 

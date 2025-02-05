@@ -56,6 +56,20 @@ timoni build silly-demo timoni \
     | kubectl apply --filename -
 ```
 
+## Unit Tests
+
+```sh
+./dot.nu run unit_tests
+```
+
+## Integration Tests
+
+```sh
+./dot.nu deploy app
+
+./dot.nu run integration_tests
+```
+
 ## Destroy
 
 ```sh
