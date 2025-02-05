@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -28,7 +29,12 @@ func TestFibonacci(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 	assert.Equal(t, http.StatusOK, res.StatusCode)
-	assert.Equal(t, `{"number":5,"fibonacci":5}`, string(body))
+
+	var response map[string]interface{}
+	err = json.Unmarshal(body, &response)
+	assert.NoError(t, err)
+	assert.Equal(t, float64(5), response["number"])
+	assert.Equal(t, float64(5), response["fibonacci"])
 
 	// Test case 2: Invalid input
 	url = "http://silly-demo.127.0.0.1.nip.io/fibonacci?number=abc"
@@ -46,7 +52,10 @@ func TestFibonacci(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	assert.Equal(t, `{"error":"strconv.Atoi: parsing \"abc\": invalid syntax"}`, string(body))
+
+	err = json.Unmarshal(body, &response)
+	assert.NoError(t, err)
+	assert.Equal(t, "strconv.Atoi: parsing \"abc\": invalid syntax", response["error"])
 
 	// Test case 3: Missing number parameter
 	url = "http://silly-demo.127.0.0.1.nip.io/fibonacci"
@@ -64,5 +73,8 @@ func TestFibonacci(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 	assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-	assert.Equal(t, `{"error":"strconv.Atoi: parsing \"\": invalid syntax"}`, string(body))
+
+	err = json.Unmarshal(body, &response)
+	assert.NoError(t, err)
+	assert.Equal(t, "strconv.Atoi: parsing \"\": invalid syntax", response["error"])
 }
