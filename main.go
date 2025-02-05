@@ -12,6 +12,8 @@ import (
 	"syscall"
 	"time"
 
+	"silly-demo/internal/handlers"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	flagd "github.com/open-feature/go-sdk-contrib/providers/flagd/pkg"
@@ -48,7 +50,7 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	router.GET("/fibonacci", fibonacciHandler)
+	router.GET("/fibonacci", handlers.FibonacciHandler)
 	router.POST("/video", videoPostHandler)
 	router.GET("/videos", videosGetHandler)
 	router.GET("/ping", pingHandler)

@@ -1,6 +1,6 @@
 //go:build unit
 
-package main
+package handlers
 
 import (
 	"encoding/json"
@@ -17,7 +17,7 @@ func TestFibonacciHandler(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/fibonacci?number=5", nil)
 	w := httptest.NewRecorder()
 	router := gin.Default()
-	router.GET("/fibonacci", fibonacciHandler)
+	router.GET("/fibonacci", FibonacciHandler)
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 

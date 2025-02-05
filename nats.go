@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"time"
 
+	"silly-demo/internal/service"
+
 	"github.com/nats-io/nats.go"
 )
 
@@ -34,7 +36,7 @@ func NatsSubscribe() {
 			if err != nil {
 				return fmt.Sprintf("%s is not a number", message)
 			}
-			return strconv.Itoa(calculateFibonacci(number))
+			return strconv.Itoa(service.CalculateFibonacci(number))
 		})
 	}
 }

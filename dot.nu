@@ -24,7 +24,7 @@ def "main setup" [] {
 
 def "main run unit_tests" [] {
 
-    go test -v -tags unit
+    go test -v -cover -tags unit $"($env.PWD)/..."
 
 }
 
