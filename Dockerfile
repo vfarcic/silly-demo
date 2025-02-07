@@ -1,11 +1,11 @@
 FROM golang:1.23.6-alpine AS build
 RUN mkdir /src
 WORKDIR /src
-ADD ./go.mod .
-ADD ./go.sum .
+COPY go.mod go.sum ./
+RUN go mod download
 ADD ./vendor .
-ADD ./*.go ./
-RUN go build -o silly-demo
+COPY . .
+RUN GOOS=linux GOARCH=amd64 go build -o silly-demo
 RUN chmod +x silly-demo
 
 FROM scratch
