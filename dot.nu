@@ -24,13 +24,14 @@ def "main setup" [] {
 
 def "main run unit_tests" [] {
 
-    go test -v -tags unit
+    go test -v -cover -tags unit $"($env.PWD)/..."
 
 }
 
 def "main update manifests" [
-    tag: string    # The tag of the image (e.g., 0.0.1)
-    --sign = false # Whether to sign the image
+    tag: string                    # The tag of the image (e.g., 0.0.1)
+    --sign = true                  # Whether to sign the image
+    --registry = "ghcr.io/vfarcic" # Image registry
 ] {
 
     if $sign {
@@ -45,35 +46,50 @@ def "main update manifests" [
 
     update kcl $tag
 
-    generate yaml $tag
+    generate yaml $tag --registry $registry
 
 }
 
-def "main deploy app" [] {
+def "main deploy app" [
+    --create_cluster = true # Whether to create a cluster
+] {
 
-    main create kubernetes kind
+    if $create_cluster {
 
-    main apply ingress nginx --hyperscaler kind
+        main create kubernetes kind
 
-    kubectl create namespace a-team
+        main apply ingress nginx --hyperscaler kind
 
-    main apply cnpg
+        kubectl create namespace a-team
 
-    main apply atlas
+        main apply cnpg
+
+        main apply atlas
+
+    }
 
     kcl run kcl/main.k -D db.enabled=true
         | kubectl --namespace a-team apply --filename -
 
-    (
-        kubectl --namespace a-team wait atlasschema silly-demo
-            --for=condition=ready --timeout=300s
-    )
+    if $create_cluster {
+        (
+            kubectl --namespace a-team
+                wait atlasschema silly-demo
+                --for=condition=ready --timeout=300s
+        )
+    }
 
 }
 
 def "main run integration_tests" [] {
 
-    go test -v -tags integration
+    go test -v -tags integration $"($env.PWD)/..."
+
+}
+
+def "main destroy app" [] {
+
+    main destroy kubernetes kind
 
 }
 
