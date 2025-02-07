@@ -40,6 +40,11 @@ jobs:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: deploy-app
         run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
+      - name: xxx
+        run: |
+          kubectl get ns
+          kubectl --namespace a-team get pods
+          kubectl --namespace a-team describe pod --selector app.kubernetes.io/name=silly-demo
       - name: run-integration-tests
         run: |
           source .env

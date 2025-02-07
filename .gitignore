@@ -9,3 +9,4 @@
 /tmp/*.yaml
 /tmp/*.sql
 /.env
+/devbox.lock
