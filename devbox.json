@@ -17,7 +17,7 @@
     "air@1.61.7",
     "kcl@0.11.0",
     "postgresql@17.2",
-    "go@1.23.4"
+    "go@1.23.5"
   ],
   "shell": {
     "init_hook": [],
