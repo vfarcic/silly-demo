@@ -7,16 +7,17 @@ def "main build image" [
     --image = "silly-demo"         # Image name
     --push = true                  # Whether to push the image to the registry
     --bake = true                  # Whether to use `docker buildx bake`
+    --bake_target = default        # Which Docker Bake target to use if `--bake` is `true`
 ] {
 
     if $bake {
 
         if $push {
-            TAG=$tag IMAGE=$"($registry)/($image)" docker buildx bake --push
+            TAG=$tag IMAGE=$"($registry)/($image)" docker buildx bake $bake_target --push
         } else {
-            TAG=$tag IMAGE=$"($registry)/($image)" docker buildx bake
+            TAG=$tag IMAGE=$"($registry)/($image)" docker buildx bake $bake_target
         }
-        
+
     } else {
 
         docker image build --tag $"($registry)/($image):latest" .

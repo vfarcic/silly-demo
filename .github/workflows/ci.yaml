@@ -37,7 +37,7 @@ jobs:
       - name: run-unit-tests
         run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
       - name: build-image
-        run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG
+        run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG --bake_target backend
         env:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: update-manifests
