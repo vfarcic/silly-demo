@@ -8,15 +8,22 @@ def "main build image" [
     --push = true                  # Whether to push the image to the registry
 ] {
 
-    docker image build --tag $"($registry)/($image):latest" .
-
-    docker image tag $"($registry)/($image):latest" $"($registry)/($image):($tag)"
-
+    let pushArg = ""
     if $push {
-
-        docker image push $"($registry)/($image):latest"
-
-        docker image push $"($registry)/($image):($tag)"
+        $pushArg = "--push"
     }
+
+    TAG=$tag docker buildx bake $pushArg
+
+    # docker image build --tag $"($registry)/($image):latest" .
+
+    # docker image tag $"($registry)/($image):latest" $"($registry)/($image):($tag)"
+
+    # if $push {
+
+    #     docker image push $"($registry)/($image):latest"
+
+    #     docker image push $"($registry)/($image):($tag)"
+    # }
 
 }

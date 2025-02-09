@@ -6,5 +6,7 @@ COPY package.json .
 RUN npm install
 COPY public/ /app/public
 COPY src/ /app/src
+ARG VERSION
+ENV VERSION=$VERSION
 
 CMD ["npm", "start"]
