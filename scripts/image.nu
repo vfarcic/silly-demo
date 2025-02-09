@@ -20,3 +20,19 @@ def "main build image" [
     }
 
 }
+
+# Retrieves a container registry address
+def "main get container_registry" [] {
+
+    mut registry = ""
+    if "CONTAINER_REGISTRY" in $env {
+        $registry = $env.CONTAINER_REGISTRY
+    } else {
+        let value = input $"(ansi green_bold)Enter container image registry \(e.g., `ghcr.io/vfarcic`\):(ansi reset) "
+        $registry = $value
+    }
+    $"export CONTAINER_REGISTRY=($registry)\n" | save --append .env
+
+    $registry
+
+}

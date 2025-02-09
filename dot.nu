@@ -242,3 +242,30 @@ def "update kcl" [
         | save kcl/values.yaml --force
 
 }
+
+def "main setup bake" [] {
+
+    rm --force .env
+
+    print $"
+Make sure to run Docker Desktop version (ansi yellow_bold)4.19.0(ansi reset) or higher.
+Press (ansi yellow_bold)any key(ansi reset) to continue.
+"
+    input
+
+    print $"
+Make sure that (ansi yellow_bold)Use containerd for pulling and storing images(ansi reset) in the General section of Docker Desktop Settings is (ansi yellow_bold)checked(ansi reset).
+See https://docs.docker.com/desktop/features/containerd for more details.
+Press (ansi yellow_bold)any key(ansi reset) to continue.
+"
+    input
+
+    let registry = main get container_registry
+
+    docker login $registry
+
+    $"export IMAGE=($registry)/silly-demo\n" | save --append .env
+
+    main print source
+
+}
