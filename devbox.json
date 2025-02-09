@@ -10,7 +10,7 @@
     "cosign@2.2.4",
     "path:gcloud#google-cloud-sdk",
     "nodejs@22.13.1",
-    "timoni@0.22.0",
+    "timoni@0.23.0",
     "viddy@1.1.5",
     "nushell@0.100.0",
     "teller@2.0.7",
