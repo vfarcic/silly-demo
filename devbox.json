@@ -2,7 +2,7 @@
   "packages": [
     "kind@0.22.0",
     "gh@2.66.1",
-    "kubectl@1.29.2",
+    "kubectl@1.32.1",
     "bat@0.25.0",
     "kubernetes-helm@3.17.0",
     "yq-go@4.43.1",
