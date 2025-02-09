@@ -8,7 +8,7 @@ def "main build image" [
     --push = true                  # Whether to push the image to the registry
 ] {
 
-    let pushArg = ""
+    mut pushArg = ""
     if $push {
         $pushArg = "--push"
     }
