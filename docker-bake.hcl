@@ -20,8 +20,8 @@ target "default" {
     tags = item.tags
     dockerfile = "Dockerfile"
     context = item.context
-    # platforms = ["linux/amd64", "linux/arm64"]
-    platforms = ["linux/amd64"]
+    platforms = ["linux/amd64", "linux/arm64"]
+    # platforms = ["linux/amd64"]
     args = {
         VERSION = TAG
     }
