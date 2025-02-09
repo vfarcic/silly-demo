@@ -14,14 +14,14 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: setup-containerd
-        env:
-          DOCKER_CLI_EXPERIMENTAL: enabled
-        uses: crazy-max/ghaction-setup-docker@v4
-        with:
-          version: v24.0.6
-          daemon-config: |
-            { "features": { "containerd-snapshotter": true } }
+      # - name: setup-containerd
+      #   env:
+      #     DOCKER_CLI_EXPERIMENTAL: enabled
+      #   uses: crazy-max/ghaction-setup-docker@v4
+      #   with:
+      #     version: v24.0.6
+      #     daemon-config: |
+      #       { "features": { "containerd-snapshotter": true } }
       - name: setup-qemu
         uses: docker/setup-qemu-action@v3
       - name: login-to-ghcr
@@ -36,10 +36,16 @@ jobs:
           project-path: devbox-ci.json
       - name: run-unit-tests
         run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
+      # - name: build-image
+      #   run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG --bake_target backend
+      #   env:
+      #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: build-image
-        run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG --bake_target backend
-        env:
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        uses: docker/bake-action@v6
+        with:
+          push: true
+          # set: |
+          #   *.tags=user/app:latest
       - name: update-manifests
         run: devbox run --config devbox-ci.json -- ./dot.nu update manifests $TAG
         env:
