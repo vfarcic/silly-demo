@@ -9,7 +9,7 @@
     "jq@1.7.1",
     "cosign@2.2.4",
     "path:gcloud#google-cloud-sdk",
-    "nodejs@22.6.0",
+    "nodejs@22.13.1",
     "timoni@0.22.0",
     "viddy@1.1.5",
     "nushell@0.100.0",
