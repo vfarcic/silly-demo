@@ -7,7 +7,7 @@
     "kubernetes-helm@3.17.0",
     "yq-go@4.43.1",
     "jq@1.7.1",
-    "cosign@2.2.4",
+    "cosign@2.4.2",
     "path:gcloud#google-cloud-sdk",
     "nodejs@22.13.1",
     "viddy@1.1.5",
