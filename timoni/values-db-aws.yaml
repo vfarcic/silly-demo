@@ -1,7 +1,0 @@
-values:
-  ingress:
-    className: traefik
-    host: silly-demo.127.0.0.1.nip.io
-  db:
-    enabled: true
-    provider: "aws"

@@ -40,22 +40,6 @@ curl -X POST "http://silly-demo.127.0.0.1.nip.io/video?id=2&title=else"
 curl "http://silly-demo.127.0.0.1.nip.io/videos" | jq .
 ```
 
-## App with OTEL
-
-```sh
-timoni build silly-demo timoni \
-    --values timoni/values-otel.yaml --namespace a-team \
-    | kubectl apply --filename -
-```
-
-## App with NATS
-
-```sh
-timoni build silly-demo timoni \
-    --values timoni/values-nats.yaml --namespace a-team \
-    | kubectl apply --filename -
-```
-
 ## Unit Tests
 
 ```sh
