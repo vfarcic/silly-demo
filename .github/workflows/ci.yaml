@@ -30,22 +30,16 @@ jobs:
           registry: ghcr.io
           username: vfarcic
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      # - name: install-devbox
-      #   uses: jetify-com/devbox-install-action@v0.12.0
-      #   with:
-      #     project-path: devbox-ci.json
-      # - name: run-unit-tests
-      #   run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
-      # - name: build-image
-      #   run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG --bake_target backend
-      #   env:
-      #     REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: build-image
-        uses: docker/bake-action@v6
+      - name: install-devbox
+        uses: jetify-com/devbox-install-action@v0.12.0
         with:
-          push: true
-          # set: |
-          #   *.tags=user/app:latest
+          project-path: devbox-ci.json
+      - name: run-unit-tests
+        run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
+      - name: build-image
+        run: devbox run --config devbox-ci.json -- ./dot.nu build image $TAG --bake_target backend
+        env:
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - name: update-manifests
         run: devbox run --config devbox-ci.json -- ./dot.nu update manifests $TAG
         env:
