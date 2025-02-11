@@ -14,9 +14,13 @@ def main [] {}
 # Creates a local Kubernetes cluster
 def "main setup" [] {
 
-    main create kubernetes kind 
+    rm --force .env
 
-    main apply ingress nginx --hyperscaler kind
+    let provider = main get provider
+
+    main create kubernetes $provider --min_nodes 1
+
+    main apply ingress nginx --hyperscaler $provider
 
     kubectl create namespace a-team
     

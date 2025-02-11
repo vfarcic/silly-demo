@@ -10,3 +10,5 @@ providers:
           cosign-password: COSIGN_PASSWORD
           github-token: GITHUB_TOKEN
           github-org: GITHUB_USER
+          upcloud-username: UPCLOUD_USERNAME
+          upcloud-password: UPCLOUD_PASSWORD
