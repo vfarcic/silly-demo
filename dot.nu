@@ -83,7 +83,7 @@ def "main deploy app" [
 
     sleep 60sec
 
-    kubectl --namespace a-team get pods,atlasschemas
+    kubectl --namespace a-team describe pods
 
     if $create_cluster {
         (
