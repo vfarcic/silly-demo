@@ -59,14 +59,14 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      # - id: deploy-app
-      #   name: Deploy App
-      #   run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
-      # - id: run-integration-tests
-      #   name: Run Integration Tests
-      #   run: |
-      #     source .env
-      #     devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
+      - id: deploy-app
+        name: Deploy App
+        run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
+      - id: run-integration-tests
+        name: Run Integration Tests
+        run: |
+          source .env
+          devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
       - id: commit-changes
         name: Commit Changes
         run: |
