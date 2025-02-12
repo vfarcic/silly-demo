@@ -10,3 +10,5 @@
 /tmp/*.sql
 /.env
 /devbox.lock
+/semver
+
