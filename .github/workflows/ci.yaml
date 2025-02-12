@@ -13,8 +13,10 @@ jobs:
       FORCE_COLOR: 1
     steps:
       - id: checkout
+        name: Checkout
         uses: actions/checkout@v4
       - id: setup-containerd
+        name: Setup Containerd
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
         uses: crazy-max/ghaction-setup-docker@v4
@@ -23,46 +25,57 @@ jobs:
           daemon-config: |
             { "features": { "containerd-snapshotter": true } }
       - id: setup-qemu
+        name: Setup QEMU
         uses: docker/setup-qemu-action@v3
       - id: login-to-ghcr
+        name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: vfarcic
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - id: install-devbox
+        name: Install Devbox
         uses: jetify-com/devbox-install-action@v0.12.0
         with:
           project-path: devbox-ci.json
       - id: generate-semver
+        name: Generate Semver
         run: | 
           devbox run --config devbox-ci.json -- GOBIN=$PWD go install github.com/maykonlsf/semver-cli/cmd/semver@latest
           devbox run --config devbox-ci.json -- echo "tag=$(./semver up release)" >> "$GITHUB_OUTPUT"
       - id: run-unit-tests
+        name: Run Unit Tests
         run: devbox run --config devbox-ci.json -- ./dot.nu run unit_tests
       - id: build-image
+        name: Build Image
         run: devbox run --config devbox-ci.json -- ./dot.nu build image ${{ steps.generate-semver.outputs.tag }} --bake_target backend
         env:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - id: update-manifests
+        name: Update Manifests
         run: devbox run --config devbox-ci.json -- ./dot.nu update manifests ${{ steps.generate-semver.outputs.tag }}
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - id: deploy-app
+        name: Deploy App
         run: devbox run --config devbox-ci.json -- ./dot.nu deploy app
       - id: run-integration-tests
+        name: Run Integration Tests
         run: |
           source .env
           devbox run --config devbox-ci.json -- ./dot.nu run integration_tests
       - id: commit-changes
+        name: Commit Changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
           git commit -m "Release ${{ steps.generate-semver.outputs.tag }} [skip ci]"
       - id: push-changes
+        name: Push Changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

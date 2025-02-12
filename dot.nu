@@ -58,6 +58,8 @@ def "main deploy app" [
     --create_cluster = true # Whether to create a cluster
 ] {
 
+    print "000"
+
     if $create_cluster {
 
         main create kubernetes kind
@@ -72,8 +74,12 @@ def "main deploy app" [
 
     }
 
+    print "111"
+
     kcl run kcl/main.k -D db.enabled=true
         | kubectl --namespace a-team apply --filename -
+
+    print "222"
 
     if $create_cluster {
         (
@@ -82,6 +88,8 @@ def "main deploy app" [
                 --for=condition=ready --timeout=300s
         )
     }
+
+    print "333"
 
 }
 
