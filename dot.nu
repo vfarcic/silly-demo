@@ -12,17 +12,25 @@ source  scripts/atlas.nu
 def main [] {}
 
 # Creates a local Kubernetes cluster
-def "main setup" [] {
+def "main setup" [
+    --provider = ""
+] {
 
     rm --force .env
 
-    let provider = main get provider
+    mut provider = $provider
+
+    if $provider == "" {
+        $provider = main get provider
+    }
 
     main create kubernetes $provider --min_nodes 1
 
     main apply ingress nginx --hyperscaler $provider
 
     kubectl create namespace a-team
+
+    main print source
     
 }
 
