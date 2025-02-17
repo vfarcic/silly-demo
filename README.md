@@ -2,6 +2,7 @@
 
 ## Demo Manifests and Code Used in DevOps Toolkit Videos
 
+[![Say Goodbye to Tedious Docker Commands: Embrace Docker to Bake Images](https://img.youtube.com/vi/3Fc7YuTWptw/0.jpg)](https://youtu.be/3Fc7YuTWptw)
 [![Stop Losing Requests! Learn Graceful Shutdown Techniques](https://img.youtube.com/vi/eQPYsGrZW_E/0.jpg)](https://youtu.be/eQPYsGrZW_E)
 
 ## Common
