@@ -11,7 +11,7 @@ require (
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/nats-io/nats.go v1.39.0
 	github.com/open-feature/go-sdk v1.14.1
-	github.com/open-feature/go-sdk-contrib/providers/flagd v0.2.4
+	github.com/open-feature/go-sdk-contrib/providers/flagd v0.2.5
 	github.com/stretchr/testify v1.10.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -53,8 +53,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nats-io/nkeys v0.4.9 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/open-feature/flagd-schemas v0.2.9-0.20250106184836-37baa2cdea48 // indirect
-	github.com/open-feature/flagd/core v0.10.8 // indirect
+	github.com/open-feature/flagd-schemas v0.2.9-0.20250127221449-bb763438abc5 // indirect
+	github.com/open-feature/flagd/core v0.11.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
