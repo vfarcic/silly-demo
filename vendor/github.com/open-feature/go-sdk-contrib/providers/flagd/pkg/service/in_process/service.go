@@ -27,7 +27,7 @@ type InProcess struct {
 	events           chan of.Event
 	listenerShutdown chan interface{}
 	logger           *logger.Logger
-	serviceMetadata  map[string]interface{}
+	serviceMetadata  model.Metadata
 	sync             sync.ISync
 	syncEnd          context.CancelFunc
 }
@@ -36,6 +36,7 @@ type Configuration struct {
 	Host                  any
 	Port                  any
 	TargetUri             string
+	ProviderID            string
 	Selector              string
 	TLSEnabled            bool
 	OfflineFlagSource     string
@@ -49,10 +50,13 @@ func NewInProcessService(cfg Configuration) *InProcess {
 	iSync, uri := makeSyncProvider(cfg, log)
 
 	// service specific metadata
-	var svcMetadata map[string]interface{}
+	var svcMetadata model.Metadata
 	if cfg.Selector != "" {
-		svcMetadata = make(map[string]interface{}, 1)
+		svcMetadata = make(model.Metadata, 1)
 		svcMetadata["scope"] = cfg.Selector
+	}
+	if cfg.ProviderID != "" {
+		svcMetadata["providerID"] = cfg.ProviderID
 	}
 
 	flagStore := store.NewFlags()
@@ -264,7 +268,7 @@ func (i *InProcess) EventChannel() <-chan of.Event {
 	return i.events
 }
 
-func (i *InProcess) appendMetadata(evalMetadata map[string]interface{}) {
+func (i *InProcess) appendMetadata(evalMetadata model.Metadata) {
 	// For a nil slice, the number of iterations is 0
 	for k, v := range i.serviceMetadata {
 		evalMetadata[k] = v
@@ -301,6 +305,7 @@ func makeSyncProvider(cfg Configuration, log *logger.Logger) (sync.ISync, string
 		CredentialBuilder: &credentials.CredentialBuilder{},
 		Logger:            log,
 		Secure:            cfg.TLSEnabled,
+		ProviderID:        cfg.ProviderID,
 		Selector:          cfg.Selector,
 		URI:               uri,
 	}, uri
