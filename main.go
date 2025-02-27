@@ -53,7 +53,7 @@ func main() {
 	router.GET("/fibonacci", handlers.FibonacciHandler)
 	router.POST("/video", videoPostHandler)
 	router.GET("/videos", videosGetHandler)
-	router.GET("/ping", pingHandler)
+	router.GET("/ping", handlers.PingHandler)
 	router.GET("/memory-leak", memoryLeakHandler)
 	router.GET("/", rootHandler)
 	port := os.Getenv("PORT")
