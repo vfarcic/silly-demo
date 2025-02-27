@@ -1,4 +1,4 @@
-tag: v1.5.19
+tag: v1.5.20
 image: ghcr.io/vfarcic/silly-demo
 replicas: 2
 autoscaling:
