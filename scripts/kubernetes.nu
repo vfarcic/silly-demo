@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 
 def --env "main create kubernetes" [
-    hyperscaler: string,
+    provider: string,
     --name = "dot",
     --min_nodes = 2,
     --max_nodes = 4,
@@ -14,104 +14,83 @@ def --env "main create kubernetes" [
     $"export KUBECONFIG=($env.KUBECONFIG)\n" | save --append .env
     $"export KUBECONFIG_($name | str upcase)=($env.KUBECONFIG)\n" | save --append .env
 
-    if $hyperscaler == "google" {
-
-        if $auth {
-            gcloud auth login
-        }
-
-        mut project_id = ""
-        if PROJECT_ID in $env and not $auth {
-            $project_id = $env.PROJECT_ID
-        } else {
-            $project_id = $"dot-(date now | format date "%Y%m%d%H%M%S")"
-            $env.PROJECT_ID = $project_id
-            $"export PROJECT_ID=($project_id)\n" | save --append .env
-
-            gcloud projects create $project_id
-
-            start $"https://console.cloud.google.com/marketplace/product/google/container.googleapis.com?project=($project_id)"
-    
-            print $"(ansi yellow_bold)
-ENABLE(ansi reset) the API.
-Press any key to continue.
-"
-            input
-        }
-
-        mut vm_size = "e2-standard-2"
-        if $node_size == "medium" {
-            $vm_size = "e2-standard-4"
-        } else if $node_size == "large" {
-            $vm_size = "e2-standard-8"
-        }
+    if $provider == "google" {
 
         (
-            gcloud container clusters create $name --project $project_id
-                --zone us-east1-b --machine-type $vm_size
-                --enable-autoscaling --num-nodes $min_nodes
-                --min-nodes $min_nodes --max-nodes $max_nodes
-                --enable-network-policy --no-enable-autoupgrade
+            create gke --name $name --node_size $node_size
+                --min_nodes $min_nodes --max_nodes $max_nodes
+                --auth $auth
         )
 
-        (
-            gcloud container clusters get-credentials $name
-                --project $project_id --zone us-east1-b
-        )
-
-    } else if $hyperscaler == "aws" {
+    } else if $provider == "aws" {
 
         (
             create eks  --name $name --node_size $node_size
                 --min_nodes $min_nodes --max_nodes $max_nodes
         )
 
-    } else if $hyperscaler == "azure" {
+    } else if $provider == "azure" {
 
-        mut tenant_id = ""
-        let location = "eastus"
+        (
+            create aks --name $name --node_size $node_size
+                --min_nodes $min_nodes --max_nodes $max_nodes
+        )
 
-        if AZURE_TENANT in $env {
-            $tenant_id = $env.AZURE_TENANT
+    } else if $provider == "upcloud" {
+
+        print $"
+Visit https://upcloud.com to (ansi yellow_bold)sign up(ansi reset) if you haven't already.
+Make sure that (ansi yellow_bold)Allow API connections from all networks(ansi reset) is checked inside the https://hub.upcloud.com/account/overview page.
+Install `(ansi yellow_bold)upctl(ansi reset)` from https://upcloudltd.github.io/upcloud-cli if you do not already have it.
+Press (ansi yellow_bold)any key(ansi reset) to continue.
+"
+        input
+
+        mut upcloud_username = ""
+        if UPCLOUD_USERNAME in $env {
+            $upcloud_username = $env.UPCLOUD_USERNAME
         } else {
-            $tenant_id = input $"(ansi green_bold)Enter Azure Tenant ID: (ansi reset)"
+            $upcloud_username = input $"(ansi green_bold)Enter UpCloud username: (ansi reset)"
+            $env.UPCLOUD_USERNAME = $upcloud_username
         }
-
-        if $auth {
-            az login --tenant $tenant_id
-        }
-
-        mut resource_group = ""
-        if RESOURCE_GROUP in $env {
-            $resource_group = $env.RESOURCE_GROUP
+        $"export UPCLOUD_USERNAME=($upcloud_username)\n"
+            | save --append .env
+    
+        mut upcloud_password = ""
+        if UPCLOUD_PASSWORD in $env {
+            $upcloud_password = $env.UPCLOUD_PASSWORD
         } else {
-            $resource_group = $"dot-(date now | format date "%Y%m%d%H%M%S")"
-            $env.RESOURCE_GROUP = $resource_group
-            $"export RESOURCE_GROUP=($resource_group)\n" | save --append .env
-            az group create --name $resource_group --location $location
+            $upcloud_password = input $"(ansi green_bold)Enter UpCloud password: (ansi reset)" --suppress-output
+            $env.UPCLOUD_PASSWORD = $upcloud_password
         }
-        mut vm_size = "Standard_B2s"
+        $"export UPCLOUD_PASSWORD=($upcloud_password)\n"
+            | save --append .env
+        print ""
+
+        mut vm_size = "2xCPU-4GB"
         if $node_size == "medium" {
-            $vm_size = "Standard_B4ms"
+            $vm_size = "4xCPU-8GB"
         } else if $node_size == "large" {
-            $vm_size = "Standard_B8ms"
+            $vm_size = "8xCPU-32GB"
         }
 
+        do --ignore-errors {(
+            upctl network create --name $name --zone us-nyc1
+                --ip-network address="10.0.1.0/24,dhcp=true"
+        )}
+
         (
-            az aks create --resource-group $resource_group --name $name
-                --node-count $min_nodes --min-count $min_nodes
-                --max-count $max_nodes
-                --node-vm-size $vm_size
-                --enable-managed-identity --generate-ssh-keys
-                --enable-cluster-autoscaler --yes
+            upctl kubernetes create --name $name --zone us-nyc1
+                --node-group $"count=($min_nodes),name=main,plan=($vm_size)"
+                --network dot --kubernetes-api-allow-ip 
         )
 
         (
-            az aks get-credentials --resource-group $resource_group
-                --name $name --file $env.KUBECONFIG
+            upctl kubernetes config $name --output yaml
+                --write $env.KUBECONFIG
         )
 
-    } else if $hyperscaler == "kind" {
+    } else if $provider == "kind" {
 
         mut config = {
             kind: "Cluster"
@@ -150,7 +129,7 @@ nodeRegistration:
     
     } else {
 
-        print $"(ansi red_bold)($hyperscaler)(ansi reset) is not a supported."
+        print $"(ansi red_bold)($provider)(ansi reset) is not a supported."
         exit 1
 
     }
@@ -160,12 +139,12 @@ nodeRegistration:
 }
 
 def "main destroy kubernetes" [
-    hyperscaler: string
+    provider: string
     --name = "dot"
     --delete_project = true
 ] {
 
-    if $hyperscaler == "google" {
+    if $provider == "google" {
 
         rm --force kubeconfig.yaml
 
@@ -178,7 +157,7 @@ def "main destroy kubernetes" [
             gcloud projects delete $env.PROJECT_ID --quiet
         }
     
-    } else if $hyperscaler == "aws" {
+    } else if $provider == "aws" {
 
         (
             eksctl delete addon --name aws-ebs-csi-driver
@@ -197,7 +176,7 @@ def "main destroy kubernetes" [
                 --wait
         )
 
-    } else if $hyperscaler == "azure" {
+    } else if $provider == "azure" {
 
         (
             az aks delete --resource-group $env.RESOURCE_GROUP
@@ -210,7 +189,15 @@ def "main destroy kubernetes" [
 
         }
 
-    } else if $hyperscaler == "kind" {
+    } else if $provider == "upcloud" {
+
+        upctl kubernetes delete $name
+
+        # FIXME: Sleep for 60 seconds?
+
+        upctl network delete $name
+
+    } else if $provider == "kind" {
 
         kind delete cluster --name $name
 
@@ -313,7 +300,113 @@ def "main create kubernetes_creds" [
 
 }
 
-def "create eks" [
+def --env "create aks" [
+    --name = "dot",
+    --min_nodes = 2,
+    --max_nodes = 4,
+    --node_size = "small" # Supported values: small, medium, large
+    --auth = true
+] {
+
+    mut tenant_id = ""
+    let location = "eastus"
+
+    if AZURE_TENANT in $env {
+        $tenant_id = $env.AZURE_TENANT
+    } else {
+        $tenant_id = input $"(ansi green_bold)Enter Azure Tenant ID: (ansi reset)"
+    }
+
+    if $auth {
+        az login --tenant $tenant_id
+    }
+
+    mut resource_group = ""
+    if RESOURCE_GROUP in $env {
+        $resource_group = $env.RESOURCE_GROUP
+    } else {
+        $resource_group = $"dot-(date now | format date "%Y%m%d%H%M%S")"
+        $env.RESOURCE_GROUP = $resource_group
+        $"export RESOURCE_GROUP=($resource_group)\n" | save --append .env
+        az group create --name $resource_group --location $location
+    }
+    mut vm_size = "Standard_B2s"
+    if $node_size == "medium" {
+        $vm_size = "Standard_B4ms"
+    } else if $node_size == "large" {
+        $vm_size = "Standard_B8ms"
+    }
+
+    (
+        az aks create --resource-group $resource_group --name $name
+            --node-count $min_nodes --min-count $min_nodes
+            --max-count $max_nodes
+            --node-vm-size $vm_size
+            --enable-managed-identity --generate-ssh-keys
+            --enable-cluster-autoscaler --yes
+    )
+
+    (
+        az aks get-credentials --resource-group $resource_group
+            --name $name --file $env.KUBECONFIG
+    )
+
+}
+
+def --env "create gke" [
+    --name = "dot",
+    --min_nodes = 2,
+    --max_nodes = 4,
+    --node_size = "small" # Supported values: small, medium, large
+    --auth = true
+] {
+
+    if $auth {
+        gcloud auth login
+    }
+
+    mut project_id = ""
+    if PROJECT_ID in $env and not $auth {
+        $project_id = $env.PROJECT_ID
+    } else {
+        $project_id = $"dot-(date now | format date "%Y%m%d%H%M%S")"
+        $env.PROJECT_ID = $project_id
+        $"export PROJECT_ID=($project_id)\n" | save --append .env
+
+        gcloud projects create $project_id
+
+        start $"https://console.cloud.google.com/marketplace/product/google/container.googleapis.com?project=($project_id)"
+
+        print $"
+    (ansi yellow_bold)ENABLE(ansi reset) the API.
+    Press (ansi yellow_bold)any key(ansi reset) to continue.
+    "
+        input
+    }
+
+    mut vm_size = "e2-standard-2"
+    if $node_size == "medium" {
+        $vm_size = "e2-standard-4"
+    } else if $node_size == "large" {
+        $vm_size = "e2-standard-8"
+    }
+
+    (
+        gcloud container clusters create $name --project $project_id
+            --zone us-east1-b --machine-type $vm_size
+            --enable-autoscaling --num-nodes $min_nodes
+            --min-nodes $min_nodes --max-nodes $max_nodes
+            --enable-network-policy --no-enable-autoupgrade
+    )
+
+    (
+        gcloud container clusters get-credentials $name
+            --project $project_id --zone us-east1-b
+    )
+
+}
+
+def --env "create eks" [
     --name = "dot",
     --min_nodes = 2,
     --max_nodes = 4,
