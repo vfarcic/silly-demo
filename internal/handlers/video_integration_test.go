@@ -1,6 +1,6 @@
 //go:build integration
 
-package main
+package handlers
 
 import (
 	"encoding/json"

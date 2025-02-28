@@ -51,8 +51,8 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 	router.GET("/fibonacci", handlers.FibonacciHandler)
-	router.POST("/video", videoPostHandler)
-	router.GET("/videos", videosGetHandler)
+	router.POST("/video", handlers.VideoPostHandler)
+	router.GET("/videos", handlers.VideosGetHandler)
 	router.GET("/ping", handlers.PingHandler)
 	router.GET("/memory-leak", memoryLeakHandler)
 	router.GET("/", rootHandler)

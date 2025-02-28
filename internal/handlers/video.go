@@ -1,8 +1,7 @@
-package main
+package handlers
 
 import (
 	"context"
-	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -27,7 +26,7 @@ func getConn() *pgx.Conn {
 	return conn
 }
 
-func videosGetHandler(ctx *gin.Context) {
+func VideosGetHandler(ctx *gin.Context) {
 	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	var videos []Video
 	conn := getConn()
@@ -37,7 +36,7 @@ func videosGetHandler(ctx *gin.Context) {
 	defer conn.Close(context.Background())
 	rows, err := conn.Query(context.Background(), "SELECT id, title FROM videos")
 	if err != nil {
-		httpErrorInternalServerError(err, ctx)
+		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 	defer rows.Close()
@@ -45,7 +44,7 @@ func videosGetHandler(ctx *gin.Context) {
 		var video Video
 		err := rows.Scan(&video.ID, &video.Title)
 		if err != nil {
-			httpErrorInternalServerError(err, ctx)
+			ctx.String(http.StatusInternalServerError, err.Error())
 			return
 		}
 		videos = append(videos, video)
@@ -53,16 +52,16 @@ func videosGetHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, videos)
 }
 
-func videoPostHandler(ctx *gin.Context) {
+func VideoPostHandler(ctx *gin.Context) {
 	slog.Debug("Handling request", "URI", ctx.Request.RequestURI)
 	id := ctx.Query("id")
 	if len(id) == 0 {
-		httpErrorBadRequest(errors.New("id is empty"), ctx)
+		ctx.String(http.StatusBadRequest, "id is empty")
 		return
 	}
 	title := ctx.Query("title")
 	if len(title) == 0 {
-		httpErrorBadRequest(errors.New("title is empty"), ctx)
+		ctx.String(http.StatusBadRequest, "title is empty")
 		return
 	}
 	video := &Video{
@@ -76,7 +75,7 @@ func videoPostHandler(ctx *gin.Context) {
 	defer conn.Close(context.Background())
 	_, err := conn.Exec(context.Background(), "INSERT INTO videos(id, title) VALUES ($1, $2)", video.ID, video.Title)
 	if err != nil {
-		httpErrorInternalServerError(err, ctx)
+		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 }
