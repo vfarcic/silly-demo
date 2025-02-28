@@ -1,13 +1,13 @@
 #!/usr/bin/env nu
 
 def "main get provider" [] {
-    let hyperscaler = [aws azure google local upcloud]
+    let provider = [aws azure google local upcloud]
         | input list $"(ansi yellow_bold)Which Hyperscaler do you want to use?(ansi green_bold)"
     print $"(ansi reset)"
 
-    $"export HYPERSCALER=($hyperscaler)\n" | save --append .env
+    $"export HYPERSCALER=($provider)\n" | save --append .env
 
-    $hyperscaler
+    $provider
 }
 
 def "main print source" [] {

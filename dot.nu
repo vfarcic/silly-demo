@@ -152,7 +152,9 @@ def "main run ci" [
 
 def "main setup devcontainers" [] {
 
-    main create kubernetes kind
+    let provider = main get provider
+
+    main create kubernetes $provider
 
     main get github
 
