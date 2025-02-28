@@ -162,7 +162,7 @@ def "main setup devcontainers" [] {
 
 def "main destroy devcontainers" [] {
 
-    rm --force .devcontainer
+    rm --recursive --force .devcontainer
 
     main destroy kubernetes kind
 
