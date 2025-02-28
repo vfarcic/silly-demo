@@ -15,8 +15,8 @@
     "timoni@0.22.0",
     "viddy@1.1.5",
     "nushell@0.100.0",
-    "teller@2.0.7"
-    "air@1.61.5"
+    "teller@2.0.7",
+    "git@2.48.1"
   ],
   "shell": {
     "init_hook": [],
