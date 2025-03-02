@@ -9,19 +9,17 @@ def "main build image" [
     --builder = "docker"                         # Image builder; currently supported are: `docker` and `kaniko`
     --push = true                                # Whether to push the image to the registry
     --dockerfile = "Dockerfile"                  # Path to Dockerfile
-    --platforms = ["linux/amd64", "linux/arm64"] # Platforms for the image
 ] {
 
     if $builder == "docker" {
 
-        for platform in $platforms {(
+        (
             docker image build
                 --tag $"($registry)/($registry_user)/($image):latest"
                 --tag $"($registry)/($registry_user)/($image):($tag)"
                 --file $dockerfile
-                --platform $platform
                 .
-        )}
+        )
 
         if $push {
 

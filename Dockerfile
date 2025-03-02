@@ -5,7 +5,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 ADD ./vendor .
 COPY . .
-RUN go build -o silly-demo
+RUN GOOS=linux GOARCH=amd64 go build -o silly-demo
 RUN chmod +x silly-demo
 
 FROM scratch
