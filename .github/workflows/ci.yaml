@@ -50,8 +50,8 @@ jobs:
       - id: build-image
         name: Build Image
         run: |
-          devbox run --config devbox-ci.json -- ./dot.nu build image ${{ steps.generate-semver.outputs.tag }} --bake_target backend --platform "linux/amd64"
-          devbox run --config devbox-ci.json -- ./dot.nu build image ${{ steps.generate-semver.outputs.tag }} --bake_target backend --platform "linux/arm64"
+          devbox run --config devbox-ci.json -- ./dot.nu build image ${{ steps.generate-semver.outputs.tag }}
+          # devbox run --config devbox-ci.json -- ./dot.nu build image ${{ steps.generate-semver.outputs.tag }}
         env:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       - id: update-manifests
