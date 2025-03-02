@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 
 def "main get provider" [] {
-    let hyperscaler = [aws azure google local upcloud]
+    let hyperscaler = [aws azure google kind upcloud]
         | input list $"(ansi yellow_bold)Which Hyperscaler do you want to use?(ansi green_bold)"
     print $"(ansi reset)"
 
