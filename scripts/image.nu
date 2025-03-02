@@ -2,26 +2,26 @@
 
 # Builds a container image
 def "main build image" [
-    tag: string                            # The tag of the image (e.g., 0.0.1)
-    --registry = "ghcr.io"                 # Image registry (e.g., ghcr.io)
-    --registry_user = "vfarcic"            # Image registry user (e.g., vfarcic)
-    --image = "silly-demo"                 # Image name (e.g., silly-demo)
-    --builder = "docker"                   # Image builder; currently supported are: `docker` and `kaniko`
-    --push = true                          # Whether to push the image to the registry
-    --dockerfile = "Dockerfile"            # Path to Dockerfile
-    --platform = "linux/amd64,linux/arm64" # Platform for the image
+    tag: string                                  # The tag of the image (e.g., 0.0.1)
+    --registry = "ghcr.io"                       # Image registry (e.g., ghcr.io)
+    --registry_user = "vfarcic"                  # Image registry user (e.g., vfarcic)
+    --image = "silly-demo"                       # Image name (e.g., silly-demo)
+    --builder = "docker"                         # Image builder; currently supported are: `docker` and `kaniko`
+    --push = true                                # Whether to push the image to the registry
+    --dockerfile = "Dockerfile"                  # Path to Dockerfile
+    --platforms = ["linux/amd64", "linux/arm64"] # Platforms for the image
 ] {
 
     if $builder == "docker" {
 
-        (
+        for platform in $platforms {(
             docker image build
                 --tag $"($registry)/($registry_user)/($image):latest"
                 --tag $"($registry)/($registry_user)/($image):($tag)"
                 --file $dockerfile
                 --platform $platform
                 .
-        )
+        )}
 
         if $push {
 
