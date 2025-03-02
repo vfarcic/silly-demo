@@ -15,15 +15,15 @@ jobs:
       - id: checkout
         name: Checkout
         uses: actions/checkout@v4
-      - id: setup-containerd
-        name: Setup Containerd
-        env:
-          DOCKER_CLI_EXPERIMENTAL: enabled
-        uses: crazy-max/ghaction-setup-docker@v4
-        with:
-          version: v24.0.6
-          daemon-config: |
-            { "features": { "containerd-snapshotter": true } }
+      # - id: setup-containerd
+      #   name: Setup Containerd
+      #   env:
+      #     DOCKER_CLI_EXPERIMENTAL: enabled
+      #   uses: crazy-max/ghaction-setup-docker@v4
+      #   with:
+      #     version: v24.0.6
+      #     daemon-config: |
+      #       { "features": { "containerd-snapshotter": true } }
       - id: setup-qemu
         name: Setup QEMU
         uses: docker/setup-qemu-action@v3
