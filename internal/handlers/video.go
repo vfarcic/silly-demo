@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -18,9 +19,17 @@ type Video struct {
 
 func getConn() *pgx.Conn {
 	url := os.Getenv("DB_URI")
+	if url == "" {
+		user := os.Getenv("DB_USER")
+		pass := os.Getenv("DB_PASS")
+		endpoint := os.Getenv("DB_ENDPOINT")
+		port := os.Getenv("DB_PORT")
+		name := os.Getenv("DB_NAME")
+		url = fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, pass, endpoint, port, name)
+	}
 	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
-		slog.Error("Failed to parse DB_URL", "error", err)
+		slog.Error("Failed to connect to the database", "error", err)
 		return nil
 	}
 	return conn
@@ -31,6 +40,7 @@ func VideosGetHandler(ctx *gin.Context) {
 	var videos []Video
 	conn := getConn()
 	if conn == nil {
+		ctx.String(http.StatusInternalServerError, "Failed to connect to the database")
 		return
 	}
 	defer conn.Close(context.Background())
@@ -70,6 +80,7 @@ func VideoPostHandler(ctx *gin.Context) {
 	}
 	conn := getConn()
 	if conn == nil {
+		ctx.String(http.StatusInternalServerError, "Failed to connect to the database")
 		return
 	}
 	defer conn.Close(context.Background())
@@ -78,4 +89,5 @@ func VideoPostHandler(ctx *gin.Context) {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
+	ctx.String(http.StatusOK, "Video added successfully")
 }
