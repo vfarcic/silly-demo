@@ -4,6 +4,9 @@ variable "IMAGE" {
 variable "TAG" {
     default = "dev"
 }
+variable "PLATFORM" {
+    default = "linux/amd64"
+}
 target "default" {
     name = item.name
     matrix = {
@@ -20,8 +23,9 @@ target "default" {
     tags = item.tags
     dockerfile = "Dockerfile"
     context = item.context
-    platforms = ["linux/amd64", "linux/arm64"]
+    # platforms = ["linux/amd64", "linux/arm64"]
     # platforms = ["linux/amd64"]
+    platforms = ["${PLATFORM}"]
     args = {
         VERSION = TAG
     }
