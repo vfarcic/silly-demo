@@ -20,8 +20,8 @@ type Video struct {
 func getConn() *pgx.Conn {
 	url := os.Getenv("DB_URI")
 	if url == "" {
-		user := os.Getenv("DB_USER")
-		pass := os.Getenv("DB_PASS")
+		user := os.Getenv("DB_USERNAME")
+		pass := os.Getenv("DB_PASSWORD")
 		endpoint := os.Getenv("DB_ENDPOINT")
 		port := os.Getenv("DB_PORT")
 		name := os.Getenv("DB_NAME")
