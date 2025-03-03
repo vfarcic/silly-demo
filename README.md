@@ -75,5 +75,5 @@ source .env
 ## Destroy
 
 ```sh
-./dot.nu destroy
+./dot.nu destroy $HYPERSCALER
 ```

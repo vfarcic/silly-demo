@@ -1,13 +1,13 @@
 #!/usr/bin/env nu
 
 def "main get provider" [] {
-    let hyperscaler = [aws azure google kind upcloud]
-        | input list $"(ansi yellow_bold)Which Hyperscaler do you want to use?(ansi green_bold)"
+    let provider = [aws azure google kind upcloud]
+        | input list $"(ansi yellow_bold)Which provider do you want to use?(ansi green_bold)"
     print $"(ansi reset)"
 
-    $"export HYPERSCALER=($hyperscaler)\n" | save --append .env
+    $"export PROVIDER=($provider)\n" | save --append .env
 
-    $hyperscaler
+    $provider
 }
 
 def "main print source" [] {
@@ -27,17 +27,17 @@ def "main delete temp_files" [] {
 }
 
 def --env "main get creds" [
-    hyperscaler: string,
+    provider: string,
 ] {
 
-    mut creds = {hyperscaler: $hyperscaler}
+    mut creds = {provider: $provider}
 
-    if $hyperscaler == "google" {
+    if $provider == "google" {
 
         gcloud auth login
 
 
-    } else if $hyperscaler == "aws" {
+    } else if $provider == "aws" {
 
         mut aws_access_key_id = ""
         if AWS_ACCESS_KEY_ID in $env {
@@ -70,7 +70,7 @@ def --env "main get creds" [
             | save --append .env
         $creds = ( $creds | upsert aws_account_id $aws_account_id )
 
-    } else if $hyperscaler == "azure" {
+    } else if $provider == "azure" {
 
         mut tenant_id = ""
 
@@ -85,7 +85,7 @@ def --env "main get creds" [
     
     } else {
 
-        print $"(ansi red_bold)($hyperscaler)(ansi reset) is not a supported."
+        print $"(ansi red_bold)($provider)(ansi reset) is not a supported."
         exit 1
 
     }

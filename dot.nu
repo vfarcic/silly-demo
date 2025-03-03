@@ -125,7 +125,7 @@ def "main run ci" [
 }
 
 def "main destroy" [
-    --provider: string
+    provider: string
 ] {
 
     main destroy kubernetes $provider
