@@ -19,3 +19,23 @@ Ingress = {
         }]
     }
 }
+
+IngressFrontEnd = {
+    apiVersion = "networking.k8s.io/v1"
+    kind = "Ingress"
+    metadata = common.MetadataFrontEnd
+    spec = {
+        ingressClassName = common.Values.ingress.className
+        rules: [{
+            host = common.Values.frontend.host
+            http.paths: [{
+                path = "/"
+                pathType = "ImplementationSpecific"
+                backend.service = {
+                    name = common.Name + "-frontend"
+                    port.number = 3000
+                }
+            }]
+        }]
+    }
+}

@@ -5,6 +5,7 @@ import db
 
 _tag = common.Values.tag
 _probe = core.Probe { httpGet = { path = "/", port = 8080 } }
+_probeFrontend = core.Probe { httpGet = { path = "/", port = 3000 } }
 
 Deployment = apps.Deployment {
     metadata = common.Metadata
@@ -39,6 +40,42 @@ Deployment = apps.Deployment {
                             name = "DB_URI"
                             valueFrom.secretKeyRef = { name = db.SecretName, key = "uri" }
                         }]
+                }]
+            }
+        }
+    }
+}
+
+DeploymentFrontEnd = apps.Deployment {
+    metadata = common.MetadataFrontEnd
+    spec = {
+        selector = {
+            matchLabels = metadata.labels
+        }
+        template = {
+            metadata.labels = metadata.labels
+            spec = {
+                shareProcessNamespace = True
+                containers = [{
+                    name = "main"
+                    image = "${common.Values.frontend.image}:${common.Values.frontend.tag}"
+                    ports = [{ containerPort = 3000 }]
+                    livenessProbe = _probeFrontend
+                    readinessProbe = _probeFrontend
+                    resources = {
+                        limits = {
+                            cpu = "1000m"
+                            memory = "1024Mi"
+                        }
+                        requests = {
+                            cpu = "500m"
+                            memory = "512Mi"
+                        }
+                    }
+                    env = [{
+                        name = "REACT_APP_BACKEND_URL"
+                        value = "http://" + common.Values.ingress.host
+                    }]
                 }]
             }
         }

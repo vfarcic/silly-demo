@@ -9,4 +9,4 @@ COPY src/ /app/src
 ARG VERSION
 ENV VERSION=$VERSION
 
-CMD ["npm", "start"]
+CMD ["npm", "start", "--host", "0.0.0.0"]

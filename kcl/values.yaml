@@ -9,3 +9,8 @@ db:
 ingress:
   host: silly-demo.127.0.0.1.nip.io
   className: nginx
+frontend:
+  enabled: false
+  host: silly-demo-frontend.127.0.0.1.nip.io
+  tag: "0.0.4"
+  image: ghcr.io/vfarcic/silly-demo-frontend

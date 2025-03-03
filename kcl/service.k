@@ -14,3 +14,17 @@ Service = core.Service {
         type = "ClusterIP"
     }
 }
+
+ServiceFrontEnd = core.Service {
+    metadata = common.MetadataFrontEnd
+    spec = {
+        ports = [{
+            name = "http"
+            port = 3000
+            protocol = "TCP"
+            targetPort = 3000
+        }]
+        selector = metadata.labels
+        type = "ClusterIP"
+    }
+}
