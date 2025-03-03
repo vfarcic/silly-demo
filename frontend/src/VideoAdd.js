@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 
-const url = process.env.REACT_APP_BACKEND_URL;
-
-const VideoAdd = () => {
+const VideoAdd = ({ url }) => {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
 

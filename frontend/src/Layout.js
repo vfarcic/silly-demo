@@ -1,9 +1,13 @@
 import { Outlet, Link } from "react-router-dom";
+import Root from './Root';
+
+const url = process.env.REACT_APP_BACKEND_URL;
 
 const Layout = () => {
   return (
     <div className="App">
     <>
+      <Root url={url} />
       <nav>
         <div>
             <Link to="/video-add">Add Video</Link>

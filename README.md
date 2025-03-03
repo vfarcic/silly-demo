@@ -10,18 +10,31 @@
 ```sh
 chmod +x dot.nu
 
-./dot.nu setup
+./dot.nu setup --provider kind
 
 source .env
 ```
 
-## App Alone
+## Backend with CNPG PostgreSQL
 
 ```sh
-kubectl --namespace a-team apply --filename k8s
+./dot.nu apply cnpg
+
+./dot.nu apply atlas
+
+kcl run kcl/main.k -D db.enabled=true \
+    | kubectl --namespace a-team apply --filename -
+
+curl "http://silly-demo.127.0.0.1.nip.io"
+
+curl -X POST "http://silly-demo.127.0.0.1.nip.io/video?id=1&title=something"
+
+curl -X POST "http://silly-demo.127.0.0.1.nip.io/video?id=2&title=else"
+
+curl "http://silly-demo.127.0.0.1.nip.io/videos" | jq .
 ```
 
-## App with CNPG PostgreSQL
+## Both frontend and backend with CNPG PostgreSQL
 
 ```sh
 ./dot.nu apply cnpg

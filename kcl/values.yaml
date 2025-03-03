@@ -9,6 +9,8 @@ db:
 ingress:
   host: silly-demo.127.0.0.1.nip.io
   className: nginx
+backend:
+  enabled: true
 frontend:
   enabled: false
   host: silly-demo-frontend.127.0.0.1.nip.io

@@ -9,13 +9,15 @@ import Layout from './Layout';
 import VideoList from './VideoList';
 import VideoAdd from './VideoAdd';
 
+const url = process.env.REACT_APP_BACKEND_URL;
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="video-add" element={<VideoAdd />} />
-          <Route path="video-list" element={<VideoList />} />
+          <Route path="video-add" element={<VideoAdd url={url} />} />
+          <Route path="video-list" element={<VideoList url={url} />} />
         </Route>
       </Routes>
     </BrowserRouter>

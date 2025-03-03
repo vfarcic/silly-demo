@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const url = process.env.REACT_APP_BACKEND_URL;
-
-const VideoList = () => {
+const VideoList = ({ url }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
@@ -10,7 +8,7 @@ const VideoList = () => {
       .then(response => response.json())
       .then(data => setVideos(data))
       .catch(error => console.error('Error fetching videos:', error));
-  }, []);
+  });
 
   return (
     <div>
