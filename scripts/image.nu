@@ -9,6 +9,7 @@ def "main build image" [
     --builder = "docker"                         # Image builder; currently supported are: `docker` and `kaniko`
     --push = true                                # Whether to push the image to the registry
     --dockerfile = "Dockerfile"                  # Path to Dockerfile
+    --context = "."                              # Path to the context
 ] {
 
     if $builder == "docker" {
@@ -18,7 +19,7 @@ def "main build image" [
                 --tag $"($registry)/($registry_user)/($image):latest"
                 --tag $"($registry)/($registry_user)/($image):($tag)"
                 --file $dockerfile
-                .
+                $context
         )
 
         if $push {
