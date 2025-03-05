@@ -196,6 +196,7 @@ def "build helm" [
 
     open helm/app/values.yaml
         | upsert image.tag $tag
+        | upsert frontend.tag $tag
         | save helm/app/values.yaml --force
 
     helm package helm/app
