@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +14,10 @@ import (
 
 func TestRoot(t *testing.T) {
 	// Test case 1: No query parameters
-	url := "http://silly-demo.127.0.0.1.nip.io"
+	url := os.Getenv("URL")
+	if len(url) == 0 {
+		url = "http://silly-demo.127.0.0.1.nip.io"
+	}
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

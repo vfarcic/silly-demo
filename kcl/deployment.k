@@ -4,7 +4,10 @@ import common
 import db
 
 _tag = common.Values.tag
-_probe = core.Probe { httpGet = { path = "/", port = 8080 } }
+_probe = core.Probe {
+    httpGet = { path = "/", port = 8080 }
+    failureThreshold = 10
+}
 _probeFrontend = core.Probe { httpGet = { path = "/", port = 3000 } }
 
 Deployment = apps.Deployment {
@@ -27,7 +30,6 @@ Deployment = apps.Deployment {
                     readinessProbe = _probe
                     resources = {
                         limits = {
-                            cpu = "250m"
                             memory = "256Mi"
                         }
                         requests = {
@@ -64,7 +66,6 @@ DeploymentFrontEnd = apps.Deployment {
                     readinessProbe = _probeFrontend
                     resources = {
                         limits = {
-                            cpu = "1000m"
                             memory = "1024Mi"
                         }
                         requests = {

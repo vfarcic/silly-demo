@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strconv"
 	"testing"
 	"time"
@@ -27,7 +28,11 @@ func TestVideoPut(t *testing.T) {
 		for i := range expectedTitle {
 			expectedTitle[i] = letterBytes[rand.Intn(len(letterBytes))]
 		}
-		url := fmt.Sprintf("http://silly-demo.127.0.0.1.nip.io/video?id=%s&title=%s", expectedID, expectedTitle)
+		baseUrl := os.Getenv("URL")
+		if len(baseUrl) == 0 {
+			baseUrl = "http://silly-demo.127.0.0.1.nip.io"
+		}
+		url := fmt.Sprintf("%s/video?id=%s&title=%s", baseUrl, expectedID, expectedTitle)
 		client := &http.Client{}
 		req, err := http.NewRequest("POST", url, nil)
 		if err != nil {
@@ -45,7 +50,7 @@ func TestVideoPut(t *testing.T) {
 		assert.Equal(t, http.StatusOK, w.Code)
 
 		// Test case 2: Get videos
-		url = "http://silly-demo.127.0.0.1.nip.io/videos"
+		url = fmt.Sprintf("%s/videos", baseUrl)
 		req, err = http.NewRequest("GET", url, nil)
 		if err != nil {
 			t.Errorf(err.Error())

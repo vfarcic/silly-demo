@@ -14,5 +14,5 @@ backend:
 frontend:
   enabled: false
   host: silly-demo-frontend.127.0.0.1.nip.io
-  tag: 0.0.4
+  tag: v1.5.31
   image: ghcr.io/vfarcic/silly-demo-frontend
