@@ -10,4 +10,3 @@ frontend:
     tag: 0.0.3
   ingress:
     host: silly-demo-frontend.com
-  tag: v1.5.35

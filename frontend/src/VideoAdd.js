@@ -9,7 +9,6 @@ const VideoAdd = ({ url }) => {
     event.preventDefault();
     fetch(`${url}/video?id=${id}&title=${title}`, {
       method: 'POST',
-      mode: 'no-cors',
     })
       .then(response => {
         if (response.ok) {
