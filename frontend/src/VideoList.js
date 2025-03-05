@@ -4,7 +4,7 @@ const VideoList = ({ url }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    fetch(`${url}/videos`)
+    fetch(`${url}/videos`, { mode: 'no-cors' })
       .then(response => response.json())
       .then(data => setVideos(data))
       .catch(error => console.error('Error fetching videos:', error));

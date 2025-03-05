@@ -5,7 +5,7 @@ const Root = ({ url }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch(url)
+    fetch(url, { mode: 'no-cors' })
       .then(response => response.text())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching data:', error));
