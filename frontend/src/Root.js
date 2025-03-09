@@ -5,11 +5,14 @@ const Root = ({ url }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch(url)
+    const params = new URLSearchParams(window.location.search);
+    const user = params.get('user');
+
+    fetch(`${url}/?user=${user}`)
       .then(response => response.text())
       .then(data => setData(data))
       .catch(error => console.error('Error fetching data:', error));
-  });
+  }, [url]);
 
   return (
     <Container maxWidth="sm">
