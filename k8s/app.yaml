@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: silly-demo
     spec:
       containers:
-      - image: ghcr.io/vfarcic/silly-demo:v1.5.38
+      - image: ghcr.io/vfarcic/silly-demo:v1.5.39
         livenessProbe:
           failureThreshold: 10
           httpGet:
