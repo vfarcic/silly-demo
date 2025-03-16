@@ -1,4 +1,4 @@
-tag: v1.5.40
+tag: v1.5.41
 image: ghcr.io/vfarcic/silly-demo
 replicas: 2
 autoscaling:
@@ -14,5 +14,5 @@ backend:
 frontend:
   enabled: false
   host: silly-demo-frontend.127.0.0.1.nip.io
-  tag: v1.5.40
+  tag: v1.5.41
   image: ghcr.io/vfarcic/silly-demo-frontend
