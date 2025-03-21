@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import Root from './Root';
 
-const url = process.env.REACT_APP_BACKEND_URL;
+const url = process.env.BACKEND_URL;
 
 const Layout = () => {
   return (

@@ -74,7 +74,7 @@ DeploymentFrontEnd = apps.Deployment {
                         }
                     }
                     env = [{
-                        name = "REACT_APP_BACKEND_URL"
+                        name = "BACKEND_URL"
                         value = "http://" + common.Values.ingress.host
                     }]
                 }]

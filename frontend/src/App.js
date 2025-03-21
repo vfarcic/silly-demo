@@ -9,7 +9,7 @@ import Layout from './Layout';
 import VideoList from './VideoList';
 import VideoAdd from './VideoAdd';
 
-const url = process.env.REACT_APP_BACKEND_URL;
+const url = process.env.BACKEND_URL;
 
 function App() {
   return (
