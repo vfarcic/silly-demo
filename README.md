@@ -2,6 +2,7 @@
 
 ## Demo Manifests and Code Used in DevOps Toolkit Videos
 
+[![Remote Environments with Dev Containers and Devpod: Are They Worth It?](https://img.youtube.com/vi/T_y3NTDrMHU/0.jpg)](https://youtu.be/T_y3NTDrMHU)
 [![Say Goodbye to Tedious Docker Commands: Embrace Docker to Bake Images](https://img.youtube.com/vi/3Fc7YuTWptw/0.jpg)](https://youtu.be/3Fc7YuTWptw)
 [![Stop Losing Requests! Learn Graceful Shutdown Techniques](https://img.youtube.com/vi/eQPYsGrZW_E/0.jpg)](https://youtu.be/eQPYsGrZW_E)
 
