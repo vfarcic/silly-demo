@@ -9,7 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-resty/resty/v2 v2.16.5
 	github.com/jackc/pgx/v5 v5.7.4
-	github.com/nats-io/nats.go v1.41.0
+	github.com/nats-io/nats.go v1.41.1
 	github.com/open-feature/go-sdk v1.14.1
 	github.com/open-feature/go-sdk-contrib/providers/flagd v0.2.6
 	github.com/stretchr/testify v1.10.0
