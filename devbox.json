@@ -4,7 +4,7 @@
     "gh@2.69.0",
     "kubectl@1.32.3",
     "bat@0.25.0",
-    "kubernetes-helm@3.17.2",
+    "kubernetes-helm@3.17.3",
     "yq-go@4.45.1",
     "jq@1.7.1",
     "cosign@2.5.0",
