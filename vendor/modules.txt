@@ -98,7 +98,7 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
-# github.com/go-logr/logr v1.4.2
+# github.com/go-logr/logr v1.4.3
 ## explicit; go 1.18
 github.com/go-logr/logr
 github.com/go-logr/logr/funcr
@@ -216,8 +216,8 @@ github.com/open-feature/flagd/core/pkg/sync/grpc
 github.com/open-feature/flagd/core/pkg/sync/grpc/credentials
 github.com/open-feature/flagd/core/pkg/sync/grpc/nameresolvers
 github.com/open-feature/flagd/core/pkg/utils
-# github.com/open-feature/go-sdk v1.14.1
-## explicit; go 1.21
+# github.com/open-feature/go-sdk v1.15.0
+## explicit; go 1.23.0
 github.com/open-feature/go-sdk/openfeature
 github.com/open-feature/go-sdk/openfeature/internal
 # github.com/open-feature/go-sdk-contrib/providers/flagd v0.2.6
@@ -308,6 +308,9 @@ go.opentelemetry.io/otel/metric/noop
 go.opentelemetry.io/otel/trace
 go.opentelemetry.io/otel/trace/embedded
 go.opentelemetry.io/otel/trace/noop
+# go.uber.org/mock v0.5.2
+## explicit; go 1.23
+go.uber.org/mock/gomock
 # go.uber.org/multierr v1.11.0
 ## explicit; go 1.19
 go.uber.org/multierr
@@ -361,7 +364,7 @@ golang.org/x/net/trace
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/text v0.24.0
+# golang.org/x/text v0.25.0
 ## explicit; go 1.23.0
 golang.org/x/text/cases
 golang.org/x/text/internal
