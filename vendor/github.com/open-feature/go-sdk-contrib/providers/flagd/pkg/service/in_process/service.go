@@ -7,6 +7,7 @@ import (
 	"regexp"
 	parallel "sync"
 
+	"go.uber.org/zap"
 	googlegrpc "google.golang.org/grpc"
 
 	"github.com/open-feature/flagd/core/pkg/evaluator"
@@ -19,7 +20,6 @@ import (
 	"github.com/open-feature/flagd/core/pkg/sync/grpc/credentials"
 	of "github.com/open-feature/go-sdk/openfeature"
 	"golang.org/x/exp/maps"
-	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 )
 
 // InProcess service implements flagd flag evaluation in-process.
@@ -47,8 +47,12 @@ type Configuration struct {
 	GrpcDialOptionsOverride []googlegrpc.DialOption
 }
 
+type Shutdowner interface {
+	Shutdown() error
+}
+
 func NewInProcessService(cfg Configuration) *InProcess {
-	log := logger.NewLogger(zap.NewRaw(), false)
+	log := logger.NewLogger(NewRaw(), false)
 
 	iSync, uri := makeSyncProvider(cfg, log)
 
@@ -117,6 +121,12 @@ func (i *InProcess) Init() error {
 					ProviderEventDetails: of.ProviderEventDetails{Message: "New flag sync", FlagChanges: maps.Keys(changes)}}
 			case <-i.listenerShutdown:
 				i.logger.Info("Shutting down data sync listener")
+				if shutdowner, ok := i.sync.(Shutdowner); ok {
+					err := shutdowner.Shutdown()
+					if err != nil {
+						i.logger.Error("Error shutdown sync provider", zap.Error(err))
+					}
+				}
 				return
 			}
 		}
