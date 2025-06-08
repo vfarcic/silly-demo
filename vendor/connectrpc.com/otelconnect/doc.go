@@ -1,4 +1,4 @@
-// Copyright 2022-2024 The Connect Authors
+// Copyright 2022-2025 The Connect Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
 
 // Package otelconnect provides OpenTelemetry tracing and metrics for
 // [connectrpc.com/connect] servers and clients.
-// The specification followed was the [OpenTelemetry specification] with both the [rpc metrics specification] and [rpc trace specification] implemented.
+// The specification followed was the [OpenTelemetry specification]
+// with both the [rpc metrics specification]
+// and [rpc spans specification] implemented.
 //
 // [OpenTelemetry specification]: https://github.com/open-telemetry/opentelemetry-specification
-// [rpc metrics specification]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/rpc-metrics.md
-// [rpc trace specification]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/rpc.md
+// [rpc metrics specification]: https://opentelemetry.io/docs/specs/semconv/rpc/rpc-metrics/
+// [rpc spans specification]: https://opentelemetry.io/docs/specs/semconv/rpc/rpc-spans/
 package otelconnect
