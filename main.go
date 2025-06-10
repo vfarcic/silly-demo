@@ -23,7 +23,11 @@ import (
 var OpenFeatureClient *openfeature.Client
 
 func init() {
-	openfeature.SetProviderAndWait(flagd.NewProvider())
+	provider, err := flagd.NewProvider()
+	if err != nil {
+		log.Fatalf("failed to create flagd provider: %v", err)
+	}
+	openfeature.SetProviderAndWait(provider)
 	OpenFeatureClient = openfeature.NewClient("silly-demo")
 }
 

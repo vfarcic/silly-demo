@@ -11,4 +11,5 @@
 /.env
 /devbox.lock
 /semver
+.cursor/mcp.json
 
