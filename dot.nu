@@ -36,7 +36,7 @@ def "main setup" [
 
 def "main run unit_tests" [] {
 
-    go test -v -cover -tags unit $"($env.PWD)/..."
+    go test -v -tags unit $"($env.PWD)/..."
 
 }
 
