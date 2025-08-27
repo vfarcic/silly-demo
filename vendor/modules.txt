@@ -160,7 +160,7 @@ github.com/pelletier/go-toml/v2/unstable
 github.com/pmezard/go-difflib/difflib
 # github.com/rogpeppe/go-internal v1.13.1
 ## explicit; go 1.22
-# github.com/stretchr/testify v1.11.0
+# github.com/stretchr/testify v1.11.1
 ## explicit; go 1.17
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/assert/yaml
