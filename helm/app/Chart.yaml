@@ -1,4 +1,4 @@
 apiVersion: v1
 description: I'm too lazy to write a description
 name: silly-demo-helm
-version: v1.5.170
+version: v1.5.171
