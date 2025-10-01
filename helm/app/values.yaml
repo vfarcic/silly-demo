@@ -1,6 +1,6 @@
 image:
   repository: ghcr.io/vfarcic/silly-demo
-  tag: v1.5.185
+  tag: v1.5.186
 ingress:
   host: silly-demo.com
 db:
