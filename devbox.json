@@ -17,7 +17,7 @@
     "kcl@0.11.4",
     "postgresql@17.2",
     "go@1.25.3",
-    "git@2.51.0"
+    "git@2.51.2"
   ],
   "shell": {
     "init_hook": [],
