@@ -8,5 +8,12 @@
       "k8s/.+\\.yaml$",
       "kustomize/base"
     ]
-  }
+  },
+  "packageRules": [
+    {
+      "matchFileNames": ["devbox.json", "devbox-ci.json"],
+      "automerge": true,
+      "commitMessagePrefix": "[skip ci] "
+    }
+  ]
 }
