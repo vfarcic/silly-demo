@@ -11,7 +11,7 @@
   },
   "packageRules": [
     {
-      "matchFileNames": ["devbox.json", "devbox-ci.json"],
+      "matchManagers": ["devbox"],
       "automerge": true,
       "commitMessagePrefix": "[skip ci] "
     }
