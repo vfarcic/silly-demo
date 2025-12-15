@@ -7,7 +7,7 @@ toolchain go1.25.5
 require (
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
-	github.com/go-resty/resty/v2 v2.17.0
+	github.com/go-resty/resty/v2 v2.17.1
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/nats-io/nats.go v1.47.0
 	github.com/stretchr/testify v1.11.1
