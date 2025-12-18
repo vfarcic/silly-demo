@@ -5,7 +5,7 @@
     "kubectl@1.34.3",
     "bat@0.26.1",
     "kubernetes-helm@3.19.1",
-    "yq-go@4.49.2",
+    "yq-go@4.50.1",
     "jq@1.8.1",
     "cosign@3.0.3",
     "path:gcloud#google-cloud-sdk",
