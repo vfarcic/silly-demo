@@ -6,7 +6,7 @@
     "bat@0.26.1",
     "kubernetes-helm@3.19.1",
     "yq-go@4.50.1",
-    "jq@1.8.1",
+    "jq@1.8.2",
     "cosign@3.0.3",
     "path:gcloud#google-cloud-sdk",
     "nodejs@25.2.1",
