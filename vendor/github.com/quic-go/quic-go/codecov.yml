@@ -8,8 +8,6 @@ coverage:
     - internal/mocks/
     - internal/utils/linkedlist/linkedlist.go
     - internal/testdata
-    - logging/connection_tracer_multiplexer.go
-    - logging/tracer_multiplexer.go
     - testutils/
     - fuzzing/
     - metrics/
@@ -18,3 +16,8 @@ coverage:
       default:
         threshold: 0.5
     patch: false
+flags:
+  clusterfuzz-lite-batch:
+    joined: false
+  clusterfuzz:
+    joined: false

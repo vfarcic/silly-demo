@@ -3,10 +3,10 @@ package quic
 import (
 	"slices"
 	"sync"
-	"time"
 
 	"github.com/quic-go/quic-go/internal/ackhandler"
 	"github.com/quic-go/quic-go/internal/flowcontrol"
+	"github.com/quic-go/quic-go/internal/monotime"
 	"github.com/quic-go/quic-go/internal/protocol"
 	"github.com/quic-go/quic-go/internal/utils/ringbuffer"
 	"github.com/quic-go/quic-go/internal/wire"
@@ -27,7 +27,7 @@ type streamFrameGetter interface {
 }
 
 type streamControlFrameGetter interface {
-	getControlFrame(time.Time) (_ ackhandler.Frame, ok, hasMore bool)
+	getControlFrame(monotime.Time) (_ ackhandler.Frame, ok, hasMore bool)
 }
 
 type framer struct {
@@ -90,7 +90,7 @@ func (f *framer) Append(
 	frames []ackhandler.Frame,
 	streamFrames []ackhandler.StreamFrame,
 	maxLen protocol.ByteCount,
-	now time.Time,
+	now monotime.Time,
 	v protocol.Version,
 ) ([]ackhandler.Frame, []ackhandler.StreamFrame, protocol.ByteCount) {
 	f.controlFrameMutex.Lock()
@@ -102,7 +102,7 @@ func (f *framer) Append(
 	f.mutex.Lock()
 	// pop STREAM frames, until less than 128 bytes are left in the packet
 	numActiveStreams := f.streamQueue.Len()
-	for i := 0; i < numActiveStreams; i++ {
+	for range numActiveStreams {
 		if protocol.MinStreamFrameSize > maxLen {
 			break
 		}
@@ -157,7 +157,7 @@ func (f *framer) Append(
 func (f *framer) appendControlFrames(
 	frames []ackhandler.Frame,
 	maxLen protocol.ByteCount,
-	now time.Time,
+	now monotime.Time,
 	v protocol.Version,
 ) ([]ackhandler.Frame, protocol.ByteCount) {
 	var length protocol.ByteCount
